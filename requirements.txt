@@ -3,3 +3,4 @@ pyboy
 openai
 requests
 shutil
+keyboard
