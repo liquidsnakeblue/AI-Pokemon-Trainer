@@ -22,7 +22,7 @@ def pyboy_thread():
         for key in pressed_keys:
             pyboy.button_press(key)
         
-        pyboy.tick()
+        pyboy.tick(20,True)
         
         for key in list(pressed_keys):
             pyboy.button_release(key)
