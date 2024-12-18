@@ -1,9 +1,9 @@
-import requests
+import requests, os, json
 from openai import OpenAI
 from pathlib import Path
 
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_SETTING = None
 if not os.path.exists(BASE_DIR / 'secret_setting.json'):

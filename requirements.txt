@@ -1,0 +1,4 @@
+flask
+pyboy
+openai
+requests

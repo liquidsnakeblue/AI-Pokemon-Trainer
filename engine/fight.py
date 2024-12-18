@@ -1,5 +1,5 @@
 from pyboy import PyBoy
-from api import get_chatgpt_response
+from .api import get_chatgpt_response
 
 class Fight:
 
@@ -26,6 +26,7 @@ class Fight:
         ...
 
     def start(self):
+        print("# start fight")
         while True:
             for i in range(999999):
                 self.pyboy.tick()

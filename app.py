@@ -5,7 +5,8 @@ import time
 import io
 from werkzeug.serving import WSGIRequestHandler
 import os, logging
-from .fight import do_fight
+
+from engine.fight import do_fight
 
 app = Flask(__name__)
 
@@ -36,7 +37,7 @@ def pyboy_thread():
         byte_io.seek(0)
         last_frame = byte_io.getvalue()
         
-        time.sleep(0.001)
+        time.sleep(0.01)
 
 pyboy_thread_instance = threading.Thread(target=pyboy_thread)
 pyboy_thread_instance.daemon = True
