@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyBoy Game Controller</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f4f4;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #game-screen {
+            width: 60vw;
+            height: 50vh;
+            object-fit: contain;
+            border: 2px solid #000;
+            background-color: #000;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:active {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <img id="game-screen" src="/screen" alt="Game screen">
+    <div class="controls">
+        <button class="button" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button>
+        <button class="button" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button>
+        <button class="button" onmousedown="pressKey('right')" onmouseup="releaseKey('right')">Right</button>
+        <button class="button" onmousedown="pressKey('down')" onmouseup="releaseKey('down')">Down</button>
+        <button class="button" onmousedown="pressKey('a')" onmouseup="releaseKey('a')">A</button>
+        <button class="button" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button>
+        <button class="button" onclick="saveProgress()">Save</button>
+        <button class="button" onclick="loadProgress()">Load</button>
+    </div>
+    <script>
+        const keyMap = {
+            ArrowUp: 'up',
+            ArrowDown: 'down',
+            ArrowLeft: 'left',
+            ArrowRight: 'right',
+            KeyA: 'a',
+            KeyB: 'b',
+            Enter: 'start',
+            Shift: 'select',
+        };
+
+        const activeKeys = new Set();
+
+        function pressKey(key) {
+            if (!activeKeys.has(key)) {
+                activeKeys.add(key);
+                fetch('/press', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key }),
+                });
+            }
+        }
+
+        function releaseKey(key) {
+            if (activeKeys.has(key)) {
+                activeKeys.delete(key);
+                fetch('/release', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key }),
+                });
+            }
+        }
+
+        function saveProgress() {
+            fetch('/save', { method: 'POST' }).then(res => res.json()).then(data => alert(data.status));
+        }
+
+        function loadProgress() {
+            fetch('/load', { method: 'POST' }).then(res => res.json()).then(data => alert(data.status));
+        }
+
+        // Keyboard event listeners
+        document.addEventListener('keydown', (event) => {
+            const key = keyMap[event.code];
+            if (key) {
+                pressKey(key);
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            const key = keyMap[event.code];
+            if (key) {
+                releaseKey(key);
+            }
+        });
+
+        // Refresh the screen every 16ms (~60 FPS)
+        setInterval(() => {
+            document.getElementById('game-screen').src = "/screen?" + new Date().getTime();
+        }, 16);
+    </script>
+</body>
+</html>
