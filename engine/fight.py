@@ -1,5 +1,14 @@
 from pyboy import PyBoy
 from .api import get_chatgpt_response
+from jinja2 import Template
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+fight_template = None
+with open(BASE_DIR / "prompt" / "fight.txt", "r") as fp:
+    fight_template = Template(fp.read())
 
 class Fight:
 
@@ -13,7 +22,7 @@ class Fight:
     
     def dump_data(self, data):
         # make prompt
-        ...
+        return fight_template.render(data)
     
     def act(self, response):
         # use response to do some act
