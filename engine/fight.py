@@ -31,22 +31,18 @@ class Fight:
     def ifight(self):
         return bool(self.pyboy.memory[0xD057]) # Fight Flag
     
-    def getresult():
+    def getresult(self):
         ...
 
     def start(self):
         print("# start fight")
-        while True:
-            for i in range(999999):
-                self.pyboy.tick()
+        while self.ifight():
 
-            if not self.ifight():
-                break
+            # self.act(get_chatgpt_response(self.dump_data(self.read_data())))
 
-            self.act(get_chatgpt_response(self.dump_data(self.read_data())))
+            self.pyboy.tick(3600,True)
 
-            self.pyboy.tick()
-
+        print("# end fight")
         return self.getresult() # return fight result
 
 
