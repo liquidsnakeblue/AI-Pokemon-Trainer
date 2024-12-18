@@ -1,4 +1,4 @@
-import requests, os, json
+import requests, os, json, shutil
 from openai import OpenAI
 from pathlib import Path
 
