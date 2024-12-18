@@ -7,7 +7,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 fight_template = None
-with open(BASE_DIR / "prompt" / "fight.txt", "r") as fp:
+with open(BASE_DIR / "engine" / "prompt" / "fight.txt", "r") as fp:
     fight_template = Template(fp.read())
 
 class Fight:
