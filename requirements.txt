@@ -2,3 +2,4 @@ flask
 pyboy
 openai
 requests
+shutil
