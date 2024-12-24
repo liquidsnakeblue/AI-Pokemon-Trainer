@@ -41,7 +41,7 @@
 | Max HP | D23D-D23E |
 
 | Player's Pokemon 6 |
-| Level | D268
+| Level | D268 |
 | Current HP | D248-D249 |
 | Attack | D26B-D26C |
 | Defense | D26D-D26E |
