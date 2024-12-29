@@ -18,7 +18,7 @@
 | Enemy's Move 3 | CFEF |
 | Enemy's Move 4 | CFF0 |
 | Enemy's Move ID | CFCC |
-<!-- Move 指技能，目前已有对照表。前四个指存储技能，最后一个指当前使用技能。对照表相同-->
+<!-- Move 指技能，目前已有对照表。前四个指存储技能，最后一个指当前使用技能。对照表相同。-->
 | Enemy's Status | CFE9 |
 <!-- 对应的bits和状态已有关系。-->
 <!-- Pokemon in battle 会显示目前出战的宝可梦的数据，剩余六个宝可梦是在等待席的六个宝可梦。 -->
@@ -32,6 +32,7 @@
 | Move 2 | D01D |
 | Move 3 | D01E |
 | Move 4 | D01F |
+<!-- 十分需要注意！这里的Move1会出现储存多个数字的情况，可能是字节显示问题。-->
 | Max HP | D023-D024 |
 | Attack | D025-DO26 |
 | Defense | D027-D028 |

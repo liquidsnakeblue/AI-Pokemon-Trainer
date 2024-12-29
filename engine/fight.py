@@ -18,7 +18,39 @@ class Fight:
     
     def read_data(self):
         # return the data of game
-        ...
+        return {
+            "enemy_id": self.pyboy.memory[0xCFE5],
+            "enemy_type1": self.pyboy.memory[0xCFEA],
+            "enemy_type2": self.pyboy.memory[0xCFEB],
+            "enemy_move1": self.pyboy.memory[0xCFED],
+            "enemy_move2": self.pyboy.memory[0xCFEE],
+            "enemy_move3": self.pyboy.memory[0xCFEF],
+            "enemy_move4": self.pyboy.memory[0xCFF0],
+            "enemy_move_now":self.pyboy.memory[0xCFCC],
+            "enemy_hp":self.pyboy.memory[0xCFE6:0xCFE7],
+            "enemy_maxhp":self.pyboy.memory[0xCFF4:0xCFF5],
+            "enemy_attack":self.pyboy.memory[0xCFF6:0xCFF7],
+            "enemy_defense":self.pyboy.memory[0xCFF8:0xCFF9],
+            "enemy_level": self.pyboy.memory[0xCFF0],
+            "enemy_status": self.pyboy.memory[0xCFE9],
+            "my_id": self.pyboy.memory[0xD014],
+            "my_hp":self.pyboy.memory[0xD015:0xD016],
+            "my_status": self.pyboy.memory[0xD018],
+            "my_type1": self.pyboy.memory[0xD019],
+            "my_type2": self.pyboy.memory[0xD01A],
+            "my_move1": self.pyboy.memory[0xD01C],
+            "my_move2": self.pyboy.memory[0xD01D],
+            "my_move3": self.pyboy.memory[0xD01E],
+            "my_move4": self.pyboy.memory[0xD01F],
+            "my_maxhp":self.pyboy.memory[0xD023:0xD024],
+            "my_attack":self.pyboy.memory[0xD025:0xD026],
+            "my_defense":self.pyboy.memory[0xD027:0xD028],
+            "my_level":self.pyboy.memory[0xD022],
+            "my_move1_pp":self.pyboy.memory[0xD02D],
+            "my_move1_pp":self.pyboy.memory[0xD02E],
+            "my_move1_pp":self.pyboy.memory[0xD02F],
+            "my_move1_pp":self.pyboy.memory[0xD030],
+        }
     
     def dump_data(self, data):
         # make prompt
