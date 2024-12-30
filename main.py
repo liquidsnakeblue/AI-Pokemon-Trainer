@@ -1,12 +1,17 @@
 from pyboy import PyBoy
+from pathlib import Path
 import time
 import keyboard
 from engine.fight import do_fight
 
+BASE_DIR = Path(__file__).resolve().parent
+state_save_path = BASE_DIR / "red.gb.state"
+
 pyboy = PyBoy("red.gb")
-state_save_path="red.gb.state"
-with open(state_save_path, "rb") as f:
-    pyboy.load_state(f)
+
+if state_save_path.exists():
+    with open(state_save_path, "rb") as f:
+        pyboy.load_state(f)
 
 def pyboy_thread():
     while True:

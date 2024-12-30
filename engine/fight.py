@@ -1,7 +1,7 @@
 import json
 from pyboy import PyBoy
 from .api import get_chatgpt_response
-from .component import connect_digit_list, read_prompt
+from .component import connect_digit_list, read_prompt, read_prompt_without_template
 from .index_data import *
 
 fight_template = read_prompt("fight")
@@ -10,6 +10,7 @@ system_prompt = read_prompt_without_template("system_prompt")
 class Fight:
 
     def __init__(self, pyboy_obj):
+        self.lastfight = 1
         self.pyboy = pyboy_obj
         self.history = []
     
@@ -65,6 +66,21 @@ class Fight:
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
 
+
+        move1 = move_index[data["my_move1"]]
+        move2 = move_index[data["my_move2"]]
+        move3 = move_index[data["my_move3"]]
+        move4 = move_index[data["my_move4"]]
+
+        data["move1_name"] = move1["name"]
+        data["move1_type"] = move1["type"]
+        data["move2_name"] = move2["name"]
+        data["move2_type"] = move2["type"]
+        data["move3_name"] = move3["name"]
+        data["move3_type"] = move3["type"]
+        data["move4_name"] = move4["name"]
+        data["move4_type"] = move4["type"]
+
         return [{
             "role": "system",
             "content": system_prompt,
@@ -76,11 +92,18 @@ class Fight:
     def _act_move(self, move_index):
         self.pyboy.button_press('a')
         self.pyboy.tick()
+
+        for i in range(self.lastfight-1):
+            self.pyboy.button_press('up')
+            self.pyboy.tick()
+
         for i in range(move_index-1):
             self.pyboy.button_press('down')
             self.pyboy.tick()
+
         self.pyboy.button_press('a')
         self.pyboy.tick()
+        self.lastfight = move_index
     
     def _act_run(self):
         self.pyboy.button_press('down')
@@ -108,7 +131,7 @@ class Fight:
         print("# start fight")
         while self.ifight():
 
-            # self.act(get_chatgpt_response(self.dump_data(self.read_data())))
+            self.act(get_chatgpt_response(self.dump_data(self.read_data())))
 
             self.pyboy.tick(3600,True)
 
