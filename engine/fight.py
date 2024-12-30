@@ -1,9 +1,11 @@
+import json
 from pyboy import PyBoy
 from .api import get_chatgpt_response
 from .component import connect_digit_list, read_prompt
 from .index_data import *
 
 fight_template = read_prompt("fight")
+system_prompt = read_prompt_without_template("system_prompt")
 
 class Fight:
 
@@ -56,7 +58,7 @@ class Fight:
         data["enemy_name"] = enemy["name"]
         data["enemy_type1"] = enemy["type1"]
         data["enemy_type2"] = enemy["type2"]
-        data["percentage_hp"] = data["enemy_hp"] / data["enemy_maxhp"] # The robort can't dirctly get enemy's hp.
+        data["percentage_hp"] = (data["enemy_hp"] / data["enemy_maxhp"]) * 100 # The robort can't dirctly get enemy's hp.
 
         my = internal_index[data["my_id"]]
         data["my_name"] = my["name"]
@@ -64,6 +66,9 @@ class Fight:
         data["my_type2"] = my["type2"]
 
         return [{
+            "role": "system",
+            "content": system_prompt,
+        },{
             "role": "user",
             'content': fight_template.render(data)
         }]
@@ -87,7 +92,11 @@ class Fight:
 
     def act(self, response):
         # use response to do some act
-        ...
+        response = json.loads(response)
+        if response["decision"] == "run":
+            self._act_run()
+        else:
+            self._act_move(response["decision"])
     
     def ifight(self):
         return bool(self.pyboy.memory[0xD057]) # Fight Flag

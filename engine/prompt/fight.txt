@@ -1,10 +1,10 @@
 ### Current State:
-- Your Pokémon: {player_pokemon} (Level {player_level}, HP: {player_hp}/{player_max_hp})
+- Your Pokémon: {{my_name}} (Level {{my_level}}, HP: {{my_hp}}/{{my_maxhp}})
   - Moves:
-    1. {move1_name} ({move1_type}, PP: {move1_pp})
-    2. {move2_name} ({move2_type}, PP: {move2_pp})
-    3. {move3_name} ({move3_type}, PP: {move3_pp})
-    4. {move4_name} ({move4_type}, PP: {move4_pp})
-- Opponent Pokémon: {opponent_pokemon} (Level {opponent_level}, HP: {opponent_hp}/{opponent_max_hp})
+    1. {{move1_name}} ({{my_move1_type}}, PP: {{my_move1_pp}})
+    2. {{move2_name}} ({{my_move2_type}}, PP: {{my_move2_pp}})
+    3. {{move3_name}} ({{my_move3_type}}, PP: {{my_move3_pp}})
+    4. {{move4_name}} ({{my_move4_type}}, PP: {{my_move4_pp}})
+- Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
 
 Make your decision.
