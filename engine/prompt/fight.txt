@@ -1,3 +1,10 @@
-Now you are playing Pokemon game player, now you have a battle, you need to win the game as much as possible, if you think you can't win, you can leave, but with the wild can run, but not with others.
-Now you will be provided with some details about each round, please make the correct action based on this data.
-You have two operations, the first is attack, each Pokemon has a different attack mode, please choose the appropriate attack mode according to the properties of both Pokemon. The second is to run, if you think you can't beat, you can always choose to run.
+### Current State:
+- Your Pokémon: {player_pokemon} (Level {player_level}, HP: {player_hp}/{player_max_hp})
+  - Moves:
+    1. {move1_name} ({move1_type}, PP: {move1_pp})
+    2. {move2_name} ({move2_type}, PP: {move2_pp})
+    3. {move3_name} ({move3_type}, PP: {move3_pp})
+    4. {move4_name} ({move4_type}, PP: {move4_pp})
+- Opponent Pokémon: {opponent_pokemon} (Level {opponent_level}, HP: {opponent_hp}/{opponent_max_hp})
+
+Make your decision.
