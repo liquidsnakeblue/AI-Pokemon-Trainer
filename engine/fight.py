@@ -59,7 +59,17 @@ class Fight:
     
     def dump_data(self, data):
         # make prompt
-        data["enemy_name"] = internal_index[data["enemy_id"]]
+        enemy = internal_index[data["enemy_id"]]
+        data["enemy_name"] = enemy["name"]
+        data["enemy_type1"] = enemy["type1"]
+        data["enemy_type2"] = enemy["type2"]
+        data["percentage_hp"] = data["enemy_hp"] / data["enemy_maxhp"] # The robort can't dirctly get enemy's hp.
+
+        my = internal_index[data["my_id"]]
+        data["my_name"] = my["name"]
+        data["my_type1"] = my["type1"]
+        data["my_type2"] = my["type2"]
+
         return fight_template.render(data)
     
     def act(self, response):
