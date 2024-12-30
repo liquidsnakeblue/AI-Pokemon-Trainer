@@ -1,9 +1,5 @@
 
 internal_index = [
-    "glitch",
-    "Rhydon",
-    "Kangaskhan",
-    "Nidoran",
-    "Clefairy",# UNFINISH
+    {"name":"a", "type1":"a", "type2":"b"}
 ]
 
