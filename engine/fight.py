@@ -1,16 +1,9 @@
 from pyboy import PyBoy
 from .api import get_chatgpt_response
-from .component import connect_digit_list
+from .component import connect_digit_list, read_prompt
 from .index_data import *
-from jinja2 import Template
-from pathlib import Path
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-fight_template = None
-with open(BASE_DIR / "engine" / "prompt" / "fight.txt", "r") as fp:
-    fight_template = Template(fp.read())
+fight_template = read_prompt("fight")
 
 class Fight:
 
@@ -70,8 +63,28 @@ class Fight:
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
 
-        return fight_template.render(data)
+        return [{
+            "role": "user",
+            'content': fight_template.render(data)
+        }]
     
+    def _act_move(self, move_index):
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+        for i in range(move_index-1):
+            self.pyboy.button_press('down')
+            self.pyboy.tick()
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+    
+    def _act_run(self):
+        self.pyboy.button_press('down')
+        self.pyboy.tick()
+        self.pyboy.button_press('right')
+        self.pyboy.tick()
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+
     def act(self, response):
         # use response to do some act
         ...
