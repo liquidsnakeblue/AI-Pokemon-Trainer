@@ -33,7 +33,7 @@ class Fight:
             "enemy_status": self.pyboy.memory[0xCFE9],
 
             "my_id": self.pyboy.memory[0xD014],
-            "my_hp": self.pyboy.memory[0xD015:0xD016],
+            "my_hp": connect_digit_list(self.pyboy.memory[0xD015:0xD016]),
             "my_status": self.pyboy.memory[0xD018],
             "my_type1": self.pyboy.memory[0xD019],
             "my_type2": self.pyboy.memory[0xD01A],
@@ -130,10 +130,16 @@ class Fight:
     def start(self):
         print("# start fight")
         while self.ifight():
+            tmp = self.read_data()
+            print(self.pyboy.memory[0xCFF4:0xCFF5])
+            if tmp['enemy_maxhp']  == 0:
+                self.pyboy.button_press("a")
+                self.pyboy.tick()
+                print("00000000000")
+                continue
+            self.act(get_chatgpt_response(self.dump_data(tmp)))
 
-            self.act(get_chatgpt_response(self.dump_data(self.read_data())))
-
-            self.pyboy.tick(3600,True)
+            self.pyboy.tick(100,True)
 
         print("# end fight")
         return self.getresult() # return fight result

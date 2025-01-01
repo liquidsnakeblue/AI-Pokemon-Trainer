@@ -14,7 +14,7 @@ pyboy = PyBoy("red.gb", window_type="headless")
 
 last_frame = None
 pressed_keys = set()
-SAVE_STATE_PATH = "save_state.sav"
+SAVE_STATE_PATH = "red.gb.state"
 
 def pyboy_thread():
     global last_frame
