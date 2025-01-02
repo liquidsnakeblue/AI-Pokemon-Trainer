@@ -36,7 +36,7 @@ def read_prompt_without_template(name):
     return template
 
 def extract_json_from_string(input_string):
-    json_pattern = r'\{(?:[^{}]|(?R))*\}'
+    json_pattern = r'\{(?:[^{}]|\{(?:[^{}])*\})*\}'
     match = re.search(json_pattern, input_string)
     if match:
         json_str = match.group()
