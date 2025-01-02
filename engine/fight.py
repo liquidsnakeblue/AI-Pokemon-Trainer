@@ -46,9 +46,9 @@ class Fight:
             "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
             "my_move1_pp": self.pyboy.memory[0xD02D],
-            "my_move1_pp": self.pyboy.memory[0xD02E],
-            "my_move1_pp": self.pyboy.memory[0xD02F],
-            "my_move1_pp": self.pyboy.memory[0xD030],
+            "my_move2_pp": self.pyboy.memory[0xD02E],
+            "my_move3_pp": self.pyboy.memory[0xD02F],
+            "my_move4_pp": self.pyboy.memory[0xD030],
 
             "fight_mod": self.pyboy.memory[0xD057],
         }
@@ -150,6 +150,7 @@ class Fight:
                 self.pyboy.button_release("a")
                 self.pyboy.tick()
                 continue
+            print(tmp)
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
             self.pyboy.tick(100,True)
