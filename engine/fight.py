@@ -14,6 +14,12 @@ class Fight:
         self.pyboy = pyboy_obj
         self.history = []
     
+    def press_and_release(key):
+        self.pyboy.button_press(key)
+        self.pyboy.tick()
+        self.pyboy.button_release(key)
+        self.pyboy.tick()
+    
     def read_data(self):
         # return the data of game
         return {
@@ -90,41 +96,21 @@ class Fight:
         }]
     
     def _act_move(self, move_index):
-        self.pyboy.button_press('a')
-        self.pyboy.tick()
-        self.pyboy.button_release('a')
-        self.pyboy.tick()
+        self.press_and_release('a')
 
         for i in range(self.lastfight-1):
-            self.pyboy.button_press('up')
-            self.pyboy.tick()
-            self.pyboy.button_release("up")
+            self.press_and_release('up')
 
         for i in range(move_index-1):
-            self.pyboy.button_press('down')
-            self.pyboy.tick()
-            self.pyboy.button_release('down')
-            self.pyboy.tick()
+            self.press_and_release('down')
 
-        self.pyboy.button_press('a')
-        self.pyboy.tick()
-        self.pyboy.button_release('a')
-        self.pyboy.tick()
+        self.press_and_release('a')
         self.lastfight = move_index
     
     def _act_run(self):
-        self.pyboy.button_press('down')
-        self.pyboy.tick()
-        self.pyboy.button_release("down")
-        self.pyboy.tick()
-        self.pyboy.button_press('right')
-        self.pyboy.tick()
-        self.pyboy.button_release("right")
-        self.pyboy.tick()
-        self.pyboy.button_press('a')
-        self.pyboy.tick()
-        self.pyboy.button_release("a")
-        self.pyboy.tick()
+        self.press_and_release('down')
+        self.press_and_release('right')
+        self.press_and_release('a')
 
     def act(self, response):
         # use response to do some act
@@ -145,10 +131,7 @@ class Fight:
         while self.ifight():
             tmp = self.read_data()
             if tmp['enemy_maxhp']  == 0:
-                self.pyboy.button_press("a")
-                self.pyboy.tick()
-                self.pyboy.button_release("a")
-                self.pyboy.tick()
+                self.press_and_release('a')
                 continue
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
