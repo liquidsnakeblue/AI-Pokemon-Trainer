@@ -14,7 +14,7 @@ class Fight:
         self.pyboy = pyboy_obj
         self.history = []
     
-    def press_and_release(key):
+    def press_and_release(self,key):
         self.pyboy.button_press(key)
         self.pyboy.tick()
         self.pyboy.button_release(key)
