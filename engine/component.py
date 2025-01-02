@@ -1,4 +1,4 @@
-import math
+import math, json, re
 from pathlib import Path
 from jinja2 import Template
 
@@ -34,3 +34,14 @@ def read_prompt_without_template(name):
     with open(BASE_DIR / "engine" / "prompt" / f"{name}.txt", "r") as fp:
         template = fp.read()
     return template
+
+def extract_json_from_string(input_string):
+    json_pattern = r'\{(?:[^{}]|(?R))*\}'
+    match = re.search(json_pattern, input_string)
+    if match:
+        json_str = match.group()
+        try:
+            return json.loads(json_str)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON format: {e}")
+    raise ValueError(f"JSON format error")
