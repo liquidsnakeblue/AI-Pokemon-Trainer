@@ -15,10 +15,11 @@ class Fight:
         self.history = []
     
     def press_and_release(self,key):
+        self.pyboy.tick(10)
         self.pyboy.button_press(key)
-        self.pyboy.tick()
+        self.pyboy.tick(10)
         self.pyboy.button_release(key)
-        self.pyboy.tick()
+        self.pyboy.tick(10)
     
     def read_data(self):
         # return the data of game
@@ -97,7 +98,7 @@ class Fight:
     
     def _act_move(self, move_index):
         self.press_and_release('a')
-
+        move_index=int(move_index)
         for i in range(self.lastfight-1):
             self.press_and_release('up')
 
@@ -136,7 +137,7 @@ class Fight:
             print(tmp)
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
-            self.pyboy.tick(100,True)
+            self.pyboy.tick(3600)
 
         print("# end fight")
         return self.getresult() # return fight result
