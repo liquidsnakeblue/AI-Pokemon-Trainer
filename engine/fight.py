@@ -25,15 +25,15 @@ class Fight:
             "enemy_move3": self.pyboy.memory[0xCFEF],
             "enemy_move4": self.pyboy.memory[0xCFF0],
             "enemy_move_now": self.pyboy.memory[0xCFCC],
-            "enemy_hp": connect_digit_list(self.pyboy.memory[0xCFE6:0xCFE7]),
-            "enemy_maxhp": connect_digit_list(self.pyboy.memory[0xCFF4:0xCFF5]),
-            "enemy_attack": connect_digit_list(self.pyboy.memory[0xCFF6:0xCFF7]),
-            "enemy_defense": connect_digit_list(self.pyboy.memory[0xCFF8:0xCFF9]),
+            "enemy_hp": connect_digit_list([self.pyboy.memory[0xCFE6],self.pyboy.memory[0xCFE7]]),
+            "enemy_maxhp": connect_digit_list([self.pyboy.memory[0xCFF4],self.pyboy.memory[0xCFF5]]),
+            "enemy_attack": connect_digit_list([self.pyboy.memory[0xCFF6],self.pyboy.memory[0xCFF7]]),
+            "enemy_defense": connect_digit_list([self.pyboy.memory[0xCFF8],self.pyboy,memory[0xCFF9]]),
             "enemy_level": self.pyboy.memory[0xCFF0],
             "enemy_status": self.pyboy.memory[0xCFE9],
 
             "my_id": self.pyboy.memory[0xD014],
-            "my_hp": connect_digit_list(self.pyboy.memory[0xD015:0xD016]),
+            "my_hp": connect_digit_list([self.pyboy.memory[0xD015],self.pyboy.memory[0xD016]]),
             "my_status": self.pyboy.memory[0xD018],
             "my_type1": self.pyboy.memory[0xD019],
             "my_type2": self.pyboy.memory[0xD01A],
@@ -41,9 +41,9 @@ class Fight:
             "my_move2": self.pyboy.memory[0xD01D],
             "my_move3": self.pyboy.memory[0xD01E],
             "my_move4": self.pyboy.memory[0xD01F],
-            "my_maxhp": connect_digit_list(self.pyboy.memory[0xD023:0xD024]),
-            "my_attack": connect_digit_list(self.pyboy.memory[0xD025:0xD026]),
-            "my_defense": connect_digit_list(self.pyboy.memory[0xD027:0xD028]),
+            "my_maxhp": connect_digit_list([self.pyboy.memory[0xD023],self.pyboy.memory[0xD024]]),
+            "my_attack": connect_digit_list([self.pyboy.memory[0xD025],self.pyboy.memory[0xD026]]),
+            "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
             "my_move1_pp": self.pyboy.memory[0xD02D],
             "my_move1_pp": self.pyboy.memory[0xD02E],
@@ -90,27 +90,27 @@ class Fight:
         }]
     
     def _act_move(self, move_index):
-        self.pyboy.button_press('a')
+        self.pyboy.button_press('a',1)
         self.pyboy.tick()
 
         for i in range(self.lastfight-1):
-            self.pyboy.button_press('up')
+            self.pyboy.button_press('up',1)
             self.pyboy.tick()
 
         for i in range(move_index-1):
-            self.pyboy.button_press('down')
+            self.pyboy.button_press('down',1)
             self.pyboy.tick()
 
-        self.pyboy.button_press('a')
+        self.pyboy.button_press('a',1)
         self.pyboy.tick()
         self.lastfight = move_index
     
     def _act_run(self):
-        self.pyboy.button_press('down')
+        self.pyboy.button_press('down',1)
         self.pyboy.tick()
-        self.pyboy.button_press('right')
+        self.pyboy.button_press('right',1)
         self.pyboy.tick()
-        self.pyboy.button_press('a')
+        self.pyboy.button_press('a',1)
         self.pyboy.tick()
 
     def act(self, response):
@@ -131,11 +131,9 @@ class Fight:
         print("# start fight")
         while self.ifight():
             tmp = self.read_data()
-            print(self.pyboy.memory[0xCFF4:0xCFF5])
             if tmp['enemy_maxhp']  == 0:
-                self.pyboy.button_press("a")
+                self.pyboy.button_press("a",1)
                 self.pyboy.tick()
-                print("00000000000")
                 continue
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
