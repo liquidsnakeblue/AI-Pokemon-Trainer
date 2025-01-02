@@ -20,10 +20,11 @@ class Fight:
         self.history = []
     
     def press_and_release(self,key):
+        self.pyboy.tick(10)
         self.pyboy.button_press(key)
-        self.pyboy.tick()
+        self.pyboy.tick(10)
         self.pyboy.button_release(key)
-        self.pyboy.tick()
+        self.pyboy.tick(10)
     
     def read_data(self):
         # return the data of game
@@ -57,9 +58,9 @@ class Fight:
             "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
             "my_move1_pp": self.pyboy.memory[0xD02D],
-            "my_move1_pp": self.pyboy.memory[0xD02E],
-            "my_move1_pp": self.pyboy.memory[0xD02F],
-            "my_move1_pp": self.pyboy.memory[0xD030],
+            "my_move2_pp": self.pyboy.memory[0xD02E],
+            "my_move3_pp": self.pyboy.memory[0xD02F],
+            "my_move4_pp": self.pyboy.memory[0xD030],
 
             "fight_mod": self.pyboy.memory[0xD057],
         }
@@ -102,7 +103,7 @@ class Fight:
     
     def _act_move(self, move_index):
         self.press_and_release('a')
-
+        move_index=int(move_index)
         for i in range(self.lastfight-1):
             self.press_and_release('up')
 
@@ -138,9 +139,10 @@ class Fight:
             if tmp['enemy_maxhp']  == 0:
                 self.press_and_release('a')
                 continue
+            print(tmp)
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
-            self.pyboy.tick(100,True)
+            self.pyboy.tick(3600)
 
         print("# end fight")
         return self.getresult() # return fight result
