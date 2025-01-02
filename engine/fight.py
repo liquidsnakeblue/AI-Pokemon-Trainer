@@ -90,27 +90,40 @@ class Fight:
         }]
     
     def _act_move(self, move_index):
-        self.pyboy.button_press('a',1)
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+        self.pyboy.button_release('a')
         self.pyboy.tick()
 
         for i in range(self.lastfight-1):
-            self.pyboy.button_press('up',1)
+            self.pyboy.button_press('up')
             self.pyboy.tick()
+            self.pyboy.button_release("up")
 
         for i in range(move_index-1):
-            self.pyboy.button_press('down',1)
+            self.pyboy.button_press('down')
+            self.pyboy.tick()
+            self.pyboy.button_release('down')
             self.pyboy.tick()
 
-        self.pyboy.button_press('a',1)
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+        self.pyboy.button_release('a')
         self.pyboy.tick()
         self.lastfight = move_index
     
     def _act_run(self):
-        self.pyboy.button_press('down',1)
+        self.pyboy.button_press('down')
         self.pyboy.tick()
-        self.pyboy.button_press('right',1)
+        self.pyboy.button_release("down")
         self.pyboy.tick()
-        self.pyboy.button_press('a',1)
+        self.pyboy.button_press('right')
+        self.pyboy.tick()
+        self.pyboy.button_release("right")
+        self.pyboy.tick()
+        self.pyboy.button_press('a')
+        self.pyboy.tick()
+        self.pyboy.button_release("a")
         self.pyboy.tick()
 
     def act(self, response):
@@ -132,7 +145,9 @@ class Fight:
         while self.ifight():
             tmp = self.read_data()
             if tmp['enemy_maxhp']  == 0:
-                self.pyboy.button_press("a",1)
+                self.pyboy.button_press("a")
+                self.pyboy.tick()
+                self.pyboy.button_release("a")
                 self.pyboy.tick()
                 continue
             self.act(get_chatgpt_response(self.dump_data(tmp)))

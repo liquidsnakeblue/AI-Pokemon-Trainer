@@ -198,7 +198,7 @@ internal_index = [
 
 
 move_index=[
-  {},
+  {"name":"None","type":"None"},
   {"name":"Pound","type":"Normal"},
   {"name":"Karate Chop","type":"Fighting"},
   {"name":"Double Slap","type":"Normal"},
