@@ -22,6 +22,7 @@ def get_chatgpt_response(prompt):
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=prompt,
+        response_format={"type": "json_object"},
     )
     print("[DEBUG] GPT OUT",response.choices[0].message.content)
     return response.choices[0].message.content
