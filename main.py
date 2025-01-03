@@ -19,10 +19,10 @@ def pyboy_thread():
         # pyboy.memory[0xD024] = 0 # revise enemy's max hp into 0 so that skip the discussion
         pyboy.tick()
         if keyboard.is_pressed("\\"):
-                    print("Saving state...")
-                    with open(state_save_path, "wb") as f:
-                        pyboy.save_state(f)
-                    print("State Saved!")
+            print("Saving state...")
+            with open(state_save_path, "wb") as f:
+                pyboy.save_state(f)
+            print("State Saved!")
         if bool(pyboy.memory[0xD057]):
             do_fight(pyboy)
         

@@ -46,14 +46,14 @@
 <body>
     <img id="game-screen" src="/screen" alt="Game screen">
     <div class="controls">
-        <button class="button" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button>
-        <button class="button" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button>
-        <button class="button" onmousedown="pressKey('right')" onmouseup="releaseKey('right')">Right</button>
-        <button class="button" onmousedown="pressKey('down')" onmouseup="releaseKey('down')">Down</button>
-        <button class="button" onmousedown="pressKey('a')" onmouseup="releaseKey('a')">A</button>
-        <button class="button" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button>
-        <button class="button" onclick="saveProgress()">Save</button>
-        <button class="button" onclick="loadProgress()">Load</button>
+        <!-- <button class="button" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button> -->
+        <!-- <button class="button" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button> -->
+        <!-- <button class="button" onmousedown="pressKey('right')" onmouseup="releaseKey('right')">Right</button> -->
+        <!-- <button class="button" onmousedown="pressKey('down')" onmouseup="releaseKey('down')">Down</button> -->
+        <!-- <button class="button" onmousedown="pressKey('a')" onmouseup="releaseKey('a')">A</button> -->
+        <!-- <button class="button" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button> -->
+        <!-- <button class="button" onclick="saveProgress()">Save</button> -->
+        <!-- <button class="button" onclick="loadProgress()">Load</button> -->
     </div>
     <script>
         const keyMap = {
@@ -100,19 +100,19 @@
         }
 
         // Keyboard event listeners
-        document.addEventListener('keydown', (event) => {
-            const key = keyMap[event.code];
-            if (key) {
-                pressKey(key);
-            }
-        });
+        // document.addEventListener('keydown', (event) => {
+            // const key = keyMap[event.code];
+            // if (key) {
+                // pressKey(key);
+            // }
+        // });
 
-        document.addEventListener('keyup', (event) => {
-            const key = keyMap[event.code];
-            if (key) {
-                releaseKey(key);
-            }
-        });
+        // document.addEventListener('keyup', (event) => {
+            // const key = keyMap[event.code];
+            // if (key) {
+                // releaseKey(key);
+            // }
+        // });
 
         // Refresh the screen every 16ms (~60 FPS)
         setInterval(() => {
