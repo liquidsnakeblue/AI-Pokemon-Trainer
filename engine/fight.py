@@ -71,7 +71,7 @@ class Fight:
         data["enemy_name"] = enemy["name"]
         data["enemy_type1"] = enemy["type1"]
         data["enemy_type2"] = enemy["type2"]
-        data["percentage_hp"] = (data["enemy_hp"] / data["enemy_maxhp"]) * 100 # The robort can't dirctly get enemy's hp.
+        data["percentage_hp"] = round((data["enemy_hp"] / data["enemy_maxhp"]) * 100) # The robort can't dirctly get enemy's hp.
 
         my = internal_index[data["my_id"]]
         data["my_name"] = my["name"]
