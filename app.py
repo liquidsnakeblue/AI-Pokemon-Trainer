@@ -10,14 +10,25 @@ from engine.fight import do_fight
 
 app = Flask(__name__)
 
-pyboy = PyBoy("red.gb", window_type="headless")
-
 last_frame = None
+
+class PyBoy_Web(PyBoy):
+    def tick(self, count=1, render=True):
+        global last_frame
+        screen = pyboy.screen
+        image = screen.image
+        byte_io = io.BytesIO()
+        image.save(byte_io, 'PNG')
+        byte_io.seek(0)
+        last_frame = byte_io.getvalue()
+        return super().tick(count, render)
+
+pyboy = PyBoy_Web("red.gb", window_type="headless")
+
 pressed_keys = set()
 SAVE_STATE_PATH = "red.gb.state"
 
 def pyboy_thread():
-    global last_frame
     while True:
         for key in pressed_keys:
             pyboy.button_press(key)
@@ -29,13 +40,6 @@ def pyboy_thread():
 
         if bool(pyboy.memory[0xD057]):
             do_fight(pyboy)
-        
-        screen = pyboy.screen
-        image = screen.image
-        byte_io = io.BytesIO()
-        image.save(byte_io, 'PNG')
-        byte_io.seek(0)
-        last_frame = byte_io.getvalue()
         
         time.sleep(0.01)
 
