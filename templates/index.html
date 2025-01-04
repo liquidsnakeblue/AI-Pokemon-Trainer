@@ -1,61 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PyBoy Game Controller</title>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #f4f4f4;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-        }
-        #game-screen {
-            width: 60vw;
-            height: 50vh;
-            object-fit: contain;
-            border: 2px solid #000;
-            background-color: #000;
-        }
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:active {
-            background-color: #388e3c;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.3/css/bulma.min.css" integrity="sha512-4EnjWdm80dyWrJ7rh/tlhNt6fJL52dSDSHNEqfdVmBLpJLPrRYnFa+Kn4ZZL+FRkDL5/7lAXuHylzJkpzkSM2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>AI POKEMON TRAINER</title>
 </head>
 <body>
-    <img id="game-screen" src="/screen" alt="Game screen">
-    <div class="controls">
-        <button class="button" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button>
-        <button class="button" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button>
-        <button class="button" onmousedown="pressKey('right')" onmouseup="releaseKey('right')">Right</button>
-        <button class="button" onmousedown="pressKey('down')" onmouseup="releaseKey('down')">Down</button>
-        <button class="button" onmousedown="pressKey('a')" onmouseup="releaseKey('a')">A</button>
-        <button class="button" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button>
-        <button class="button" onclick="saveProgress()">Save</button>
-        <button class="button" onclick="loadProgress()">Load</button>
+    <div class="container">
+        <h1 class="title mt-6">AI POKEMON TRAINER</h1>
+        <div class="columns">
+            <div class="column">
+                <figure class="image">
+                    <img width="160" id="game-screen" src="/screen" alt="Game screen">
+                </figure>
+            </div>
+            <div class="column">
+                <div class="buttons">
+                    <button class="button is-success" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button>
+                    <button class="button is-success" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button>
+                    <button class="button is-success" onmousedown="pressKey('right')" onmouseup="releaseKey('right')">Right</button>
+                    <button class="button is-success" onmousedown="pressKey('down')" onmouseup="releaseKey('down')">Down</button>
+                    <button class="button is-success" onmousedown="pressKey('a')" onmouseup="releaseKey('a')">A</button>
+                    <button class="button is-success" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button>
+                    <button class="button is-warning" onclick="saveProgress()">Save</button>
+                    <button class="button is-warning" onclick="loadProgress()">Load</button>
+                </div>
+                <div class="notification is-danger">
+                    <strong>Status</strong><br>
+                    <p id="status_msg">There not Status now.</p>
+                </div>
+                <div class="notification is-link">
+                    <strong>Action</strong><br>
+                    <p id="action_msg">There not Action now.</p>
+                </div>
+                <div class="notification is-warning">
+                    <strong>Reason</strong><br>
+                    <p id="reason_msg">There not Reason now.</p>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
+        let status_msg = document.getElementById("status_msg");
+        let action_msg = document.getElementById("action_msg");
+        let reason_msg = document.getElementById("reason_msg");
+
         const keyMap = {
             ArrowUp: 'up',
             ArrowDown: 'down',
@@ -114,10 +105,24 @@
             }
         });
 
-        // Refresh the screen every 16ms (~60 FPS)
         setInterval(() => {
             document.getElementById('game-screen').src = "/screen?" + new Date().getTime();
-        }, 16);
+        }, 10);
+
+        
+        setInterval(() => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/get_run_data', true);
+            xhr.onload = function() {
+                if (this.status >= 200 && this.status < 300) {
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    status_msg.innerText = jsonResponse["status_msg"];
+                    action_msg.innerText = jsonResponse["action_msg"];
+                    reason_msg.innerText = jsonResponse["reason_msg"];
+                }
+            };
+            xhr.send();
+        }, 10);
     </script>
 </body>
 </html>

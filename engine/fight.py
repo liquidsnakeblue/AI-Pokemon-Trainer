@@ -124,9 +124,12 @@ class Fight:
     def act(self, response):
         # use response to do some act
         response = extract_json_from_string(response)
+        self.pyboy.run_data["reason_msg"] = response["reason"]
         if response["decision"] == "run":
+            self.pyboy.run_data["action_msg"] = "Run"
             self._act_run()
         else:
+            self.pyboy.run_data["action_msg"] = f"Use move {response['decision']}"
             self._act_move(response["decision"])
     
     def ifight(self):
@@ -136,7 +139,7 @@ class Fight:
         ...
 
     def start(self):
-        print("# start fight")
+        self.pyboy.run_data["status_msg"] = "Started fighting"
         while self.ifight():
             tmp = self.read_data()
 
@@ -148,9 +151,8 @@ class Fight:
 
             for _ in range(360):
                 self.pyboy.tick()
-            
 
-        print("# end fight")
+        self.pyboy.run_data["status_msg"] = "Manual Operation"
         return self.getresult() # return fight result
 
 

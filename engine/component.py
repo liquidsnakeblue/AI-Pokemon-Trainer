@@ -24,14 +24,14 @@ def connect_digit_list(numlist):
 
 def read_prompt(name):
     template = None
-    with open(BASE_DIR / "engine" / "prompt" / f"{name}.txt", "r") as fp:
+    with open(BASE_DIR / "engine" / "prompt" / f"{name}.txt", "r", encoding = "utf-8") as fp:
         template = Template(fp.read())
     return template
 
 
 def read_prompt_without_template(name):
     template = None
-    with open(BASE_DIR / "engine" / "prompt" / f"{name}.txt", "r") as fp:
+    with open(BASE_DIR / "engine" / "prompt" / f"{name}.txt", "r", encoding = "utf-8") as fp:
         template = fp.read()
     return template
 

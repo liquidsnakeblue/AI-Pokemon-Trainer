@@ -5,17 +5,28 @@ import time
 import io
 from werkzeug.serving import WSGIRequestHandler
 import os, logging
+from pathlib import Path
 
 from engine.fight import do_fight
 
 app = Flask(__name__)
 
 last_frame = None
+pressed_keys = set()
+
+BASE_DIR = Path(__file__).resolve().parent
+state_save_path = BASE_DIR / "red.gb.state"
 
 class PyBoy_Web(PyBoy):
+    run_data = {
+        "status_msg": "Manual Operation",
+        "action_msg": "There not Action now.",
+        "reason_msg": "There not Reason now.",
+    }
+    
     def tick(self, count=1, render=True):
         global last_frame
-        screen = pyboy.screen
+        screen = self.screen
         image = screen.image
         byte_io = io.BytesIO()
         image.save(byte_io, 'PNG')
@@ -25,15 +36,16 @@ class PyBoy_Web(PyBoy):
 
 pyboy = PyBoy_Web("red.gb", window_type="headless")
 
-pressed_keys = set()
-SAVE_STATE_PATH = "red.gb.state"
+if state_save_path.exists():
+    with open(state_save_path, "rb") as f:
+        pyboy.load_state(f)
 
 def pyboy_thread():
     while True:
         for key in pressed_keys:
             pyboy.button_press(key)
         
-        pyboy.tick(20,True)
+        pyboy.tick()
         
         for key in list(pressed_keys):
             pyboy.button_release(key)
@@ -74,18 +86,22 @@ def release_key():
 
 @app.route('/save', methods=['POST'])
 def save_progress():
-    with open(SAVE_STATE_PATH, 'wb') as save_file:
+    with open(state_save_path, 'wb') as save_file:
         pyboy.save_state(save_file)
     return jsonify({"status": "Game saved successfully!"})
 
 @app.route('/load', methods=['POST'])
 def load_progress():
-    if os.path.exists(SAVE_STATE_PATH):
-        with open(SAVE_STATE_PATH, 'rb') as load_file:
+    if os.path.exists(state_save_path):
+        with open(state_save_path, 'rb') as load_file:
             pyboy.load_state(load_file)
         return jsonify({"status": "Game loaded successfully!"})
     else:
         return jsonify({"error": "Save state file not found"}), 404
+
+@app.route('/get_run_data', methods=['GET'])
+def get_run_data():
+    return jsonify(pyboy.run_data)
 
 if __name__ == '__main__':
     log = logging.getLogger('werkzeug')
