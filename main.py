@@ -7,7 +7,14 @@ from engine.fight import do_fight
 BASE_DIR = Path(__file__).resolve().parent
 state_save_path = BASE_DIR / "red.gb.state"
 
-pyboy = PyBoy("red.gb")
+class PyBoy_Web(PyBoy):
+    run_data = {
+        "status_msg": "Manual Operation",
+        "action_msg": "There not Action now.",
+        "reason_msg": "There not Reason now.",
+    }
+
+pyboy = PyBoy_Web("red.gb")
 
 if state_save_path.exists():
     with open(state_save_path, "rb") as f:
