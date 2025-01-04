@@ -1,4 +1,4 @@
-#https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Internal_Index_Number
+# https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Internal_Index_Number
 internal_index = [
     {"name": "'M (glitch)", "type1": "Bird", "type2": "Normal"},
     {"name": "Rhydon", "type1": "Ground", "type2": "Rock"},
