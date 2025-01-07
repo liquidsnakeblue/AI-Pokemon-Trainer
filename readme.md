@@ -18,6 +18,8 @@ Run `app.py`, you will get a web server which started in 8000 port and listening
 
 Run `main.py`, you will get a window that run by pyboy, you can see some detial in the console. It's goal is for test the AI.
 
+![](./docs/img.png)
+
 ## Reference
 
 [Pokémon Red and Blue/Internal Index Number](https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Internal_Index_Number)
