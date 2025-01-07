@@ -44,7 +44,7 @@ class Fight:
             "enemy_maxhp": connect_digit_list([self.pyboy.memory[0xCFF4],self.pyboy.memory[0xCFF5]]),
             "enemy_attack": connect_digit_list([self.pyboy.memory[0xCFF6],self.pyboy.memory[0xCFF7]]),
             "enemy_defense": connect_digit_list([self.pyboy.memory[0xCFF8],self.pyboy.memory[0xCFF9]]),
-            "enemy_level": self.pyboy.memory[0xCFF0],
+            "enemy_level": self.pyboy.memory[0xCFF3],
             "enemy_status": self.pyboy.memory[0xCFE9],
 
             "my_id": self.pyboy.memory[0xD014],
