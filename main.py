@@ -2,10 +2,18 @@ from pyboy import PyBoy
 from pathlib import Path
 import time
 import keyboard
+import logging
+
 from engine.fight import do_fight
 
 BASE_DIR = Path(__file__).resolve().parent
 state_save_path = BASE_DIR / "red.gb.state"
+
+logger = logging.getLogger("ai_pokemon_trainer")
+logger.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+logger.addHandler(console_handler)
 
 class PyBoy_Web(PyBoy):
     run_data = {

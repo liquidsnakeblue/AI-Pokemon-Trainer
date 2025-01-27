@@ -1,4 +1,3 @@
-import json
 from pyboy import PyBoy
 from .api import get_chatgpt_response
 from .component import (
@@ -8,6 +7,9 @@ from .component import (
     extract_json_from_string,
 )
 from .index_data import *
+
+import logging
+logger = logging.getLogger("ai_pokemon_trainer")
 
 fight_template = read_prompt("fight")
 system_prompt = read_prompt_without_template("system_prompt")
@@ -146,7 +148,7 @@ class Fight:
             if tmp['enemy_maxhp']  == 0:
                 self.press_and_release('a')
                 continue
-            print(tmp)
+            logger.debug(f"Fight Data {tmp}")
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
             for _ in range(360):

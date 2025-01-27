@@ -17,6 +17,12 @@ pressed_keys = set()
 BASE_DIR = Path(__file__).resolve().parent
 state_save_path = BASE_DIR / "red.gb.state"
 
+logger = logging.getLogger("ai_pokemon_trainer")
+logger.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+logger.addHandler(console_handler)
+
 class PyBoy_Web(PyBoy):
     run_data = {
         "status_msg": "Manual Operation",

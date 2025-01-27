@@ -1,7 +1,9 @@
-import requests, os, json, shutil
+import os, json, shutil
 from openai import OpenAI
 from pathlib import Path
 
+import logging
+logger = logging.getLogger("ai_pokemon_trainer")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,12 +20,12 @@ client = OpenAI(
 )
 
 def get_chatgpt_response(prompt):
-    print("[DEBUG]", prompt)
+    logger.debug(f"Send to API, {prompt}")
     response = client.chat.completions.create(
         model='deepseek-chat',
         #model="gpt-4o",
         messages=prompt,
         response_format={"type": "json_object"},
     )
-    print("[DEBUG] GPT OUT",response.choices[0].message.content)
+    logger.debug(f"Recived by API, {response.choices[0].message.content}")
     return response.choices[0].message.content
