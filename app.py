@@ -1,7 +1,11 @@
 from flask import Flask, render_template, Response, request, jsonify
+import websockets
+import asyncio
 from pyboy import PyBoy
 import threading
+import base64
 import time
+import json
 import io
 from werkzeug.serving import WSGIRequestHandler
 import os, logging
@@ -65,51 +69,62 @@ pyboy_thread_instance = threading.Thread(target=pyboy_thread)
 pyboy_thread_instance.daemon = True
 pyboy_thread_instance.start()
 
+async def websocket_handler(websocket, path):
+    if path == "/screen":
+        while True:
+            base64_data = "data:image/jpeg;base64," + str(base64.b64encode(last_frame), 'utf-8')
+            await websocket.send(base64_data)
+            await asyncio.sleep(0.1)
+            
+    elif path == "/get_run_data":
+        while True:
+            await websocket.send(json.dumps(pyboy.run_data))
+            await asyncio.sleep(0.1)
+            
+    elif path == "/press":
+        async for message in websocket:
+            key = message
+            if key and key not in pressed_keys:
+                pressed_keys.add(key)
+                
+    elif path == "/release":
+        async for message in websocket:
+            key = message
+            if key and key in pressed_keys:
+                pressed_keys.remove(key)
+                
+    elif path == "/save_load":
+        async for message in websocket:
+            if message == "save":
+                with open(state_save_path, 'wb') as save_file:
+                    pyboy.save_state(save_file)
+                await websocket.send("Game saved successfully!")
+                
+            elif message == "load":
+                if os.path.exists(state_save_path):
+                    with open(state_save_path, 'rb') as load_file:
+                        pyboy.load_state(load_file)
+                    await websocket.send("Game loaded successfully!")
+                else:
+                    await websocket.send("Save state file not found")
+
+def start_websocket_server():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    start_server = websockets.serve(websocket_handler, "0.0.0.0", 8080)
+    loop.run_until_complete(start_server)
+    loop.run_forever()
+
+websocket_thread = threading.Thread(target=start_websocket_server)
+websocket_thread.daemon = True
+websocket_thread.start()
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/screen', methods=['GET'])
-def get_screen():
-    if last_frame:
-        return Response(last_frame, mimetype='image/png')
-    else:
-        return jsonify({"error": "No frame available"}), 404
-
-@app.route('/press', methods=['POST'])
-def press_key():
-    key = request.json.get('key')
-    if key and key not in pressed_keys:
-        pressed_keys.add(key)
-    return jsonify({"status": "key pressed"}), 200
-
-@app.route('/release', methods=['POST'])
-def release_key():
-    key = request.json.get('key')
-    if key and key in pressed_keys:
-        pressed_keys.remove(key)
-    return jsonify({"status": "key released"}), 200
-
-@app.route('/save', methods=['POST'])
-def save_progress():
-    with open(state_save_path, 'wb') as save_file:
-        pyboy.save_state(save_file)
-    return jsonify({"status": "Game saved successfully!"})
-
-@app.route('/load', methods=['POST'])
-def load_progress():
-    if os.path.exists(state_save_path):
-        with open(state_save_path, 'rb') as load_file:
-            pyboy.load_state(load_file)
-        return jsonify({"status": "Game loaded successfully!"})
-    else:
-        return jsonify({"error": "Save state file not found"}), 404
-
-@app.route('/get_run_data', methods=['GET'])
-def get_run_data():
-    return jsonify(pyboy.run_data)
-
 if __name__ == '__main__':
     log = logging.getLogger('werkzeug')
     log.disabled = True
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=False)

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.3/css/bulma.min.css" integrity="sha512-4EnjWdm80dyWrJ7rh/tlhNt6fJL52dSDSHNEqfdVmBLpJLPrRYnFa+Kn4ZZL+FRkDL5/7lAXuHylzJkpzkSM2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/static/bulma.min.css" />
     <title>AI POKEMON TRAINER</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="columns">
             <div class="column">
                 <figure class="image">
-                    <img width="160" id="game-screen" src="/screen" alt="Game screen">
+                    <img width="160" id="game-screen" src="" alt="Game screen">
                 </figure>
             </div>
             <div class="column">
@@ -46,6 +46,9 @@
         let status_msg = document.getElementById("status_msg");
         let action_msg = document.getElementById("action_msg");
         let reason_msg = document.getElementById("reason_msg");
+        let game_screen = document.getElementById('game-screen');
+
+        let mainurl = "ws://"+window.location.hostname+":8080";
 
         const keyMap = {
             ArrowUp: 'up',
@@ -60,35 +63,32 @@
 
         const activeKeys = new Set();
 
+        const ws_press = new WebSocket(`${mainurl}/press`);
         function pressKey(key) {
             if (!activeKeys.has(key)) {
                 activeKeys.add(key);
-                fetch('/press', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key }),
-                });
+                ws_press.send(key);
             }
         }
 
+        const ws_release = new WebSocket(`${mainurl}/release`);
         function releaseKey(key) {
             if (activeKeys.has(key)) {
                 activeKeys.delete(key);
-                fetch('/release', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key }),
-                });
+                ws_release.send(key);
             }
         }
 
+        const ws_save_load = new WebSocket(`${mainurl}/save_load`);
         function saveProgress() {
-            fetch('/save', { method: 'POST' }).then(res => res.json()).then(data => alert(data.status));
+            ws_save_load.send("save");
         }
-
         function loadProgress() {
-            fetch('/load', { method: 'POST' }).then(res => res.json()).then(data => alert(data.status));
+            ws_save_load.send("load");
         }
+        ws_save_load.onmessage = function(event) {
+            alert(event.data)
+        };
 
         // Keyboard event listeners
         document.addEventListener('keydown', (event) => {
@@ -105,24 +105,18 @@
             }
         });
 
-        setInterval(() => {
-            document.getElementById('game-screen').src = "/screen?" + new Date().getTime();
-        }, 10);
+        const ws_screen = new WebSocket(`${mainurl}/screen`);
+        ws_screen.onmessage = function(event) {
+            game_screen.src = event.data;
+        };
 
-        
-        setInterval(() => {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/get_run_data', true);
-            xhr.onload = function() {
-                if (this.status >= 200 && this.status < 300) {
-                    var jsonResponse = JSON.parse(xhr.responseText);
-                    status_msg.innerText = jsonResponse["status_msg"];
-                    action_msg.innerText = jsonResponse["action_msg"];
-                    reason_msg.innerText = jsonResponse["reason_msg"];
-                }
-            };
-            xhr.send();
-        }, 10);
+        const ws_run_data = new WebSocket(`${mainurl}/get_run_data`);
+        ws_run_data.onmessage = function(event) {
+            var jsonResponse = JSON.parse(event.data);
+            status_msg.innerText = jsonResponse["status_msg"];
+            action_msg.innerText = jsonResponse["action_msg"];
+            reason_msg.innerText = jsonResponse["reason_msg"];
+        };
     </script>
 </body>
 </html>

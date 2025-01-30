@@ -143,12 +143,11 @@ class Fight:
     def start(self):
         self.pyboy.run_data["status_msg"] = "Started fighting"
         while self.ifight():
-            
-            if self.pyboy.memory[0xC4F2] != 16:
-                logger.debug(f"** Skip msg")
-                self.pyboy.run_data["action_msg"] = "Skip msg"
-                self.pyboy.run_data["reason_msg"] = "..."
-                self.press_and_release('a')
+            # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
+            #     logger.debug(f"** Skip msg")
+            #     self.pyboy.run_data["action_msg"] = "Skip msg"
+            #     self.pyboy.run_data["reason_msg"] = "..."
+            #     self.press_and_release('a')
             
             tmp = self.read_data()
 

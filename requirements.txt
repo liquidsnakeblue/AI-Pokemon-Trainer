@@ -4,3 +4,4 @@ openai
 requests
 keyboard
 pillow
+websockets

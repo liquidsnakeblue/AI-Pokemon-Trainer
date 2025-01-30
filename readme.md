@@ -14,7 +14,7 @@ Then you need copy secret_setting.json.example to secret_setting.json, and typin
 
 There are two files in the root folder, `main.py` and `app.py`.
 
-Run `app.py`, you will get a web server which started in 8000 port and listening all addr, it have beautiful screen. It's goal is for the normal user to watch how AI work.
+Run `app.py`, you will get a web server which started in 8000 port and 8080 port used by websockets, it have beautiful screen. It's goal is for the normal user to watch how AI work.
 
 Run `main.py`, you will get a window that run by pyboy, you can see some detial in the console. It's goal is for test the AI.
 
