@@ -149,15 +149,21 @@ class Fight:
             #     self.pyboy.run_data["reason_msg"] = "..."
             #     self.press_and_release('a')
             
+            #We could hard code the first keypress since it's always the same "A wild ... appears,"
             tmp = self.read_data()
 
-            if tmp['enemy_maxhp']  == 0:
+            #Does this account for the scenario which the user pokemon levels up? In level up, you need to press a multiple times to exit battle
+            #What if the pokemon wants to learn a new skill?
+            #What if our pokemon is dead?
+            if tmp['enemy_maxhp']  == 0: 
                 self.press_and_release('a')
                 continue
             logger.debug(f"Fight Data {tmp}")
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
+
             for _ in range(360):
+                #We will need a check here for dialogues. If our pokemon uses a non-damaging move, critical hits, dialogue will pop-up and need to press a
                 self.pyboy.tick()
 
         self.pyboy.run_data["status_msg"] = "Manual Operation"
