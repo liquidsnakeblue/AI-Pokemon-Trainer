@@ -52,12 +52,14 @@ if state_save_path.exists():
 
 def pyboy_thread():
     while True:
-        for key in pressed_keys:
+        tmp = pressed_keys
+
+        for key in tmp:
             pyboy.button_press(key)
         
         pyboy.tick()
         
-        for key in list(pressed_keys):
+        for key in tmp:
             pyboy.button_release(key)
 
         if bool(pyboy.memory[0xD057]):
