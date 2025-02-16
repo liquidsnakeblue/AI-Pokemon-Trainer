@@ -4,4 +4,4 @@ openai
 requests
 keyboard
 pillow
-websockets
+websockets == 10.4
