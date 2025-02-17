@@ -150,11 +150,17 @@ class Fight:
             #     self.press_and_release('a')
             
             #We could hard code the first keypress since it's always the same "A wild ... appears,"
+            #Start of Battle
             tmp = self.read_data()
-
+            for _ in range(360):
+                self.pyboy.tick()
+            self.press_and_release('a')
+            for _ in range(360):
+                self.pyboy.tick()
             #Does this account for the scenario which the user pokemon levels up? In level up, you need to press a multiple times to exit battle
             #What if the pokemon wants to learn a new skill?
             #What if our pokemon is dead?
+            #End of Battle
             if tmp['enemy_maxhp']  == 0: 
                 self.press_and_release('a')
                 continue
@@ -164,6 +170,8 @@ class Fight:
 
             for _ in range(360):
                 #We will need a check here for dialogues. If our pokemon uses a non-damaging move, critical hits, dialogue will pop-up and need to press a
+                if self.pyboy.memory[0xC4F2]==238:
+                    self.press_and_release('a')
                 self.pyboy.tick()
 
         self.pyboy.run_data["status_msg"] = "Manual Operation"
