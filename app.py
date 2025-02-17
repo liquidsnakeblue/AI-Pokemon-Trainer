@@ -75,10 +75,13 @@ pyboy_thread_instance.start()
 
 async def websocket_handler(websocket, path):
     if path == "/screen":
+        last_data = None
         while True:
             base64_data = "data:image/jpeg;base64," + str(base64.b64encode(last_frame), 'utf-8')
-            await websocket.send(base64_data)
-            await asyncio.sleep(0.1)
+            if last_data!=base64_data:
+                await websocket.send(base64_data)
+                last_data=base64_data
+            await asyncio.sleep(0.01)
             
     elif path == "/get_run_data":
         while True:
