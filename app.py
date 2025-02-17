@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 last_frame = None
 pressed_keys = set()
+pressed_keys_lock = threading.Lock()
 
 BASE_DIR = Path(__file__).resolve().parent
 state_save_path = BASE_DIR / "red.gb.state"
@@ -52,15 +53,16 @@ if state_save_path.exists():
 
 def pyboy_thread():
     while True:
-        tmp = pressed_keys
+        with pressed_keys_lock:
+            tmp = pressed_keys
 
-        for key in tmp:
-            pyboy.button_press(key)
+            for key in tmp:
+                pyboy.button_press(key)
         
-        pyboy.tick()
+            pyboy.tick()
         
-        for key in tmp:
-            pyboy.button_release(key)
+            for key in tmp:
+                pyboy.button_release(key)
 
         if bool(pyboy.memory[0xD057]):
             do_fight(pyboy)
@@ -87,13 +89,15 @@ async def websocket_handler(websocket, path):
         async for message in websocket:
             key = message
             if key and key not in pressed_keys:
-                pressed_keys.add(key)
+                with pressed_keys_lock:
+                    pressed_keys.add(key)
                 
     elif path == "/release":
         async for message in websocket:
             key = message
             if key and key in pressed_keys:
-                pressed_keys.remove(key)
+                with pressed_keys_lock:
+                    pressed_keys.remove(key)
                 
     elif path == "/save_load":
         async for message in websocket:
