@@ -142,6 +142,7 @@ class Fight:
 
     def start(self):
         self.pyboy.run_data["status_msg"] = "Started fighting"
+        flag=True
         while self.ifight():
             # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
             #     logger.debug(f"** Skip msg")
@@ -152,11 +153,15 @@ class Fight:
             #We could hard code the first keypress since it's always the same "A wild ... appears,"
             #Start of Battle
             tmp = self.read_data()
-            for _ in range(360):
-                self.pyboy.tick()
-            self.press_and_release('a')
-            for _ in range(360):
-                self.pyboy.tick()
+            #Render battle start animation
+            if flag==True:
+                for _ in range(360):
+                    self.pyboy.tick()
+                self.press_and_release('a')    
+                #Render "throw pokemon out" animation
+                for _ in range(360):
+                    self.pyboy.tick()
+                flag=False
             #Does this account for the scenario which the user pokemon levels up? In level up, you need to press a multiple times to exit battle
             #What if the pokemon wants to learn a new skill?
             #What if our pokemon is dead?
@@ -164,11 +169,11 @@ class Fight:
             if tmp['enemy_maxhp']  == 0: 
                 self.press_and_release('a')
                 continue
-            logger.debug(f"Fight Data {tmp}")
+            #logger.debug(f"Fight Data {tmp}")
+            
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
-
-            for _ in range(360):
+            for _ in range(720):
                 #We will need a check here for dialogues. If our pokemon uses a non-damaging move, critical hits, dialogue will pop-up and need to press a
                 if self.pyboy.memory[0xC4F2]==238:
                     self.press_and_release('a')
