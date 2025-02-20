@@ -22,8 +22,7 @@ client = OpenAI(
 def get_chatgpt_response(prompt):
     logger.debug(f"Send to API, {prompt}")
     response = client.chat.completions.create(
-        model='deepseek-chat',
-        #model="gpt-4o",
+        model=SECRET_SETTING["model"],
         messages=prompt,
         response_format={"type": "json_object"},
     )
