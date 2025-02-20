@@ -203,7 +203,6 @@ class Fight:
             
             #We could hard code the first keypress since it's always the same "A wild ... appears,"
             #Start of Battle
-            tmp = self.read_data()
             #Render battle start animation
             if flag==True:
                 for _ in range(360):
@@ -213,15 +212,13 @@ class Fight:
                 for _ in range(360):
                     self.pyboy.tick()
                 flag=False
-            #Does this account for the scenario which the user pokemon levels up? In level up, you need to press a multiple times to exit battle
+            tmp = self.read_data()
             #What if the pokemon wants to learn a new skill?
-            #What if our pokemon is dead?
             #End of Battle
             if tmp['enemy_maxhp']  == 0: 
                 self.press_and_release('a')
                 continue
             #logger.debug(f"Fight Data {tmp}")
-            
             self.act(get_chatgpt_response(self.dump_data(tmp)))
 
             for _ in range(720):
