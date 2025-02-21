@@ -18,6 +18,7 @@ class Fight:
 
     def __init__(self, pyboy_obj):
         self.lastfight = 1
+        self.nowpoke = 1
         self.pyboy = pyboy_obj
         self.history = []
     
@@ -159,6 +160,7 @@ class Fight:
         for i in data["other_pokemon"]: #To check which pokemon is in battle. Then tell AI which is the current pokemon.
             if i["level"] == data["my_level"] and i["name_index"] == data["my_id"] and i["hp"] == data["my_hp"]:
                 data["now_pokemon_id"] = i["id"]
+                self.nowpoke = i["id"]
                 break
 
         return [{
@@ -185,15 +187,35 @@ class Fight:
         self.press_and_release('down')
         self.press_and_release('right')
         self.press_and_release('a')
+    
+    def _act_switch_poke(self, poke_index):
+        self.press_and_release('right')
+        self.press_and_release('a')
+        for i in range(self.nowpoke-1):
+            self.press_and_release('up')
+        for i in range(poke_index-1):
+            self.press_and_release('down')
+        self.press_and_release('a')
+        self.nowpoke = poke_index
 
     def act(self, response):
         # use response to do some act
         response = extract_json_from_string(response)
         self.pyboy.run_data["reason_msg"] = response["reason"]
         if response["decision"] == "run":
+            # Run
             self.pyboy.run_data["action_msg"] = "Run"
             self._act_run()
+        elif response["decision"][0] == "s":
+            # Switch Pokemon
+            tmp = int(response["decision"][1:])
+            self.pyboy.run_data["action_msg"] = f"Switch Pokemon: {tmp}"
+            self._act_switch_poke(tmp)
+        elif response["decision"][0] == "e":
+            # TODO: Use elements
+            ...
         else:
+            # Move
             self.pyboy.run_data["action_msg"] = f"Use move {response['decision']}"
             self._act_move(response["decision"])
     
