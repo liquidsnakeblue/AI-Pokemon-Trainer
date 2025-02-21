@@ -141,6 +141,19 @@ class Fight:
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
 
+        other_1 = internal_index[data["other_pokemon"][0]["name_index"]]
+        data["other1_name"] = other_1["name"]
+        other_2 = internal_index[data["other_pokemon"][1]["name_index"]]
+        data["other2_name"] = other_2["name"]
+        other_3 = internal_index[data["other_pokemon"][2]["name_index"]]
+        data["other3_name"] = other_3["name"]
+        other_4 = internal_index[data["other_pokemon"][3]["name_index"]]
+        data["other4_name"] = other_4["name"]
+        other_5 = internal_index[data["other_pokemon"][4]["name_index"]]
+        data["other5_name"] = other_5["name"]
+        other_6 = internal_index[data["other_pokemon"][5]["name_index"]]
+        data["other6_name"] = other_6["name"]
+
 
         move1 = move_index[data["my_move1"]]
         move2 = move_index[data["my_move2"]]
@@ -228,6 +241,7 @@ class Fight:
     def start(self):
         self.pyboy.update_run_data("status_msg", "Started fighting")
         flag=True
+        print()
         while self.ifight():
             # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
             #     logger.debug(f"** Skip msg")
