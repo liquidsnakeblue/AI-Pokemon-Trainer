@@ -38,7 +38,7 @@ class PyBoy_Web(PyBoy):
 
     def update_run_data(self, field, msg):
         with run_data_lock:
-            self.run_data[field] = msg
+            self.__run_data[field] = msg
     
     def get_run_data(self):
         with run_data_lock:
