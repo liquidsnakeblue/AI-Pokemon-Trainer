@@ -16,11 +16,8 @@ console_handler.setLevel(logging.DEBUG)
 logger.addHandler(console_handler)
 
 class PyBoy_Web(PyBoy):
-    run_data = {
-        "status_msg": "Manual Operation",
-        "action_msg": "There not Action now.",
-        "reason_msg": "There not Reason now.",
-    }
+    def update_run_data(self, *_):
+        ...
 
 pyboy = PyBoy_Web("red.gb")
 

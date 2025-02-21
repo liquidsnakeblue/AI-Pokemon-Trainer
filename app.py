@@ -18,6 +18,7 @@ app = Flask(__name__)
 last_frame = None
 pressed_keys = set()
 pressed_keys_lock = threading.Lock()
+run_data_lock = threading.Lock()
 
 BASE_DIR = Path(__file__).resolve().parent
 state_save_path = BASE_DIR / "red.gb.state"
@@ -29,11 +30,19 @@ console_handler.setLevel(logging.DEBUG)
 logger.addHandler(console_handler)
 
 class PyBoy_Web(PyBoy):
-    run_data = {
+    __run_data = {
         "status_msg": "Manual Operation",
         "action_msg": "There not Action now.",
         "reason_msg": "There not Reason now.",
     }
+
+    def update_run_data(self, field, msg):
+        with run_data_lock:
+            self.run_data[field] = msg
+    
+    def get_run_data(self):
+        with run_data_lock:
+            return self.__run_data
     
     def tick(self, count=1, render=True):
         global last_frame
@@ -85,7 +94,7 @@ async def websocket_handler(websocket, path):
             
     elif path == "/get_run_data":
         while True:
-            await websocket.send(json.dumps(pyboy.run_data))
+            await websocket.send(json.dumps(pyboy.get_run_data()))
             await asyncio.sleep(0.1)
             
     elif path == "/press":

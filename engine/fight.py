@@ -201,22 +201,22 @@ class Fight:
     def act(self, response):
         # use response to do some act
         response = extract_json_from_string(response)
-        self.pyboy.run_data["reason_msg"] = response["reason"]
+        self.pyboy.update_run_data("reason_msg", response["reason"])
         if response["decision"] == "run":
             # Run
-            self.pyboy.run_data["action_msg"] = "Run"
+            self.pyboy.update_run_data("action_msg", "Run")
             self._act_run()
         elif response["decision"][0] == "s":
             # Switch Pokemon
             tmp = int(response["decision"][1:])
-            self.pyboy.run_data["action_msg"] = f"Switch Pokemon: {tmp}"
+            self.pyboy.update_run_data("action_msg", f"Switch Pokemon: {tmp}")
             self._act_switch_poke(tmp)
         elif response["decision"][0] == "e":
             # TODO: Use elements
             ...
         else:
             # Move
-            self.pyboy.run_data["action_msg"] = f"Use move {response['decision']}"
+            self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
             self._act_move(response["decision"])
     
     def ifight(self):
@@ -226,13 +226,13 @@ class Fight:
         ...
 
     def start(self):
-        self.pyboy.run_data["status_msg"] = "Started fighting"
+        self.pyboy.update_run_data("status_msg", "Started fighting")
         flag=True
         while self.ifight():
             # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
             #     logger.debug(f"** Skip msg")
-            #     self.pyboy.run_data["action_msg"] = "Skip msg"
-            #     self.pyboy.run_data["reason_msg"] = "..."
+            #     self.pyboy.update_run_data("action_msg", "Skip msg")
+            #     self.pyboy.update_run_data("reason_msg", "...")
             #     self.press_and_release('a')
             
             #We could hard code the first keypress since it's always the same "A wild ... appears,"
@@ -261,7 +261,7 @@ class Fight:
                     self.press_and_release('a')
                 self.pyboy.tick()
 
-        self.pyboy.run_data["status_msg"] = "Manual Operation"
+        self.pyboy.update_run_data("status_msg", "Manual Operation")
         return self.getresult() # return fight result
 
 
