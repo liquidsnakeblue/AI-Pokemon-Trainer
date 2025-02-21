@@ -69,10 +69,11 @@ class Fight:
 
             "fight_mod": self.pyboy.memory[0xD057],
 
-            "other_pokemen": [
+            "other_pokemon": [
                 {
                     "id": 1,
                     "level": self.pyboy.memory[0xD18C],
+                    "name_index":self.pyboy.memory[0xD164],
                     "hp": connect_digit_list([self.pyboy.memory[0xD16C], self.pyboy.memory[0xD16D]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD18F], self.pyboy.memory[0xD190]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
@@ -81,6 +82,7 @@ class Fight:
                 {
                     "id": 2,
                     "level": self.pyboy.memory[0xD1B8],
+                    "name_index":self.pyboy.memory[0xD165],
                     "hp": connect_digit_list([self.pyboy.memory[0xD198], self.pyboy.memory[0xD199]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD1BB], self.pyboy.memory[0xD1BC]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1BD], self.pyboy.memory[0xD1BE]]),
@@ -89,6 +91,7 @@ class Fight:
                 {
                     "id": 3,
                     "level": self.pyboy.memory[0xD1E4],
+                    "name_index":self.pyboy.memory[0xD166],
                     "hp": connect_digit_list([self.pyboy.memory[0xD1C4], self.pyboy.memory[0xD1C5]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD1E7], self.pyboy.memory[0xD1E8]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1E9], self.pyboy.memory[0xD1EA]]),
@@ -97,6 +100,7 @@ class Fight:
                 {
                     "id": 4,
                     "level": self.pyboy.memory[0xD210],
+                    "name_index":self.pyboy.memory[0xD167],
                     "hp": connect_digit_list([self.pyboy.memory[0xD1F0], self.pyboy.memory[0xD1F1]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD213], self.pyboy.memory[0xD214]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
@@ -105,6 +109,7 @@ class Fight:
                 {
                     "id": 5,
                     "level": self.pyboy.memory[0xD18C],
+                    "name_index":self.pyboy.memory[0xD168],
                     "hp": connect_digit_list([self.pyboy.memory[0xD21C], self.pyboy.memory[0xD21D]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD23F], self.pyboy.memory[0xD240]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD241], self.pyboy.memory[0xD242]]),
@@ -113,6 +118,7 @@ class Fight:
                 {
                     "id": 6,
                     "level": self.pyboy.memory[0xD268],
+                    "name_index":self.pyboy.memory[0xD169],
                     "hp": connect_digit_list([self.pyboy.memory[0xD248], self.pyboy.memory[0xD249]]),
                     "attack": connect_digit_list([self.pyboy.memory[0xD26B], self.pyboy.memory[0xD26C]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD26D], self.pyboy.memory[0xD26E]]),
@@ -148,6 +154,12 @@ class Fight:
         data["move3_type"] = move3["type"]
         data["move4_name"] = move4["name"]
         data["move4_type"] = move4["type"]
+
+
+        for i in data["other_pokemon"]: #To check which pokemon is in battle. Then tell AI which is the current pokemon.
+            if i["level"] == data["my_level"] and i["name_index"] == data["my_id"] and i["hp"] == data["my_hp"]:
+                data["now_pokemon_id"] = i["id"]
+                break
 
         return [{
             "role": "system",
