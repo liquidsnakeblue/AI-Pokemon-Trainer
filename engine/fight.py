@@ -17,12 +17,14 @@ system_prompt = read_prompt_without_template("system_prompt")
 class Fight:
 
     def __init__(self, pyboy_obj):
-        self.lastfight = 1
-        self.nowpoke = 1
+        self.lastfight = 1 # Last time use move
+        self.nowpoke = 1 # Last time use pokemon
         self.pyboy = pyboy_obj
-        self.history = []
     
     def press_and_release(self,key):
+        """
+        Automatic Press Button
+        """
         for _ in range(10):
             self.pyboy.tick()
         self.pyboy.button_press(key)
@@ -33,7 +35,10 @@ class Fight:
             self.pyboy.tick()
     
     def read_data(self):
-        # return the data of game
+        """
+        Get Data from the game
+        """
+
         return {
             "enemy_id": self.pyboy.memory[0xCFE5],
             "enemy_type1": self.pyboy.memory[0xCFEA],
@@ -55,20 +60,39 @@ class Fight:
             "my_status": self.pyboy.memory[0xD018],
             "my_type1": self.pyboy.memory[0xD019],
             "my_type2": self.pyboy.memory[0xD01A],
-            "my_move1": self.pyboy.memory[0xD01C],
-            "my_move2": self.pyboy.memory[0xD01D],
-            "my_move3": self.pyboy.memory[0xD01E],
-            "my_move4": self.pyboy.memory[0xD01F],
             "my_maxhp": connect_digit_list([self.pyboy.memory[0xD023],self.pyboy.memory[0xD024]]),
             "my_attack": connect_digit_list([self.pyboy.memory[0xD025],self.pyboy.memory[0xD026]]),
             "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
-            "my_move1_pp": self.pyboy.memory[0xD02D],
-            "my_move2_pp": self.pyboy.memory[0xD02E],
-            "my_move3_pp": self.pyboy.memory[0xD02F],
-            "my_move4_pp": self.pyboy.memory[0xD030],
 
             "fight_mod": self.pyboy.memory[0xD057],
+
+            "my_move": [
+                {
+                    "id": 1,
+                    "index": self.pyboy.memory[0xD01C],
+                    "pp": self.pyboy.memory[0xD02D],
+                    "is_active": True,
+                },
+                {
+                    "id": 2,
+                    "index": self.pyboy.memory[0xD01D],
+                    "pp": self.pyboy.memory[0xD02E],
+                    "is_active": True,
+                },
+                {
+                    "id": 3,
+                    "index": self.pyboy.memory[0xD01E],
+                    "pp": self.pyboy.memory[0xD02F],
+                    "is_active": True,
+                },
+                {
+                    "id": 4,
+                    "index": self.pyboy.memory[0xD01F],
+                    "pp": self.pyboy.memory[0xD030],
+                    "is_active": True,
+                }
+            ],
 
             "other_pokemon": [
                 {
@@ -79,6 +103,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD18F], self.pyboy.memory[0xD190]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD1B9], self.pyboy.memory[0xD1BA]]),
+                    "is_active": True,
                 },
                 {
                     "id": 2,
@@ -88,6 +113,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD1BB], self.pyboy.memory[0xD1BC]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1BD], self.pyboy.memory[0xD1BE]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD1BD], self.pyboy.memory[0xD1BE]]),
+                    "is_active": True,
                 },
                 {
                     "id": 3,
@@ -97,6 +123,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD1E7], self.pyboy.memory[0xD1E8]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1E9], self.pyboy.memory[0xD1EA]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD1E5], self.pyboy.memory[0xD1E6]]),
+                    "is_active": True,
                 },
                 {
                     "id": 4,
@@ -106,6 +133,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD213], self.pyboy.memory[0xD214]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD211], self.pyboy.memory[0xD212]]),
+                    "is_active": True,
                 },
                 {
                     "id": 5,
@@ -115,6 +143,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD23F], self.pyboy.memory[0xD240]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD241], self.pyboy.memory[0xD242]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD23D], self.pyboy.memory[0xD23E]]),
+                    "is_active": True,
                 },
                 {
                     "id": 6,
@@ -124,51 +153,47 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD26B], self.pyboy.memory[0xD26C]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD26D], self.pyboy.memory[0xD26E]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD269], self.pyboy.memory[0xD26A]]),
+                    "is_active": True,
                 },
             ]
         }
     
     def dump_data(self, data):
-        # make prompt
+        """
+        Make Prompt
+        """
+
+        # Enemy information
         enemy = internal_index[data["enemy_id"]]
         data["enemy_name"] = enemy["name"]
         data["enemy_type1"] = enemy["type1"]
         data["enemy_type2"] = enemy["type2"]
         data["percentage_hp"] = round((data["enemy_hp"] / data["enemy_maxhp"]) * 100) # The robort can't dirctly get enemy's hp.
 
+        # Self information
         my = internal_index[data["my_id"]]
         data["my_name"] = my["name"]
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
 
-        other_1 = internal_index[data["other_pokemon"][0]["name_index"]]
-        data["other1_name"] = other_1["name"]
-        other_2 = internal_index[data["other_pokemon"][1]["name_index"]]
-        data["other2_name"] = other_2["name"]
-        other_3 = internal_index[data["other_pokemon"][2]["name_index"]]
-        data["other3_name"] = other_3["name"]
-        other_4 = internal_index[data["other_pokemon"][3]["name_index"]]
-        data["other4_name"] = other_4["name"]
-        other_5 = internal_index[data["other_pokemon"][4]["name_index"]]
-        data["other5_name"] = other_5["name"]
-        other_6 = internal_index[data["other_pokemon"][5]["name_index"]]
-        data["other6_name"] = other_6["name"]
+        # Process Other Pokemon
+        for i in range(6):
+            if data["other_pokemon"][i]["level"] == 0 or data["other_pokemon"][i]["hp"] == 0:
+                data["other_pokemon"][i]["is_active"] = False
+                continue
 
+            other_name = internal_index[data["other_pokemon"][i]["name_index"]]
+            data["other_pokemon"][i]["name"] = other_name["name"]
+        
+        # Process Moves
+        for i in range(4):
+            if data["my_move"][i]["index"] == 0:
+                data["my_move"][i]["is_active"] = False
+                continue
 
-        move1 = move_index[data["my_move1"]]
-        move2 = move_index[data["my_move2"]]
-        move3 = move_index[data["my_move3"]]
-        move4 = move_index[data["my_move4"]]
-
-        data["move1_name"] = move1["name"]
-        data["move1_type"] = move1["type"]
-        data["move2_name"] = move2["name"]
-        data["move2_type"] = move2["type"]
-        data["move3_name"] = move3["name"]
-        data["move3_type"] = move3["type"]
-        data["move4_name"] = move4["name"]
-        data["move4_type"] = move4["type"]
-
+            tmp = move_index[data["my_move"][i]["index"]]
+            data["my_move"][i]["name"] = tmp["name"]
+            data["my_move"][i]["type"] = tmp["type"]
 
         for i in data["other_pokemon"]: #To check which pokemon is in battle. Then tell AI which is the current pokemon.
             if i["level"] == data["my_level"] and i["name_index"] == data["my_id"] and i["hp"] == data["my_hp"]:
@@ -212,7 +237,10 @@ class Fight:
         self.nowpoke = poke_index
 
     def act(self, response):
-        # use response to do some act
+        """
+        Use response to do some act
+        """
+
         response = extract_json_from_string(response)
         self.pyboy.update_run_data("reason_msg", response["reason"])
         if response["decision"] == "run":

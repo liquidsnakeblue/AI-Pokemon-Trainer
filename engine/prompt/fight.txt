@@ -1,19 +1,15 @@
 ### Current State:
 - Your current Pokémon that fight your opponent: {{my_name}} (Level {{my_level}}, HP: {{my_hp}}/{{my_maxhp}})
   - Moves:
-    1. {{move1_name}} ({{my_move1_type}}, PP: {{my_move1_pp}})
-    2. {{move2_name}} ({{my_move2_type}}, PP: {{my_move2_pp}})
-    3. {{move3_name}} ({{my_move3_type}}, PP: {{my_move3_pp}})
-    4. {{move4_name}} ({{my_move4_type}}, PP: {{my_move4_pp}})
+{%for i in my_move%}{%if i.is_active%}
+    1. {{i.name}} ({{i.type}}, PP: {{i.pp}})
+{%endif%}{%endfor%}
 - Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
 
 - You can also switch to other available Pokémon:
-  1. {{other1_name}}:hp:{{other_pokemon.0.hp}}, level:{{other_pokemon.0.level}},attack:{{other_pokemon.0.attack}}, defense:{{other_pokemon.0.defense}}, max_hp: {{other_pokemon.0.max_hp}}
-  2. {{other2_name}}:hp:{{other_pokemon.1.hp}}, level:{{other_pokemon.1.level}},attack:{{other_pokemon.1.attack}}, defense:{{other_pokemon.1.defense}}, max_hp: {{other_pokemon.1.max_hp}}
-  3. {{other3_name}}:hp:{{other_pokemon.2.hp}}, level:{{other_pokemon.2.level}},attack:{{other_pokemon.2.attack}}, defense:{{other_pokemon.2.defense}}, max_hp: {{other_pokemon.2.max_hp}}
-  4. {{other4_name}}:hp:{{other_pokemon.3.hp}}, level:{{other_pokemon.3.level}},attack:{{other_pokemon.3.attack}}, defense:{{other_pokemon.3.defense}}, max_hp: {{other_pokemon.3.max_hp}}
-  5. {{other5_name}}:hp:{{other_pokemon.4.hp}}, level:{{other_pokemon.4.level}},attack:{{other_pokemon.4.attack}}, defense:{{other_pokemon.4.defense}}, max_hp: {{other_pokemon.4.max_hp}}
-  6. {{other6_name}}:hp:{{other_pokemon.5.hp}}, level:{{other_pokemon.5.level}},attack:{{other_pokemon.5.attack}}, defense:{{other_pokemon.5.defense}}, max_hp: {{other_pokemon.5.max_hp}}
+{%for i in other_pokemon%}{%if i.is_active%}
+  {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
+{%endif%}{%endfor%}
 - To remind you, your current Pokémon, {{now_pokemon_id}} in battle is included in this list of Pokémon.
 - If there is only one Pokémon in your list, you can not switch.
 Make your decision.
