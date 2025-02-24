@@ -98,51 +98,66 @@ logger.info("Stared PyBoy thread.")
 
 async def websocket_handler(websocket, path):
     if path == "/screen":
-        last_data = None
-        while True:
-            base64_data = "data:image/jpeg;base64," + str(base64.b64encode(last_frame), 'utf-8')
-            if last_data!=base64_data:
-                await websocket.send(base64_data)
-                last_data=base64_data
-            await asyncio.sleep(0.01)
+        try:
+            last_data = None
+            while True:
+                base64_data = "data:image/jpeg;base64," + str(base64.b64encode(last_frame), 'utf-8')
+                if last_data!=base64_data:
+                    await websocket.send(base64_data)
+                    last_data=base64_data
+                await asyncio.sleep(0.01)
+        except websockets.exceptions.ConnectionClosedOK:
+            logger.warning("websockets connection closed.")
             
     elif path == "/get_run_data":
-        last_data = None
-        while True:
-            tmp = json.dumps(pyboy.get_run_data())
-            if last_data!=tmp:
-                await websocket.send(tmp)
-                last_data=tmp
-            await asyncio.sleep(0.1)
+        try:
+            last_data = None
+            while True:
+                tmp = json.dumps(pyboy.get_run_data())
+                if last_data!=tmp:
+                    await websocket.send(tmp)
+                    last_data=tmp
+                await asyncio.sleep(0.1)
+        except websockets.exceptions.ConnectionClosedOK:
+            logger.warning("websockets connection closed.")
             
     elif path == "/press":
-        async for message in websocket:
-            key = message
-            if key and key not in pressed_keys:
-                with pressed_keys_lock:
-                    pressed_keys.add(key)
+        try:
+            async for message in websocket:
+                key = message
+                if key and key not in pressed_keys:
+                    with pressed_keys_lock:
+                        pressed_keys.add(key)
+        except websockets.exceptions.ConnectionClosedOK:
+            logger.warning("websockets connection closed.")
                 
     elif path == "/release":
-        async for message in websocket:
-            key = message
-            if key and key in pressed_keys:
-                with pressed_keys_lock:
-                    pressed_keys.remove(key)
+        try:
+            async for message in websocket:
+                key = message
+                if key and key in pressed_keys:
+                    with pressed_keys_lock:
+                        pressed_keys.remove(key)
+        except websockets.exceptions.ConnectionClosedOK:
+            logger.warning("websockets connection closed.")
                 
     elif path == "/save_load":
-        async for message in websocket:
-            if message == "save":
-                with open(state_save_path, 'wb') as save_file:
-                    pyboy.save_state(save_file)
-                await websocket.send("Game saved successfully!")
+        try:
+            async for message in websocket:
+                if message == "save":
+                    with open(state_save_path, 'wb') as save_file:
+                        pyboy.save_state(save_file)
+                    await websocket.send("Game saved successfully!")
                 
-            elif message == "load":
-                if os.path.exists(state_save_path):
-                    with open(state_save_path, 'rb') as load_file:
-                        pyboy.load_state(load_file)
-                    await websocket.send("Game loaded successfully!")
-                else:
-                    await websocket.send("Save state file not found")
+                elif message == "load":
+                    if os.path.exists(state_save_path):
+                        with open(state_save_path, 'rb') as load_file:
+                            pyboy.load_state(load_file)
+                        await websocket.send("Game loaded successfully!")
+                    else:
+                        await websocket.send("Save state file not found")
+        except websockets.exceptions.ConnectionClosedOK:
+            logger.warning("websockets connection closed.")
 
 def start_websocket_server():
     loop = asyncio.new_event_loop()
