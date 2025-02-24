@@ -25,7 +25,7 @@
 | Move 1 | D01C |
 | Move 2 | D01D |
 | Move 3 | D01E |
-| Move 4 | D01F |<!-- 十分需要注意！这里的Move1会出现储存多个数字的情况，可能是字节显示问题。-->
+| Move 4 | D01F |<!-- 这里的Move1会出现储存多个数字的情况，可能是字节显示问题。-->
 | Max HP | D023-D024 |
 | Attack | D025-DO26 |
 | Defense | D027-D028 |
@@ -40,33 +40,39 @@
 | Attack | D18F-D190 |
 | Defense | D191-D192 |
 | Max HP | D1B9-D1BA |
+| Name Index | D164 |
 | **Player's Pokemon 2** |
 | Level | D1B8 |
 | Current HP | D198-D199 |
 | Attack | D1BB-D1BC |
 | Defense | D1BD-D1BE |
 | Max HP | D1BD-D1BE |
+| Name Index | D165 |
 | **Player's Pokemon 3** |
 | Level | D1E4 |
 | Current HP | D1C4-D1C5 |
 | Attack | D1E7-D1E8 |
 | Defense | D1E9-D1EA |
 | Max HP | D1E5-D1E6 |
+| Name Index | D166 |
 | **Player's Pokemon 4** |
 | Level | D210 |
 | Current HP | D1F0-D1F1 |
 | Attack | D213-D214 |
 | Defense | D191-D192 |
 | Max HP | D211-D212 |
+| Name Index | D167 |
 | **Player's Pokemon 5** |
 | Level | D18C |
 | Current HP | D21C-D21D |
 | Attack | D23F-D240 |
 | Defense | D241-D242 |
 | Max HP | D23D-D23E |
+| Name Index | D168 |
 | **Player's Pokemon 6** |
 | Level | D268 |
 | Current HP | D248-D249 |
 | Attack | D26B-D26C |
 | Defense | D26D-D26E |
 | Max HP | D269-D26A |
+| Name Index | D169 |
