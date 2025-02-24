@@ -2,7 +2,7 @@
 - Your current Pokémon that fight your opponent: {{my_name}} (Level {{my_level}}, HP: {{my_hp}}/{{my_maxhp}})
   - Moves:
 {%for i in my_move%}{%if i.is_active%}
-    1. {{i.name}} ({{i.type}}, PP: {{i.pp}})
+    {{i.id}}. {{i.name}} ({{i.type}}, PP: {{i.pp}})
 {%endif%}{%endfor%}
 - Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
 

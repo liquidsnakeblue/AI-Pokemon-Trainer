@@ -236,6 +236,7 @@ class Fight:
         for i in range(poke_index-1):
             self.press_and_release('down')
         self.press_and_release('a')
+        self.press_and_release('a')
         self.nowpoke = poke_index
 
     def act(self, response):
