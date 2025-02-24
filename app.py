@@ -107,8 +107,12 @@ async def websocket_handler(websocket, path):
             await asyncio.sleep(0.01)
             
     elif path == "/get_run_data":
+        last_data = None
         while True:
-            await websocket.send(json.dumps(pyboy.get_run_data()))
+            tmp = json.dumps(pyboy.get_run_data())
+            if last_data!=tmp:
+                await websocket.send(tmp)
+                last_data=tmp
             await asyncio.sleep(0.1)
             
     elif path == "/press":
