@@ -20,11 +20,11 @@ client = OpenAI(
 )
 
 def get_chatgpt_response(prompt):
-    logger.debug(f"Send to API, {prompt}")
+    logger.debug(f"Send to API, {json.dumps(prompt, indent=4, separators=(',', ': '), ensure_ascii=False)}")
     response = client.chat.completions.create(
         model=SECRET_SETTING["model"],
         messages=prompt,
         response_format={"type": "json_object"},
     )
-    logger.debug(f"Recived by API, {response.choices[0].message.content}")
+    logger.debug(f"Recived by API, {json.dumps(response.choices[0].message.content, indent=4, separators=(',', ': '), ensure_ascii=False)}")
     return response.choices[0].message.content

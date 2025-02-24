@@ -39,6 +39,7 @@ class Fight:
         Get Data from the game
         """
 
+        logger.debug("Get Information about game.")
         return {
             "enemy_id": self.pyboy.memory[0xCFE5],
             "enemy_type1": self.pyboy.memory[0xCFEA],
@@ -163,6 +164,7 @@ class Fight:
         Make Prompt
         """
 
+        logger.debug("Make Prompt.")
         # Enemy information
         enemy = internal_index[data["enemy_id"]]
         data["enemy_name"] = enemy["name"]
@@ -241,6 +243,7 @@ class Fight:
         Use response to do some act
         """
 
+        logger.debug("Do Act.")
         response = extract_json_from_string(response)
         self.pyboy.update_run_data("reason_msg", response["reason"])
         if response["decision"] == "run":
@@ -268,8 +271,8 @@ class Fight:
 
     def start(self):
         self.pyboy.update_run_data("status_msg", "Started fighting")
+        logger.info("Started Fighting.")
         flag=True
-        print()
         while self.ifight():
             # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
             #     logger.debug(f"** Skip msg")
@@ -303,6 +306,7 @@ class Fight:
                     self.press_and_release('a')
                 self.pyboy.tick()
 
+        logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")
         return self.getresult() # return fight result
 
