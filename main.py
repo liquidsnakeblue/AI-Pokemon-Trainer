@@ -42,5 +42,4 @@ def pyboy_thread():
         
         time.sleep(0.01)
 
-if __name__ == "__main__":
-    pyboy_thread()
+pyboy_thread()

@@ -5,3 +5,4 @@ requests
 keyboard
 pillow
 websockets == 10.4
+click

@@ -24,6 +24,10 @@ from pathlib import Path
 
 from engine.fight import do_fight
 
+LISTEN_ADDR = os.getenv('AI_POKEMON_TRAINER_LISTEN_ADDR', '0.0.0.0')
+HTTP_PORT = int(os.getenv('AI_POKEMON_TRAINER_HTTP_PORT', '8000'))
+WS_PORT = int(os.getenv('AI_POKEMON_TRAINER_WS_PORT', '18080'))
+
 app = Flask(__name__)
 
 last_frame = None
@@ -163,23 +167,22 @@ def start_websocket_server():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     
-    start_server = websockets.serve(websocket_handler, "0.0.0.0", 18080)
+    start_server = websockets.serve(websocket_handler, LISTEN_ADDR, WS_PORT)
     loop.run_until_complete(start_server)
     loop.run_forever()
 
 websocket_thread = threading.Thread(target=start_websocket_server)
 websocket_thread.daemon = True
 websocket_thread.start()
-logger.info("Started WebSocket Thread in Port 18080.")
+logger.info(f"Started WebSocket Thread in Port {WS_PORT}.")
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', WS_PORT = WS_PORT)
 
-if __name__ == '__main__':
-    log = logging.getLogger('werkzeug')
-    log.disabled = True
-    cli = sys.modules['flask.cli']
-    cli.show_server_banner = lambda *x: None
-    logger.info("Start HTTP Web Server http://0.0.0.0:8000/ .")
-    app.run(host='0.0.0.0', port=8000, debug=False)
+log = logging.getLogger('werkzeug')
+log.disabled = True
+cli = sys.modules['flask.cli']
+cli.show_server_banner = lambda *x: None
+logger.info(f"Start HTTP Web Server http://{LISTEN_ADDR}:{HTTP_PORT}/ .")
+app.run(host=LISTEN_ADDR, port=HTTP_PORT, debug=False)
