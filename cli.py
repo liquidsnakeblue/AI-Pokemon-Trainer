@@ -11,13 +11,16 @@ def cli():
 @click.option('--ws-port', type=int, default=18080, help='WebSocket Port')
 @click.option('--remove-escape', is_flag=True, help="Ablation Escape")
 @click.option('--remove-switch', is_flag=True, help="Ablation Switch Pokemon")
-def server(port, addr, ws_port, remove_escape, remove_switch):
+@click.option('--shell', is_flag=True, help="Shell")
+def server(port, addr, ws_port, remove_escape, remove_switch, shell):
     """
     Run server
     """
     os.environ["AI_POKEMON_TRAINER_HTTP_PORT"] = str(port)
     os.environ["AI_POKEMON_TRAINER_LISTEN_ADDR"] = addr
     os.environ["AI_POKEMON_TRAINER_WS_PORT"] = str(ws_port)
+
+    os.environ["AI_POKEMON_TRAINER_SHELL"] = '1' if shell else '0'
 
     # Ablation Test
     os.environ["AI_POKEMON_TRAINER_ABLATION_ESCAPE"] = '1' if remove_escape else '0'

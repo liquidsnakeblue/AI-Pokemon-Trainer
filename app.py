@@ -12,8 +12,10 @@ import asyncio
 import threading
 import warnings
 import logging
+import signal
 import base64
 import time
+import code
 import json
 import sys
 import io
@@ -29,6 +31,7 @@ HTTP_PORT = int(os.getenv('AI_POKEMON_TRAINER_HTTP_PORT', '8000'))
 WS_PORT = int(os.getenv('AI_POKEMON_TRAINER_WS_PORT', '18080'))
 
 app = Flask(__name__)
+master_pid = os.getpid()
 
 last_frame = None
 pressed_keys = set()
@@ -70,6 +73,19 @@ class PyBoy_Web(PyBoy):
         byte_io.seek(0)
         last_frame = byte_io.getvalue()
         return super().tick(count, render)
+
+    def press_and_release(self, key):
+        """
+        Automatic Press Button
+        """
+        for _ in range(10):
+            self.pyboy.tick()
+        self.pyboy.button_press(key)
+        for _ in range(10):
+            self.pyboy.tick()
+        self.pyboy.button_release(key)
+        for _ in range(10):
+            self.pyboy.tick()
 
 pyboy = PyBoy_Web("red.gb", window="null")
 
@@ -176,6 +192,27 @@ websocket_thread.daemon = True
 websocket_thread.start()
 logger.info(f"Started WebSocket Thread in Port {WS_PORT}.")
 
+def shell_console():
+    console = code.InteractiveConsole(globals())
+    
+    print("Enter Python code to execute. Type 'exit' to quit.")
+    while True:
+        user_input = input(">>> ")
+        if user_input.strip().lower() == 'exit':
+            print("Exiting interactive console...")
+            break
+        if not user_input:
+            time.sleep(0.1)
+            continue
+
+        try:
+            console.push(user_input)
+        except Exception as e:
+            print(f"Error: {e}")
+    os.kill(master_pid, signal.SIGTERM)
+
+shell_thread = threading.Thread(target=shell_console)
+
 @app.route('/')
 def index():
     return render_template('index.html', WS_PORT = WS_PORT)
@@ -185,4 +222,8 @@ log.disabled = True
 cli = sys.modules['flask.cli']
 cli.show_server_banner = lambda *x: None
 logger.info(f"Start HTTP Web Server http://{LISTEN_ADDR}:{HTTP_PORT}/ .")
+
+if os.getenv('AI_POKEMON_TRAINER_SHELL', '0') == '1':
+    shell_thread.start()
+
 app.run(host=LISTEN_ADDR, port=HTTP_PORT, debug=False)
