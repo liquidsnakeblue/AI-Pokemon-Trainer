@@ -12,13 +12,20 @@ Then you need copy secret_setting.json.example to secret_setting.json, and typin
 
 ## Usage
 
-There are two files in the root folder, `main.py` and `app.py`.
+There are cli tools in the root folder, `cli.py`.
 
-Run `app.py`, you will get a web server which started in 8000 port and 8080 port used by websockets, it have beautiful screen. It's goal is for the normal user to watch how AI work.
+Run `python3 cli.py server`, you will get a web server which started in 8000 port and 18080 port used by websockets, it have beautiful screen. It's goal is for the normal user to watch how AI work.
 
-Run `main.py`, you will get a window that run by pyboy, you can see some detial in the console. It's goal is for test the AI.
+Run `python3 cli.py local`, you will get a window that run by pyboy, you can see some detial in the console. It's goal is for test the AI.
 
 ![](./docs/img.png)
+
+## Ablation Study
+
+There are some cli option that you can setting which one will be removed.
+
+- Remove Escape Unit `--remove-escape`
+- Remove Switch Pokemon Unit `--remove-switch`
 
 ## Reference
 

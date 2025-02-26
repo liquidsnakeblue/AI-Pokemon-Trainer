@@ -8,11 +8,11 @@ from .component import (
 )
 from .index_data import *
 
-import logging
+import logging, os
 logger = logging.getLogger("ai_pokemon_trainer")
 
 fight_template = read_prompt("fight")
-system_prompt = read_prompt_without_template("system_prompt")
+system_prompt = read_prompt("system_prompt")
 
 class Fight:
 
@@ -20,6 +20,12 @@ class Fight:
         self.lastfight = 1 # Last time use move
         self.nowpoke = 1 # Last time use pokemon
         self.pyboy = pyboy_obj
+
+        self.is_ablation_escape = os.getenv('AI_POKEMON_TRAINER_ABLATION_ESCAPE', '0') == '1'
+        if self.is_ablation_escape: logger.info('Ablation escape unit.')
+
+        self.is_ablation_switch = os.getenv('AI_POKEMON_TRAINER_ABLATION_SWITCH', '0') == '1'
+        if self.is_ablation_switch: logger.info('Ablation switch pokemon unit.')
     
     def press_and_release(self,key):
         """
@@ -202,10 +208,15 @@ class Fight:
                 data["now_pokemon_id"] = i["id"]
                 self.nowpoke = i["id"]
                 break
+        
+        data["ablation"] = {
+            "escape": self.is_ablation_escape,
+            "switch": self.is_ablation_switch,
+        }
 
         return [{
             "role": "system",
-            "content": system_prompt,
+            "content": system_prompt.render(data),
         },{
             "role": "user",
             'content': fight_template.render(data)
@@ -247,11 +258,11 @@ class Fight:
         logger.debug("Do Act.")
         response = extract_json_from_string(response)
         self.pyboy.update_run_data("reason_msg", response["reason"])
-        if response["decision"] == "run":
+        if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
             self.pyboy.update_run_data("action_msg", "Run")
             self._act_run()
-        elif response["decision"][0] == "s":
+        elif response["decision"][0] == "s" and (not self.is_ablation_switch):
             # Switch Pokemon
             tmp = int(response["decision"][1:])
             self.pyboy.update_run_data("action_msg", f"Switch Pokemon: {tmp}")

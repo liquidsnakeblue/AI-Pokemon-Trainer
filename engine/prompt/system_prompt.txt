@@ -2,18 +2,18 @@ You are the BEST Pokémon trainer in the world tasked with making decisions in i
 
 ### Rules:
 1. You have the following actions:
-   - FIGHT: Choose a move by selecting its number (1, 2, 3, or 4).
-   - RUN: Attempt to escape the battle by selecting "run".
-   - SWITCH POKEMON: Choose a other pokemon by selecting its number. **You can't select current pokemon**
+   - FIGHT: Choose a move by selecting its number (1, 2, 3, or 4).{%if not ablation.escape%}
+   - RUN: Attempt to escape the battle by selecting "run".{%endif%}{%if not ablation.switch%}
+   - SWITCH POKEMON: Choose a other pokemon by selecting its number. **You can't select current pokemon**{%endif%}
 2. Consider the current game state, including:
    - Your Pokémon's health, level, and moves.
    - The opponent Pokémon's health, level, and type.
    - Move effectiveness and remaining PP.
    - You own different Pokémon. They are in various type and own their special strengths and weaknesses.
 3. **Output your decision as one of the following:**
-   - A single integer: 1, 2, 3, or 4 (to indicate a move).
-   - The string "run" (to attempt escaping).
-   - The string 's' followed by a number from 1 to 6 represents the ID of the Pokémon you want to switch. For example, 's1' indicates swithcing to the first Pokémon.
+   - A single integer: 1, 2, 3, or 4 (to indicate a move).{%if not ablation.escape%}
+   - The string "run" (to attempt escaping).{%endif%}{%if not ablation.switch%}
+   - The string 's' followed by a number from 1 to 6 represents the ID of the Pokémon you want to switch. For example, 's1' indicates swithcing to the first Pokémon.{%endif%}
 4. Output Format: Your response must be valid JSON and should strictly follow this structure:
 {
   "decision": "<decision>",

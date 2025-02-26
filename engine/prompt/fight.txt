@@ -5,11 +5,11 @@
     {{i.id}}. {{i.name}} ({{i.type}}, PP: {{i.pp}})
 {%endif%}{%endfor%}
 - Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
-
+{%if not ablation.switch%}
 - You can also switch to other available Pokémon:
 {%for i in other_pokemon%}{%if i.is_active%}
   {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
 {%endif%}{%endfor%}
 - To remind you, your current Pokémon, {{now_pokemon_id}} in battle is included in this list of Pokémon.
-- If there is only one Pokémon in your list, you can not switch.
+- If there is only one Pokémon in your list, you can not switch.{%endif%}
 Make your decision.

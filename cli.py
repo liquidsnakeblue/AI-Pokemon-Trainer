@@ -9,35 +9,37 @@ def cli():
 @click.option('--port', type=int, default=8000, help='Http Server Port')
 @click.option('--addr', type=str, default='0.0.0.0', help='Listen address')
 @click.option('--ws-port', type=int, default=18080, help='WebSocket Port')
-def server(port, addr, ws_port):
+@click.option('--remove-escape', is_flag=True, help="Ablation Escape")
+@click.option('--remove-switch', is_flag=True, help="Ablation Switch Pokemon")
+def server(port, addr, ws_port, remove_escape, remove_switch):
     """
     Run server
     """
     os.environ["AI_POKEMON_TRAINER_HTTP_PORT"] = str(port)
     os.environ["AI_POKEMON_TRAINER_LISTEN_ADDR"] = addr
     os.environ["AI_POKEMON_TRAINER_WS_PORT"] = str(ws_port)
+
+    # Ablation Test
+    os.environ["AI_POKEMON_TRAINER_ABLATION_ESCAPE"] = '1' if remove_escape else '0'
+    os.environ["AI_POKEMON_TRAINER_ABLATION_SWITCH"] = '1' if remove_switch else '0'
     import app
 
 
 @click.command(help="Use pyboy window")
-def local():
+@click.option('--remove-escape', is_flag=True, help="Ablation Escape")
+@click.option('--remove-switch', is_flag=True, help="Ablation Switch Pokemon")
+def local(remove_escape, remove_switch):
     """
     Use pyboy window
     """
+    # Ablation Test
+    os.environ["AI_POKEMON_TRAINER_ABLATION_ESCAPE"] = '1' if remove_escape else '0'
+    os.environ["AI_POKEMON_TRAINER_ABLATION_SWITCH"] = '1' if remove_switch else '0'
     import main
 
 
-@click.command(help="Run test")
-@click.option('--count', type=int, default=1, help='Times')
-def test(count):
-    """
-    Run Test
-    """
-    ...
-
 cli.add_command(server)
 cli.add_command(local)
-cli.add_command(test)
 
 if __name__ == '__main__':
     cli()
