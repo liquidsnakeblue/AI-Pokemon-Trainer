@@ -79,13 +79,13 @@ class PyBoy_Web(PyBoy):
         Automatic Press Button
         """
         for _ in range(10):
-            self.pyboy.tick()
-        self.pyboy.button_press(key)
+            self.tick()
+        self.button_press(key)
         for _ in range(10):
-            self.pyboy.tick()
-        self.pyboy.button_release(key)
+            self.tick()
+        self.button_release(key)
         for _ in range(10):
-            self.pyboy.tick()
+            self.tick()
 
 pyboy = PyBoy_Web("red.gb", window="null")
 
