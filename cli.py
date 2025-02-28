@@ -12,7 +12,9 @@ def cli():
 @click.option('--remove-escape', is_flag=True, help="Ablation Escape")
 @click.option('--remove-switch', is_flag=True, help="Ablation Switch Pokemon")
 @click.option('--shell', is_flag=True, help="Shell")
-def server(port, addr, ws_port, remove_escape, remove_switch, shell):
+@click.option('--fight-test', is_flag=True, help="Test fight")
+@click.option('--test-count', type=int, default=20, help="Test count")
+def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count):
     """
     Run server
     """
@@ -25,6 +27,10 @@ def server(port, addr, ws_port, remove_escape, remove_switch, shell):
     # Ablation Test
     os.environ["AI_POKEMON_TRAINER_ABLATION_ESCAPE"] = '1' if remove_escape else '0'
     os.environ["AI_POKEMON_TRAINER_ABLATION_SWITCH"] = '1' if remove_switch else '0'
+
+
+    os.environ["AI_POKEMON_TRAINER_FIGHT_TEST"] = '1' if fight_test else '0'
+    os.environ["AI_POKEMON_TRAINER_TEST_CNT"] = str(test_count)
     import app
 
 

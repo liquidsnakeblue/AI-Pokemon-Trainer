@@ -33,6 +33,7 @@ WS_PORT = int(os.getenv('AI_POKEMON_TRAINER_WS_PORT', '18080'))
 app = Flask(__name__)
 master_pid = os.getpid()
 
+enable_auto_tick = True
 last_frame = None
 pressed_keys = set()
 pressed_keys_lock = threading.Lock()
@@ -44,7 +45,7 @@ state_save_path = BASE_DIR / "red.gb.state"
 logger = logging.getLogger("ai_pokemon_trainer")
 logger.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
+console_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('[%(asctime)s](%(module)s)[%(levelname)s] %(message)s')
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
@@ -94,22 +95,33 @@ if state_save_path.exists():
         pyboy.load_state(f)
 
 def pyboy_thread():
-    while True:
-        with pressed_keys_lock:
-            tmp = pressed_keys
+    if os.getenv('AI_POKEMON_TRAINER_FIGHT_TEST', '0') == "1":
+        logger.info("Perpare the fight test")
+        print("!!! Move pokemon onto the lawn !!!")
 
-            for key in tmp:
-                pyboy.button_press(key)
-        
-            pyboy.tick()
-        
-            for key in tmp:
-                pyboy.button_release(key)
+        from test import test_fight
+        report = test_fight.run_test(int(os.getenv('AI_POKEMON_TRAINER_TEST_CNT', '20')), pyboy)
+        logger.info(report)
+        logger.info("End of the test, exit.")
+        os.kill(master_pid, signal.SIGTERM)
+    else:
+        while True:
+            with pressed_keys_lock:
+                tmp = pressed_keys
 
-        if bool(pyboy.memory[0xD057]):
-            do_fight(pyboy)
+                for key in tmp:
+                    pyboy.button_press(key)
+
+                if enable_auto_tick:
+                    pyboy.tick()
         
-        time.sleep(0.01)
+                for key in tmp:
+                    pyboy.button_release(key)
+
+            if bool(pyboy.memory[0xD057]):
+                do_fight(pyboy)
+        
+            time.sleep(0.01)
 
 pyboy_thread_instance = threading.Thread(target=pyboy_thread)
 pyboy_thread_instance.daemon = True

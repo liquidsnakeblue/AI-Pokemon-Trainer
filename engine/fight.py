@@ -20,6 +20,7 @@ class Fight:
         self.lastfight = 1 # Last time use move
         self.nowpoke = 1 # Last time use pokemon
         self.pyboy = pyboy_obj
+        self.history = []
 
         self.is_ablation_escape = os.getenv('AI_POKEMON_TRAINER_ABLATION_ESCAPE', '0') == '1'
         if self.is_ablation_escape: logger.info('Ablation escape unit.')
@@ -214,6 +215,8 @@ class Fight:
             "switch": self.is_ablation_switch,
         }
 
+        self.history.append(data)
+
         return [{
             "role": "system",
             "content": system_prompt.render(data),
@@ -279,7 +282,8 @@ class Fight:
         return bool(self.pyboy.memory[0xD057]) # Fight Flag
     
     def getresult(self):
-        ...
+        self.dump_data(self.read_data())
+        return self.history
 
     def start(self):
         self.pyboy.update_run_data("status_msg", "Started fighting")
