@@ -74,6 +74,7 @@ class PyBoy_Web(PyBoy):
         image.save(byte_io, 'PNG')
         byte_io.seek(0)
         last_frame = byte_io.getvalue()
+        time.sleep(0.01)
         return super().tick(count, render)
 
     def press_and_release(self, key):
