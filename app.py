@@ -55,6 +55,7 @@ class PyBoy_Web(PyBoy):
         "status_msg": "Manual Operation",
         "action_msg": "There not Action now.",
         "reason_msg": "There not Reason now.",
+        "think_status": False,
     }
 
     def update_run_data(self, field, msg):

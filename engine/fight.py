@@ -314,7 +314,10 @@ class Fight:
                 self.press_and_release('a')
                 continue
             #logger.debug(f"Fight Data {tmp}")
+
+            self.pyboy.update_run_data("think_status", True)
             self.act(get_chatgpt_response(self.dump_data(tmp)))
+            self.pyboy.update_run_data("think_status", False)
 
             for _ in range(720):
                 #We will need a check here for dialogues. If our pokemon uses a non-damaging move, critical hits, dialogue will pop-up and need to press a
