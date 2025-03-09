@@ -36,18 +36,21 @@ def run_test(count, pyboy):
     logger.info("Test started")
     cnt = 0
     report = []
-    for i in range(count):
-        cnt+=1
-        pyboy.total_usage_token = 0
-        res = TestFight(pyboy).run()
-        logger.info(f"Test Process: {cnt}/{count}")
-        report.append({
-            "id": i,
-            "total_usage_token": pyboy.total_usage_token,
-            "init_state": res[0],
-            "result": res[-1],
-        })
     logname = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    with open(BASE_DIR / "test_record" / f"{logname}.{os.getenv('AI_POKEMON_TRAINER_TEST_SETTING')}.json", "w+") as fp:
-        fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))
+    with open(BASE_DIR / "test_record" / f"{logname}.{os.getenv('AI_POKEMON_TRAINER_TEST_SETTING')}.json", "w") as fp:
+        for i in range(count):
+            cnt+=1
+            pyboy.total_usage_token = 0
+            res = TestFight(pyboy).run()
+            logger.info(f"Test Process: {cnt}/{count}")
+            report.append({
+                "id": i,
+                "total_usage_token": pyboy.total_usage_token,
+                "init_state": res[0],
+                "result": res[-1],
+            })
+            fp.seek(0)
+            fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))
+            fp.flush()
+            os.fsync(fp.fileno())
     return report
