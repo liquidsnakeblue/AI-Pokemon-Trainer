@@ -1,4 +1,4 @@
-import logging, time, yaml, os
+import logging, time, yaml, os, json, datetime
 from pathlib import Path
 from engine.fight import do_fight
 
@@ -43,4 +43,7 @@ def run_test(count, pyboy):
             "init_state": res[0],
             "result": res[-1],
         })
+    logname = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    with open(BASE_DIR / "test_record" / f"{logname}.{os.getenv('AI_POKEMON_TRAINER_TEST_SETTING')}.json", "w+") as fp:
+        fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))
     return report

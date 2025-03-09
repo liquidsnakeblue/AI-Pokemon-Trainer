@@ -143,7 +143,7 @@ async def websocket_handler(websocket, path):
                     await websocket.send(base64_data)
                     last_data=base64_data
                 await asyncio.sleep(0.01)
-        except websockets.exceptions.ConnectionClosedOK:
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
             
     elif path == "/get_run_data":
@@ -155,7 +155,7 @@ async def websocket_handler(websocket, path):
                     await websocket.send(tmp)
                     last_data=tmp
                 await asyncio.sleep(0.1)
-        except websockets.exceptions.ConnectionClosedOK:
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
             
     elif path == "/press":
@@ -165,7 +165,7 @@ async def websocket_handler(websocket, path):
                 if key and key not in pressed_keys:
                     with pressed_keys_lock:
                         pressed_keys.add(key)
-        except websockets.exceptions.ConnectionClosedOK:
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
                 
     elif path == "/release":
@@ -175,7 +175,7 @@ async def websocket_handler(websocket, path):
                 if key and key in pressed_keys:
                     with pressed_keys_lock:
                         pressed_keys.remove(key)
-        except websockets.exceptions.ConnectionClosedOK:
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
                 
     elif path == "/save_load":
@@ -193,7 +193,7 @@ async def websocket_handler(websocket, path):
                         await websocket.send("Game loaded successfully!")
                     else:
                         await websocket.send("Save state file not found")
-        except websockets.exceptions.ConnectionClosedOK:
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
 
 def start_websocket_server():
