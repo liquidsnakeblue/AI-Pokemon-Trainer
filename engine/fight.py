@@ -1,5 +1,5 @@
 from pyboy import PyBoy
-from .api import get_chatgpt_response
+from .api import get_ai_response
 from .component import (
     connect_digit_list, 
     read_prompt, 
@@ -290,6 +290,7 @@ class Fight:
         logger.info("Started Fighting.")
         flag=True
         while self.ifight():
+            self.pyboy.pre_fight_test(self.pyboy)
             # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
             #     logger.debug(f"** Skip msg")
             #     self.pyboy.update_run_data("action_msg", "Skip msg")
@@ -316,7 +317,7 @@ class Fight:
             #logger.debug(f"Fight Data {tmp}")
 
             self.pyboy.update_run_data("think_status", True)
-            self.act(get_chatgpt_response(self.dump_data(tmp)))
+            self.act(get_ai_response(self.dump_data(tmp)))
             self.pyboy.update_run_data("think_status", False)
 
             for _ in range(720):

@@ -89,6 +89,9 @@ class PyBoy_Web(PyBoy):
         self.button_release(key)
         for _ in range(10):
             self.tick()
+    
+    def pre_fight_test(self):
+        pass
 
 pyboy = PyBoy_Web("red.gb", window="null")
 

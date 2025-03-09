@@ -14,7 +14,8 @@ def cli():
 @click.option('--shell', is_flag=True, help="Shell")
 @click.option('--fight-test', is_flag=True, help="Test fight")
 @click.option('--test-count', type=int, default=20, help="Test count")
-def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count):
+@click.option('--test-setting', type=str, default='001_simple', help='Test setting')
+def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count, test_setting):
     """
     Run server
     """
@@ -31,6 +32,7 @@ def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test,
 
     os.environ["AI_POKEMON_TRAINER_FIGHT_TEST"] = '1' if fight_test else '0'
     os.environ["AI_POKEMON_TRAINER_TEST_CNT"] = str(test_count)
+    os.environ["AI_POKEMON_TRAINER_TEST_SETTING"] = test_setting
     import app
 
 

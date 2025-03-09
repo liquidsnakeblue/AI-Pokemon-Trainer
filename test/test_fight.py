@@ -1,11 +1,24 @@
-import logging, time, json
+import logging, time, yaml, os
+from pathlib import Path
 from engine.fight import do_fight
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 logger = logging.getLogger("ai_pokemon_trainer")
+
+class FightConfig:
+    def __init__(self, config):
+        with open(BASE_DIR / "test" / "data" / f"{config}.yaml") as fp:
+            self.config = yaml.load(fp.read(), Loader=yaml.FullLoader)
+    
+    def __call__(self, pyboy):
+        for i,j in self.config.items():
+            pyboy.memory[i] = j
 
 class TestFight:
     def __init__(self, pyboy):
         self.pyboy = pyboy
+        self.pyboy.pre_fight_test = FightConfig(os.getenv('AI_POKEMON_TRAINER_TEST_SETTING', '001_simple'))
     
     def run(self):
         while True:
