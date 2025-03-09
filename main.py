@@ -18,6 +18,7 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 class PyBoy_Web(PyBoy):
+    total_usage_token = 0
     def update_run_data(self, *_):
         ...
 

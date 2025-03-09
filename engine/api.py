@@ -28,4 +28,4 @@ def get_ai_response(prompt):
     )
     logger.debug(f"Recived by API, {json.dumps(response.choices[0].message.content, indent=4, separators=(',', ': '), ensure_ascii=False)}")
     logger.info(f"API token usage: {response.usage.total_tokens}")
-    return response.choices[0].message.content
+    return response.choices[0].message.content, response.usage.total_tokens

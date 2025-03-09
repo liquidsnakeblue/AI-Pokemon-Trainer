@@ -51,6 +51,8 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 class PyBoy_Web(PyBoy):
+    total_usage_token = 0
+    
     __run_data = {
         "status_msg": "Manual Operation",
         "action_msg": "There not Action now.",
@@ -74,7 +76,8 @@ class PyBoy_Web(PyBoy):
         image.save(byte_io, 'PNG')
         byte_io.seek(0)
         last_frame = byte_io.getvalue()
-        time.sleep(0.01)
+        if os.getenv('AI_POKEMON_TRAINER_SKIP_ANIMATION') == '0':
+            time.sleep(0.01)
         return super().tick(count, render)
 
     def press_and_release(self, key):

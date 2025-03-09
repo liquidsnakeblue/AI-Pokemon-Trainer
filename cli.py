@@ -15,7 +15,8 @@ def cli():
 @click.option('--fight-test', is_flag=True, help="Test fight")
 @click.option('--test-count', type=int, default=20, help="Test count")
 @click.option('--test-setting', type=str, default='001_simple', help='Test setting')
-def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count, test_setting):
+@click.option('--skip-animation', is_flag=True, help="Is skip animation")
+def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count, test_setting, skip_animation):
     """
     Run server
     """
@@ -33,6 +34,8 @@ def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test,
     os.environ["AI_POKEMON_TRAINER_FIGHT_TEST"] = '1' if fight_test else '0'
     os.environ["AI_POKEMON_TRAINER_TEST_CNT"] = str(test_count)
     os.environ["AI_POKEMON_TRAINER_TEST_SETTING"] = test_setting
+
+    os.environ["AI_POKEMON_TRAINER_SKIP_ANIMATION"] = '1' if skip_animation else '0'
     import app
 
 

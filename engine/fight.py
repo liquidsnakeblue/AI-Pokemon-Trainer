@@ -317,7 +317,9 @@ class Fight:
             #logger.debug(f"Fight Data {tmp}")
 
             self.pyboy.update_run_data("think_status", True)
-            self.act(get_ai_response(self.dump_data(tmp)))
+            response, used_token = get_ai_response(self.dump_data(tmp))
+            self.pyboy.total_usage_token += used_token
+            self.act(response)
             self.pyboy.update_run_data("think_status", False)
 
             for _ in range(720):

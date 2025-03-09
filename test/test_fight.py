@@ -23,9 +23,11 @@ class TestFight:
     def run(self):
         while True:
             self.pyboy.press_and_release('right')
-            time.sleep(0.01)
+            if os.getenv('AI_POKEMON_TRAINER_SKIP_ANIMATION') == '0':
+                time.sleep(0.01)
             self.pyboy.press_and_release('left')
-            time.sleep(0.01)
+            if os.getenv('AI_POKEMON_TRAINER_SKIP_ANIMATION') == '0':
+                time.sleep(0.01)
 
             if bool(self.pyboy.memory[0xD057]):
                 return do_fight(self.pyboy)
@@ -36,10 +38,12 @@ def run_test(count, pyboy):
     report = []
     for i in range(count):
         cnt+=1
+        pyboy.total_usage_token = 0
         res = TestFight(pyboy).run()
         logger.info(f"Test Process: {cnt}/{count}")
         report.append({
             "id": i,
+            "total_usage_token": pyboy.total_usage_token,
             "init_state": res[0],
             "result": res[-1],
         })
