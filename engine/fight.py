@@ -242,9 +242,14 @@ class Fight:
         self.press_and_release('right')
         self.press_and_release('a')
     
-    def _act_switch_poke(self, poke_index):
-        self.press_and_release('right')
+    def _act_run_no_hp(self):
+        self.press_and_release('down')
         self.press_and_release('a')
+    
+    def _act_switch_poke(self, poke_index):
+        if self.read_data()["my_hp"] != 0:
+            self.press_and_release('right')
+            self.press_and_release('a')
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
         for i in range(poke_index-1):
@@ -264,7 +269,11 @@ class Fight:
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
             self.pyboy.update_run_data("action_msg", "Run")
-            self._act_run()
+
+            if self.read_data()["my_hp"] == 0:
+                self._act_run_no_hp()
+            else:
+                self._act_run()
         elif response["decision"][0] == "s" and (not self.is_ablation_switch):
             # Switch Pokemon
             tmp = int(response["decision"][1:])

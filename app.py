@@ -93,7 +93,7 @@ class PyBoy_Web(PyBoy):
         for _ in range(10):
             self.tick()
     
-    def pre_fight_test(self):
+    def pre_fight_test(self, pyboy):
         pass
 
 pyboy = PyBoy_Web("red.gb", window="null")
@@ -126,7 +126,7 @@ def pyboy_thread():
                 for key in tmp:
                     pyboy.button_release(key)
 
-            if bool(pyboy.memory[0xD057]):
+            if os.getenv('AI_POKEMON_TRAINER_NO_AUTO') == '0' and bool(pyboy.memory[0xD057]):
                 do_fight(pyboy)
         
             time.sleep(0.01)

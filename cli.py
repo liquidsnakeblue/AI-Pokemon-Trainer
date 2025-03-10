@@ -12,11 +12,12 @@ def cli():
 @click.option('--remove-escape', is_flag=True, help="Ablation Escape")
 @click.option('--remove-switch', is_flag=True, help="Ablation Switch Pokemon")
 @click.option('--shell', is_flag=True, help="Shell")
+@click.option('--no-auto', is_flag=True, help="Not have automatic play")
 @click.option('--fight-test', is_flag=True, help="Test fight")
 @click.option('--test-count', type=int, default=20, help="Test count")
 @click.option('--test-setting', type=str, default='001_simple', help='Test setting')
 @click.option('--skip-animation', is_flag=True, help="Is skip animation")
-def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test, test_count, test_setting, skip_animation):
+def server(port, addr, ws_port, remove_escape, remove_switch, shell, no_auto, fight_test, test_count, test_setting, skip_animation):
     """
     Run server
     """
@@ -36,6 +37,7 @@ def server(port, addr, ws_port, remove_escape, remove_switch, shell, fight_test,
     os.environ["AI_POKEMON_TRAINER_TEST_SETTING"] = test_setting
 
     os.environ["AI_POKEMON_TRAINER_SKIP_ANIMATION"] = '1' if skip_animation else '0'
+    os.environ["AI_POKEMON_TRAINER_NO_AUTO"] = '1' if no_auto else '0'
     import app
 
 
