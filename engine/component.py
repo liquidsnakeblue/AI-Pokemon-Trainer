@@ -2,6 +2,9 @@ import math, json, re
 from pathlib import Path
 from jinja2 import Template
 
+import logging
+logger = logging.getLogger("ai_pokemon_trainer")
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def digit_number(num):
@@ -43,5 +46,7 @@ def extract_json_from_string(input_string):
         try:
             return json.loads(json_str)
         except json.JSONDecodeError as e:
+            logger.error(input_string)
             raise ValueError(f"Invalid JSON format: {e}")
+    logger.error(input_string)
     raise ValueError(f"JSON format error")

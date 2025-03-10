@@ -264,7 +264,6 @@ class Fight:
         """
 
         logger.debug("Do Act.")
-        response = extract_json_from_string(response)
         self.pyboy.update_run_data("reason_msg", response["reason"])
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
@@ -326,8 +325,15 @@ class Fight:
             #logger.debug(f"Fight Data {tmp}")
 
             self.pyboy.update_run_data("think_status", True)
-            response, used_token = get_ai_response(self.dump_data(tmp))
-            self.pyboy.total_usage_token += used_token
+            while True:
+                response, used_token = get_ai_response(self.dump_data(tmp))
+                self.pyboy.total_usage_token += used_token
+                try:
+                    response = extract_json_from_string(response)
+                    break
+                except ValueError as e:
+                    logger.error(e)
+                    logger.error("Resend!")
             self.act(response)
             self.pyboy.update_run_data("think_status", False)
 
