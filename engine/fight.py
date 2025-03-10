@@ -250,6 +250,8 @@ class Fight:
         if self.read_data()["my_hp"] != 0:
             self.press_and_release('right')
             self.press_and_release('a')
+        else:
+            self.press_and_release('a')
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
         for i in range(poke_index-1):
