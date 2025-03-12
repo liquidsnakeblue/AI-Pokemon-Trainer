@@ -1,4 +1,9 @@
-### Current State:
+{%if operation_history%}### Your History Operations:{%for i in operation_history%}
+- Round {{i.id}}
+  Operation: {{i.operation}}
+  Reason: {{i.reason}}{%endfor%}
+
+{%endif%}### Current State:
 - Your current Pokémon that fight your opponent: {{my_name}} (Level {{my_level}}, HP: {{my_hp}}/{{my_maxhp}})
   - Moves:
 {%for i in my_move%}{%if i.is_active%}

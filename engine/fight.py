@@ -22,6 +22,8 @@ class Fight:
         
         self.pyboy = pyboy_obj
         self.history = []
+        self.operation_history = []
+        self.round_cnt = 1
 
         self.is_ablation_escape = os.getenv('AI_POKEMON_TRAINER_ABLATION_ESCAPE', '0') == '1'
         if self.is_ablation_escape: logger.info('Ablation escape unit.')
@@ -224,6 +226,8 @@ class Fight:
 
         self.history.append(data)
 
+        data["operation_history"] = self.operation_history
+
         return [{
             "role": "system",
             "content": system_prompt.render(data),
@@ -274,6 +278,14 @@ class Fight:
 
         logger.debug("Do Act.")
         self.pyboy.update_run_data("reason_msg", response["reason"])
+
+        self.operation_history.append({
+            "operation": response["decision"],
+            "reason": response["reason"],
+            "id": self.round_cnt,
+        })
+        self.round_cnt = self.round_cnt + 1
+
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
             self.pyboy.update_run_data("action_msg", "Run")
