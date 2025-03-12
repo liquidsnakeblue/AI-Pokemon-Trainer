@@ -19,6 +19,7 @@ class Fight:
     def __init__(self, pyboy_obj):
         self.lastfight = 1 # Last time use move
         self.nowpoke = 1 # Last time use pokemon
+        
         self.pyboy = pyboy_obj
         self.history = []
 
@@ -249,8 +250,6 @@ class Fight:
     def _act_switch_poke(self, poke_index):
         if self.read_data()["my_hp"] != 0:
             self.press_and_release('right')
-            self.press_and_release('a')
-        else:
             self.press_and_release('a')
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
