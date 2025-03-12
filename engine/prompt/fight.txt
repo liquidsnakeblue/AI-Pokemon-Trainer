@@ -5,9 +5,9 @@
     {{i.id}}. {{i.name}} ({{i.type}}, PP: {{i.pp}})
 {%endif%}{%endfor%}
 - Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
-{%if not ablation.switch%}
+{%if not ablation.switch%}{%if is_has_other_pokemon%}
 - You can also switch to other available Pokémon:
 {%for i in other_pokemon%}{%if i.is_active%}{%if i.id != now_pokemon_id%}{%if i.hp != 0%}
   {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
-{%endif%}{%endif%}{%endif%}{%endfor%}{%endif%}
+{%endif%}{%endif%}{%endif%}{%endfor%}{%else%}    You not have other available pokemon.{%endif%}{%endif%}
 Make your decision.

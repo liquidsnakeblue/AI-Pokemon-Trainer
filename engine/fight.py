@@ -204,11 +204,17 @@ class Fight:
             data["my_move"][i]["name"] = tmp["name"]
             data["my_move"][i]["type"] = tmp["type"]
 
+        is_has_other_pokemon = False
+
         for i in data["other_pokemon"]: #To check which pokemon is in battle. Then tell AI which is the current pokemon.
             if i["level"] == data["my_level"] and i["name_index"] == data["my_id"] and i["hp"] == data["my_hp"]:
                 data["now_pokemon_id"] = i["id"]
                 self.nowpoke = i["id"]
-                break
+            else:
+                if i["hp"] != 0:
+                    is_has_other_pokemon = True
+        
+        data["is_has_other_pokemon"] = is_has_other_pokemon
         
         data["ablation"] = {
             "escape": self.is_ablation_escape,
