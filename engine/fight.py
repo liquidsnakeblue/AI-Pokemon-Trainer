@@ -205,11 +205,17 @@ class Fight:
             data["my_move"][i]["name"] = tmp["name"]
             data["my_move"][i]["type"] = tmp["type"]
 
+        is_has_other_pokemon = False
+
         for i in data["other_pokemon"]: #To check which pokemon is in battle. Then tell AI which is the current pokemon.
             if i["level"] == data["my_level"] and i["name_index"] == data["my_id"] and i["hp"] == data["my_hp"]:
                 data["now_pokemon_id"] = i["id"]
                 self.nowpoke = i["id"]
-                break
+            else:
+                if i["hp"] != 0:
+                    is_has_other_pokemon = True
+        
+        data["is_has_other_pokemon"] = is_has_other_pokemon
         
         data["ablation"] = {
             "escape": self.is_ablation_escape,
@@ -269,6 +275,7 @@ class Fight:
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
             self.pyboy.update_run_data("action_msg", "Run")
+            logger.info("Act, run.")
 
             if self.read_data()["my_hp"] == 0:
                 self._act_run_no_hp()
@@ -278,6 +285,8 @@ class Fight:
             # Switch Pokemon
             tmp = int(response["decision"][1:])
             self.pyboy.update_run_data("action_msg", f"Switch Pokemon: {tmp}")
+            logger.info(f"Act, switch to {tmp}")
+
             self._act_switch_poke(tmp)
         elif response["decision"][0] == "e":
             # TODO: Use elements
@@ -285,6 +294,8 @@ class Fight:
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
+            logger.info(f"Act, move {response['decision']}")
+
             self._act_move(response["decision"])
     
     def ifight(self):
