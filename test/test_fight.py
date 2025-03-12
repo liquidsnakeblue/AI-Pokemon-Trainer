@@ -46,8 +46,7 @@ def run_test(count, pyboy):
             report.append({
                 "id": i,
                 "total_usage_token": pyboy.total_usage_token,
-                "init_state": res[0],
-                "result": res[-1],
+                "rounds": res,
             })
             fp.seek(0)
             fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))

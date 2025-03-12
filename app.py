@@ -109,7 +109,6 @@ def pyboy_thread():
 
         from test import test_fight
         report = test_fight.run_test(int(os.getenv('AI_POKEMON_TRAINER_TEST_CNT', '20')), pyboy)
-        logger.info(report)
         logger.info("End of the test, exit.")
         os.kill(master_pid, signal.SIGTERM)
     else:
