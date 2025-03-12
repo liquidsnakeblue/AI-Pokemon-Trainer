@@ -247,8 +247,6 @@ class Fight:
         self.press_and_release('a')
     
     def _act_switch_poke(self, poke_index):
-        if self.nowpoke == poke_index:
-            return
         if self.read_data()["my_hp"] != 0:
             self.press_and_release('right')
             self.press_and_release('a')
