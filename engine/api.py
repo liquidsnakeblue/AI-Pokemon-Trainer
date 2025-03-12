@@ -19,13 +19,19 @@ client = OpenAI(
     base_url=SECRET_SETTING["base-url"],
 )
 
-def get_ai_response(prompt):
+def get_ai_response(prompt, cnt=1):
     logger.debug(f"Send to API, {json.dumps(prompt, indent=4, separators=(',', ': '), ensure_ascii=False)}")
-    response = client.chat.completions.create(
-        model=SECRET_SETTING["model"],
-        messages=prompt,
-        response_format={"type": "json_object"},
-    )
+    try:
+        response = client.chat.completions.create(
+            model=SECRET_SETTING["model"],
+            messages=prompt,
+            response_format={"type": "json_object"},
+        )
+    except Exception as e:
+        if cnt>3:
+            raise BaseException(f"Request API ERROR, and ther is no pssibility of countinue. STOP!")
+        logger.error(f"Request API ERROR: {e}, Retry {cnt}!")
+        return get_ai_response(prompt, cnt+1)
     logger.debug(f"Recived by API, {json.dumps(response.choices[0].message.content, indent=4, separators=(',', ': '), ensure_ascii=False)}")
     logger.info(f"API token usage: {response.usage.total_tokens}")
     return response.choices[0].message.content, response.usage.total_tokens
