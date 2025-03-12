@@ -1,5 +1,5 @@
 import json
-file_path = "E:\保护动物隋欣航\青岛中学\python文件\\20250310_141740.002_ViridianForest.json"
+from pathlib import Path
 
 
 def get_rounds(data):
@@ -15,7 +15,16 @@ def get_rounds(data):
     return round
 
 
-with open(file_path, "r", encoding="utf-8") as file:
-    data = json.loads(file.read())
+def main():
+    user_path = input()
+    file_path = Path(user_path).resolve()
+    if not file_path.exists():
+        print("The file does not exist.")
+        return
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.loads(file.read())
+    print(get_rounds(data))
 
-print(get_rounds(data))
+if __name__ == "__main__":
+    main()
+
