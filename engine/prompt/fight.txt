@@ -7,8 +7,7 @@
 - Opponent Pokémon: {{enemy_name}} (Level {{enemy_level}}, HP(%): {{percentage_hp}}%)
 {%if not ablation.switch%}
 - You can also switch to other available Pokémon:
-{%for i in other_pokemon%}{%if i.is_active%}{%if i.id != now_pokemon_id%}
+{%for i in other_pokemon%}{%if i.is_active%}{%if i.id != now_pokemon_id%}{%if i.hp != 0%}
   {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
-{%endif%}{%endif%}{%endfor%}
-- If Pokemon'HP is zero, you can not switch.{%endif%}
+{%endif%}{%endif%}{%endif%}{%endfor%}{%endif%}
 Make your decision.
