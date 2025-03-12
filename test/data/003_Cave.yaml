@@ -1,4 +1,15 @@
-# Disable Level Up
-0xd022: 19
-0xd18c: 19
-0xd1b8: 13
+# Pokemon 2 Charmander 
+0xD1BA: 38 #max HP
+0xD1BE: 19 #Defense
+0xD1BC: 24 #Attack
+0xD1B8: 15 #level
+0xD1C0: 26 #Speed
+0xD1C2: 22 #special attack and defense
+
+# Pokemon 1 Pidgey
+0xD18E: 40 #max HP
+0xD190: 21 #attack
+0xD192: 19 #defense
+0xD194: 23 #speed
+0xD196: 18 #special attack,defense
+0xD18C: 15 #level
