@@ -39,14 +39,14 @@
 | Current HP | D16C-D16D |
 | Attack | D18F-D190 |
 | Defense | D191-D192 |
-| Max HP | D1B9-D1BA |
+| Max HP | D18D-D18E |
 | Name Index | D164 |
 | **Player's Pokemon 2** |
 | Level | D1B8 |
 | Current HP | D198-D199 |
 | Attack | D1BB-D1BC |
 | Defense | D1BD-D1BE |
-| Max HP | D1BD-D1BE |
+| Max HP | D1B9-D1BA |
 | Name Index | D165 |
 | **Player's Pokemon 3** |
 | Level | D1E4 |
