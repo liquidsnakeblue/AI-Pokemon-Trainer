@@ -17,7 +17,8 @@ def cli():
 @click.option('--test-count', type=int, default=20, help="Test count")
 @click.option('--test-setting', type=str, default='001_simple', help='Test setting')
 @click.option('--skip-animation', is_flag=True, help="Is skip animation")
-def server(port, addr, ws_port, remove_escape, remove_switch, shell, no_auto, fight_test, test_count, test_setting, skip_animation):
+@click.option('--debug', is_flag=True, help="Debug mod")
+def server(port, addr, ws_port, remove_escape, remove_switch, shell, no_auto, fight_test, test_count, test_setting, skip_animation, debug):
     """
     Run server
     """
@@ -38,6 +39,7 @@ def server(port, addr, ws_port, remove_escape, remove_switch, shell, no_auto, fi
 
     os.environ["AI_POKEMON_TRAINER_SKIP_ANIMATION"] = '1' if skip_animation else '0'
     os.environ["AI_POKEMON_TRAINER_NO_AUTO"] = '1' if no_auto else '0'
+    os.environ["AI_POKEMON_TRAINER_DEBUG"] = '1' if debug else '0'
     import app
 
 
