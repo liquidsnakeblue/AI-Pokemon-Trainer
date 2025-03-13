@@ -114,6 +114,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD18F], self.pyboy.memory[0xD190]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD18D], self.pyboy.memory[0xD18E]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD179], self.pyboy.memory[0xD17A],self.pyboy.memory[0xD17B]]),
                     "is_active": True,
                 },
                 {
@@ -124,6 +125,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD1BB], self.pyboy.memory[0xD1BC]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1BD], self.pyboy.memory[0xD1BE]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD1B9], self.pyboy.memory[0xD1BA]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD1A5], self.pyboy.memory[0xD1A6],self.pyboy.memory[0xD1A7]]),
                     "is_active": True,
                 },
                 {
@@ -134,6 +136,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD1E7], self.pyboy.memory[0xD1E8]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD1E9], self.pyboy.memory[0xD1EA]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD1E5], self.pyboy.memory[0xD1E6]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD1D1], self.pyboy.memory[0xD1D2],self.pyboy.memory[0xD1D3]]),
                     "is_active": True,
                 },
                 {
@@ -144,6 +147,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD213], self.pyboy.memory[0xD214]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD191], self.pyboy.memory[0xD192]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD211], self.pyboy.memory[0xD212]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD1FD], self.pyboy.memory[0xD1FE],self.pyboy.memory[0xD1FF]]),
                     "is_active": True,
                 },
                 {
@@ -154,6 +158,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD23F], self.pyboy.memory[0xD240]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD241], self.pyboy.memory[0xD242]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD23D], self.pyboy.memory[0xD23E]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD229], self.pyboy.memory[0xD22A],self.pyboy.memory[0xD22B]]),
                     "is_active": True,
                 },
                 {
@@ -164,6 +169,7 @@ class Fight:
                     "attack": connect_digit_list([self.pyboy.memory[0xD26B], self.pyboy.memory[0xD26C]]),
                     "defense": connect_digit_list([self.pyboy.memory[0xD26D], self.pyboy.memory[0xD26E]]),
                     "max_hp": connect_digit_list([self.pyboy.memory[0xD269], self.pyboy.memory[0xD26A]]),
+                    "experience": connect_digit_list([self.pyboy.memory[0xD255], self.pyboy.memory[0xD256],self.pyboy.memory[0xD257]]),
                     "is_active": True,
                 },
             ]

@@ -15,6 +15,7 @@ def get_rounds(data):
     return round
 
 
+def 
 def main():
     user_path = input()
     file_path = Path(user_path).resolve()
@@ -27,7 +28,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-<<<<<<< HEAD
 
-=======
->>>>>>> ecf5a4ee1e318791b9ef0634564a487e938def72

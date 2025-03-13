@@ -41,6 +41,7 @@
 | Defense | D191-D192 |
 | Max HP | D18D-D18E |
 | Name Index | D164 |
+| Experience | D179-D17B |
 | **Player's Pokemon 2** |
 | Level | D1B8 |
 | Current HP | D198-D199 |
@@ -48,6 +49,7 @@
 | Defense | D1BD-D1BE |
 | Max HP | D1B9-D1BA |
 | Name Index | D165 |
+| Experience | D1A5-D1A7 |
 | **Player's Pokemon 3** |
 | Level | D1E4 |
 | Current HP | D1C4-D1C5 |
@@ -55,6 +57,7 @@
 | Defense | D1E9-D1EA |
 | Max HP | D1E5-D1E6 |
 | Name Index | D166 |
+| Experience | D1D1-D1D3 |
 | **Player's Pokemon 4** |
 | Level | D210 |
 | Current HP | D1F0-D1F1 |
@@ -62,13 +65,15 @@
 | Defense | D191-D192 |
 | Max HP | D211-D212 |
 | Name Index | D167 |
+| Experience | D1FD-D1FF |
 | **Player's Pokemon 5** |
-| Level | D18C |
+| Level | D23C |
 | Current HP | D21C-D21D |
 | Attack | D23F-D240 |
 | Defense | D241-D242 |
 | Max HP | D23D-D23E |
 | Name Index | D168 |
+| Experience | D229-D22B |
 | **Player's Pokemon 6** |
 | Level | D268 |
 | Current HP | D248-D249 |
@@ -76,3 +81,4 @@
 | Defense | D26D-D26E |
 | Max HP | D269-D26A |
 | Name Index | D169 |
+| Experience | D255-D257 |
