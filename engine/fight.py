@@ -173,6 +173,18 @@ class Fight:
                     "is_active": True,
                 },
             ]
+
+            #"stored_items": {
+            #    "total_items": self.pyboy.memory[0xD53A],
+            #    "items": [
+            #                {
+            #                    "id": self.pyboy.memory[0xD53B + i * 2],
+            #                    "quantity": self.pyboy.memory[0xD53C + i * 2]
+            #                }
+            #    for i in range(50)  # Maximum 50 items
+            #    if self.pyboy.memory[0xD53B + i * 2] != 0  # Ignore empty slots
+            #    ]
+            #}
         }
     
     def dump_data(self, data):
@@ -193,6 +205,13 @@ class Fight:
         data["my_name"] = my["name"]
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
+
+        # Extract stored items (up to 50 items)
+        #stored_items = []
+        #for i in range(1, 51):
+        #    item_key = f"stored_item{i}"
+        #    if item_key in data and data[item_key] != 0:  # Assuming 0 means no item
+        #        stored_items.append(data[item_key])
 
         # Process Other Pokemon
         for i in range(6):
