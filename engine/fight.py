@@ -236,6 +236,26 @@ class Fight:
         data["my_type2"] = my["type2"]
 
         # My item
+        data["item_1"] = item_index["item1"]
+        data["item_2"] = item_index["item2"]
+        data["item_3"] = item_index["item3"]
+        data["item_4"] = item_index["item4"]
+        data["item_5"] = item_index["item5"]
+        data["item_6"] = item_index["item6"]
+        data["item_7"] = item_index["item7"]
+        data["item_8"] = item_index["item8"]
+        data["item_9"] = item_index["item9"]
+        data["item_10"] = item_index["item10"]
+        data["item_11"] = item_index["item11"]
+        data["item_12"] = item_index["item12"]
+        data["item_13"] = item_index["item13"]
+        data["item_14"] = item_index["item14"]
+        data["item_15"] = item_index["item15"]
+        data["item_16"] = item_index["item16"]
+        data["item_17"] = item_index["item17"]
+        data["item_18"] = item_index["item18"]
+        data["item_19"] = item_index["item19"]
+        data["item_20"] = item_index["item20"]
         
 
         # Process Other Pokemon
