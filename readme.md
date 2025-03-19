@@ -20,12 +20,11 @@ Run `python3 cli.py local`, you will get a window that run by pyboy, you can see
 
 ![](./docs/img.png)
 
-## Ablation Study
+## Technical Details
 
-There are some cli option that you can setting which one will be removed.
+If you want to know more technical details, you can check the more [detailed technical documentation](https://github.com/siw028/AI-Pokemon-Trainer/blob/main/docs/running_process.md)
 
-- Remove Escape Unit `--remove-escape`
-- Remove Switch Pokemon Unit `--remove-switch`
+We collated the [location of some game memory](https://github.com/siw028/AI-Pokemon-Trainer/blob/main/docs/memory_address.md) based on the information on the Internet
 
 ## Reference
 
