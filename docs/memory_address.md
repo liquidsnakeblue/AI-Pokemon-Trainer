@@ -82,3 +82,63 @@
 | Max HP | D269-D26A |
 | Name Index | D169 |
 | Experience | D255-D257 |
+| **Item 1** |
+| Index | 0xD31E |
+| Quantity | 0xD31F |
+| **Item 2** |
+| Index | 0xD320 |
+| Quantity | 0xD321 |
+| **Item 3** |
+| Index | 0xD322 |
+| Quantity | 0xD323 |
+| **Item 4** |
+| Index | 0xD324 |
+| Quantity | 0xD325 |
+| **Item 5** |
+| Index | 0xD326 |
+| Quantity | 0xD327 |
+| **Item 6** |
+| Index | 0xD328 |
+| Quantity | 0xD329 |
+| **Item 7** |
+| Index | 0xD32A |
+| Quantity | 0xD32B |
+| **Item 8** |
+| Index | 0xD32C |
+| Quantity | 0xD32D |
+| **Item 9** |
+| Index | 0xD32E |
+| Quantity | 0xD32F |
+| **Item 10** |
+| Index | 0xD330 |
+| Quantity | 0xD331 |
+| **Item 11** |
+| Index | 0xD332 |
+| Quantity | 0xD333 |
+| **Item 12** |
+| Index | 0xD334 |
+| Quantity | 0xD335 |
+| **Item 13** |
+| Index | 0xD336 |
+| Quantity | 0xD337 |
+| **Item 14** |
+| Index | 0xD338 |
+| Quantity | 0xD339 |
+| **Item 15** |
+| Index | 0xD33A |
+| Quantity | 0xD33B |
+| **Item 16** |
+| Index | 0xD33C |
+| Quantity | 0xD33D |
+| **Item 17** |
+| Index | 0xD33E |
+| Quantity | 0xD33F |
+| **Item 18** |
+| Index | 0xD340 |
+| Quantity | 0xD341 |
+| **Item 19** |
+| Index | 0xD342 |
+| Quantity | 0xD343 |
+| **Item 20** |
+| Index | 0xD344 |
+| Quantity | 0xD345 |
