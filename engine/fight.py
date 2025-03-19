@@ -76,47 +76,110 @@ class Fight:
             "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
 
-            "item1": self.pyboy.memory[0xD31E], 
-            "item1_quantity": sefl.pyboy.memory[0xD31F], 
-            "item2": self.pyboy.memory[0xD320], 
-            "item2_quantity": sefl.pyboy.memory[0xD321], 
-            "item3": self.pyboy.memory[0xD322], 
-            "item3_quantity": sefl.pyboy.memory[0xD323], 
-            "item4": self.pyboy.memory[0xD324], 
-            "item4_quantity": sefl.pyboy.memory[0xD325], 
-            "item5": self.pyboy.memory[0xD326], 
-            "item5_quantity": sefl.pyboy.memory[0xD327], 
-            "item6": self.pyboy.memory[0xD328], 
-            "item6_quantity": sefl.pyboy.memory[0xD329], 
-            "item7": self.pyboy.memory[0xD32A], 
-            "item7_quantity": sefl.pyboy.memory[0xD32B], 
-            "item8": self.pyboy.memory[0xD32C], 
-            "item8_quantity": sefl.pyboy.memory[0xD32D], 
-            "item9": self.pyboy.memory[0xD32E], 
-            "item9_quantity": sefl.pyboy.memory[0xD32F], 
-            "item10": self.pyboy.memory[0xD330], 
-            "item10_quantity": sefl.pyboy.memory[0xD331], 
-            "item11": self.pyboy.memory[0xD332], 
-            "item11_quantity": sefl.pyboy.memory[0xD333], 
-            "item12": self.pyboy.memory[0xD334], 
-            "item12_quantity": sefl.pyboy.memory[0xD335], 
-            "item13": self.pyboy.memory[0xD336], 
-            "item13_quantity": sefl.pyboy.memory[0xD337], 
-            "item14": self.pyboy.memory[0xD338], 
-            "item14_quantity": sefl.pyboy.memory[0xD339], 
-            "item15": self.pyboy.memory[0xD33A], 
-            "item15_quantity": sefl.pyboy.memory[0xD33B], 
-            "item16": self.pyboy.memory[0xD33C], 
-            "item16_quantity": sefl.pyboy.memory[0xD33D], 
-            "item17": self.pyboy.memory[0xD33E], 
-            "item17_quantity": sefl.pyboy.memory[0xD33F], 
-            "item18": self.pyboy.memory[0xD340], 
-            "item18_quantity": sefl.pyboy.memory[0xD341], 
-            "item19": self.pyboy.memory[0xD342], 
-            "item19_quantity": sefl.pyboy.memory[0xD343], 
-            "item20": self.pyboy.memory[0xD344], 
-            "item20_quantity": sefl.pyboy.memory[0xD345], 
-
+            "item": [
+                {
+                    "id": 1, 
+                    "index": self.pyboy.memory[0xD31E], 
+                    "quantity": self.pyboy.memory[0xD31F],
+                }, 
+                {
+                    "id": 2, 
+                    "index": self.pyboy.memory[0xD320], 
+                    "quantity": self.pyboy.memory[0xD321], 
+                }, 
+                {
+                    "id": 3, 
+                    "index": self.pyboy.memory[0xD322], 
+                    "quantity": self.pyboy.memory[0xD323],  
+                }, 
+                {
+                    "id": 4, 
+                    "index": "item4": self.pyboy.memory[0xD324], 
+                    "quantity": self.pyboy.memory[0xD325],  
+                }, 
+                {
+                    "id": 5, 
+                    "index": self.pyboy.memory[0xD326], 
+                    "quantity": self.pyboy.memory[0xD327], 
+                }, 
+                {
+                    "id": 6, 
+                    "index": self.pyboy.memory[0xD328],  
+                    "quantity": self.pyboy.memory[0xD329],  
+                }, 
+                {
+                    "id": 7, 
+                    "index": self.pyboy.memory[0xD32A], 
+                    "quantity": self.pyboy.memory[0xD32B], 
+                }, 
+                {
+                    "id": 8, 
+                    "index": self.pyboy.memory[0xD32C], 
+                    "quantity": self.pyboy.memory[0xD32D], 
+                }, 
+                {
+                    "id": 9, 
+                    "index": self.pyboy.memory[0xD32E], 
+                    "quantity": self.pyboy.memory[0xD32F], 
+                }, 
+                {
+                    "id": 10, 
+                    "index": self.pyboy.memory[0xD330], 
+                    "quantity": self.pyboy.memory[0xD331],  
+                }, 
+                {
+                    "id": 11, 
+                    "index": self.pyboy.memory[0xD332], 
+                    "quantity": self.pyboy.memory[0xD333], 
+                }, 
+                {
+                    "id": 12, 
+                    "index": self.pyboy.memory[0xD334], 
+                    "quantity": self.pyboy.memory[0xD335], 
+                }, 
+                {
+                    "id": 13, 
+                    "index": self.pyboy.memory[0xD336], 
+                    "quantity": self.pyboy.memory[0xD337], 
+                }, 
+                {
+                    "id": 14, 
+                    "index": self.pyboy.memory[0xD338], 
+                    "quantity": self.pyboy.memory[0xD339], 
+                }, 
+                {
+                    "id": 15, 
+                    "index": self.pyboy.memory[0xD33A], 
+                    "quantity": self.pyboy.memory[0xD33B], 
+                }, 
+                {
+                    "id": 16, 
+                    "index": self.pyboy.memory[0xD33C], 
+                    "quantity": self.pyboy.memory[0xD33D], 
+                }, 
+                {
+                    "id": 17, 
+                    "index": self.pyboy.memory[0xD33E], 
+                    "quantity": self.pyboy.memory[0xD33F], 
+                }, 
+                {
+                    "id": 18, 
+                    "index": self.pyboy.memory[0xD340], 
+                    "quantity": self.pyboy.memory[0xD341], 
+                }, 
+                {
+                    "id": 19, 
+                    "index": self.pyboy.memory[0xD342], 
+                    "quantity": self.pyboy.memory[0xD343], 
+                }, 
+                {
+                    "id": 20, 
+                    "index": self.pyboy.memory[0xD344], 
+                    "quantity": self.pyboy.memory[0xD345], 
+                }, 
+                
+            ]
+            
             "fight_mod": self.pyboy.memory[0xD057],
 
             "my_move": [
@@ -236,26 +299,8 @@ class Fight:
         data["my_type2"] = my["type2"]
 
         # My item
-        data["item_1"] = item_index["item1"]
-        data["item_2"] = item_index["item2"]
-        data["item_3"] = item_index["item3"]
-        data["item_4"] = item_index["item4"]
-        data["item_5"] = item_index["item5"]
-        data["item_6"] = item_index["item6"]
-        data["item_7"] = item_index["item7"]
-        data["item_8"] = item_index["item8"]
-        data["item_9"] = item_index["item9"]
-        data["item_10"] = item_index["item10"]
-        data["item_11"] = item_index["item11"]
-        data["item_12"] = item_index["item12"]
-        data["item_13"] = item_index["item13"]
-        data["item_14"] = item_index["item14"]
-        data["item_15"] = item_index["item15"]
-        data["item_16"] = item_index["item16"]
-        data["item_17"] = item_index["item17"]
-        data["item_18"] = item_index["item18"]
-        data["item_19"] = item_index["item19"]
-        data["item_20"] = item_index["item20"]
+        for i in range(20): 
+            data["item"][i]["name"] = item_index[data["item"][i]["index"]
         
 
         # Process Other Pokemon
