@@ -177,7 +177,7 @@ class Fight:
                     "id": 20, 
                     "index": self.pyboy.memory[0xD344], 
                     "quantity": self.pyboy.memory[0xD345], 
-                },   
+                } 
             ],
             
             "fight_mod": self.pyboy.memory[0xD057],
@@ -301,8 +301,7 @@ class Fight:
         # My item
         for i in range(20): 
             data["item"][i]["name"] = item_index[data["item"][i]["index"]]
-        
-
+            
         # Process Other Pokemon
         for i in range(6):
             if data["other_pokemon"][i]["level"] == 0 or data["other_pokemon"][i]["hp"] == 0:
