@@ -7,3 +7,6 @@ pillow
 websockets == 10.4
 click
 pyyaml
+scipy
+numpy
+matplotlib
