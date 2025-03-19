@@ -1,3 +1,4 @@
+import copy
 from pyboy import PyBoy
 from .api import get_ai_response
 from .component import (
@@ -94,7 +95,7 @@ class Fight:
                 }, 
                 {
                     "id": 4, 
-                    "index": "item4": self.pyboy.memory[0xD324], 
+                    "index": self.pyboy.memory[0xD324], 
                     "quantity": self.pyboy.memory[0xD325],  
                 }, 
                 {
@@ -176,9 +177,8 @@ class Fight:
                     "id": 20, 
                     "index": self.pyboy.memory[0xD344], 
                     "quantity": self.pyboy.memory[0xD345], 
-                }, 
-                
-            ]
+                },   
+            ],
             
             "fight_mod": self.pyboy.memory[0xD057],
 
@@ -300,7 +300,7 @@ class Fight:
 
         # My item
         for i in range(20): 
-            data["item"][i]["name"] = item_index[data["item"][i]["index"]
+            data["item"][i]["name"] = item_index[data["item"][i]["index"]]
         
 
         # Process Other Pokemon
@@ -339,9 +339,9 @@ class Fight:
             "switch": self.is_ablation_switch,
         }
 
-        self.history.append(data)
+        data["operation_history"] = copy.deepcopy(self.operation_history)
 
-        data["operation_history"] = self.operation_history
+        self.history.append(data)
 
         return [{
             "role": "system",
