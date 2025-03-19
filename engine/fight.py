@@ -76,6 +76,47 @@ class Fight:
             "my_defense": connect_digit_list([self.pyboy.memory[0xD027],self.pyboy.memory[0xD028]]),
             "my_level": self.pyboy.memory[0xD022],
 
+            "item1": self.pyboy.memory[0xD31E], 
+            "item1_quantity": sefl.pyboy.memory[0xD31F], 
+            "item2": self.pyboy.memory[0xD320], 
+            "item2_quantity": sefl.pyboy.memory[0xD321], 
+            "item3": self.pyboy.memory[0xD322], 
+            "item3_quantity": sefl.pyboy.memory[0xD323], 
+            "item4": self.pyboy.memory[0xD324], 
+            "item4_quantity": sefl.pyboy.memory[0xD325], 
+            "item5": self.pyboy.memory[0xD326], 
+            "item5_quantity": sefl.pyboy.memory[0xD327], 
+            "item6": self.pyboy.memory[0xD328], 
+            "item6_quantity": sefl.pyboy.memory[0xD329], 
+            "item7": self.pyboy.memory[0xD32A], 
+            "item7_quantity": sefl.pyboy.memory[0xD32B], 
+            "item8": self.pyboy.memory[0xD32C], 
+            "item8_quantity": sefl.pyboy.memory[0xD32D], 
+            "item9": self.pyboy.memory[0xD32E], 
+            "item9_quantity": sefl.pyboy.memory[0xD32F], 
+            "item10": self.pyboy.memory[0xD330], 
+            "item10_quantity": sefl.pyboy.memory[0xD331], 
+            "item11": self.pyboy.memory[0xD332], 
+            "item11_quantity": sefl.pyboy.memory[0xD333], 
+            "item12": self.pyboy.memory[0xD334], 
+            "item12_quantity": sefl.pyboy.memory[0xD335], 
+            "item13": self.pyboy.memory[0xD336], 
+            "item13_quantity": sefl.pyboy.memory[0xD337], 
+            "item14": self.pyboy.memory[0xD338], 
+            "item14_quantity": sefl.pyboy.memory[0xD339], 
+            "item15": self.pyboy.memory[0xD33A], 
+            "item15_quantity": sefl.pyboy.memory[0xD33B], 
+            "item16": self.pyboy.memory[0xD33C], 
+            "item16_quantity": sefl.pyboy.memory[0xD33D], 
+            "item17": self.pyboy.memory[0xD33E], 
+            "item17_quantity": sefl.pyboy.memory[0xD33F], 
+            "item18": self.pyboy.memory[0xD340], 
+            "item18_quantity": sefl.pyboy.memory[0xD341], 
+            "item19": self.pyboy.memory[0xD342], 
+            "item19_quantity": sefl.pyboy.memory[0xD343], 
+            "item20": self.pyboy.memory[0xD344], 
+            "item20_quantity": sefl.pyboy.memory[0xD345], 
+
             "fight_mod": self.pyboy.memory[0xD057],
 
             "my_move": [
@@ -193,6 +234,9 @@ class Fight:
         data["my_name"] = my["name"]
         data["my_type1"] = my["type1"]
         data["my_type2"] = my["type2"]
+
+        # My item
+        
 
         # Process Other Pokemon
         for i in range(6):
