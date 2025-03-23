@@ -17,4 +17,5 @@
 {%endif%}{%endif%}{%endif%}{%endfor%}{%else%}    You not have other available pokemon.{%endif%}{%endif%}{%if not ablation.item%}
 - You can use items:{%for i in item%}{%if i.name%}
   {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%endif%}{%endfor%}{%endif%}
+- The opponent is the trainer, so you have multiple Pokemons to defeat, and the opponent now has {{enemy_count}} usable Pokemon left
 Make your decision.
