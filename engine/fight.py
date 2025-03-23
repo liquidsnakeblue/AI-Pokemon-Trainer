@@ -31,6 +31,9 @@ class Fight:
 
         self.is_ablation_switch = os.getenv('AI_POKEMON_TRAINER_ABLATION_SWITCH', '0') == '1'
         if self.is_ablation_switch: logger.info('Ablation switch pokemon unit.')
+
+        self.is_ablation_item = os.getenv('AI_POKEMON_TRAINER_ABLATION_ITEM', '0') == '1'
+        if self.is_ablation_item: logger.info('Ablation item unit.')
     
     def press_and_release(self,key):
         """
@@ -299,8 +302,8 @@ class Fight:
         data["my_type2"] = my["type2"]
 
         # My item
-        for i in range(20): 
-            data["item"][i]["name"] = item_index[data["item"][i]["index"]]
+        for i in data["item"]:
+            i["name"] = item_index[i["index"]]["name"]
             
         # Process Other Pokemon
         for i in range(6):
@@ -336,6 +339,7 @@ class Fight:
         data["ablation"] = {
             "escape": self.is_ablation_escape,
             "switch": self.is_ablation_switch,
+            "item": self.is_ablation_item,
         }
 
         data["operation_history"] = copy.deepcopy(self.operation_history)
@@ -384,6 +388,13 @@ class Fight:
         self.press_and_release('a')
         self.press_and_release('a')
         self.nowpoke = poke_index
+    
+    def _act_item(self, item_index):
+        self.press_and_release('down')
+        self.press_and_release('a')
+        for i in range(item_index-1):
+            self.press_and_release('down')
+        self.press_and_release('a')
 
     def act(self, response):
         """
@@ -417,9 +428,13 @@ class Fight:
             logger.info(f"Act, switch to {tmp}")
 
             self._act_switch_poke(tmp)
-        elif response["decision"][0] == "e":
-            # TODO: Use elements
-            ...
+        elif response["decision"][0] == "i" and (not self.is_ablation_item):
+            # Use item
+            tmp = int(response["decision"][1:])
+            self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
+            logger.info(f"Act, use item {tmp}")
+
+            self._act_item(tmp)
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
