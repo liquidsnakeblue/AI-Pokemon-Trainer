@@ -392,11 +392,12 @@ class Fight:
         self.press_and_release('a')
     
     def _act_switch_poke(self, poke_index):
-        if self.read_data()["my_hp"] != 0:
-            self.press_and_release('right')
-            self.press_and_release('a')
-        else:
-            self.press_and_release('a')
+        if not self.if_fight_with_person():
+            if self.read_data()["my_hp"] != 0:
+                self.press_and_release('right')
+                self.press_and_release('a')
+            else:
+                self.press_and_release('a')
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
         for i in range(poke_index-1):
@@ -405,12 +406,28 @@ class Fight:
         self.press_and_release('a')
         self.nowpoke = poke_index
     
-    def _act_item(self, item_index):
+    def _act_item(self, item_index, forpokemon=0):
         self.press_and_release('down')
         self.press_and_release('a')
         for i in range(item_index-1):
             self.press_and_release('down')
         self.press_and_release('a')
+
+        for i in range(forpokemon-1):
+            self.press_and_release('down')
+        self.press_and_release('a')
+
+        for _  in range(180):
+            self.pyboy.tick()
+        
+        self.press_and_release('a')
+
+        for _ in range(720):
+            if self.pyboy.memory[0xc4f2]==238:
+                self.press_and_release('a')
+            self.pyboy.tick()
+
+        self.press_and_release('up')
 
     def act(self, response):
         """
@@ -446,11 +463,11 @@ class Fight:
             self._act_switch_poke(tmp)
         elif response["decision"][0] == "i" and (not self.is_ablation_item):
             # Use item
-            tmp = int(response["decision"][1:])
+            tmp = int(response["decision"].split()[0][1:])
             self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
             logger.info(f"Act, use item {tmp}")
 
-            self._act_item(tmp)
+            self._act_item(tmp, int(response["decision"].split()[1]))
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
@@ -515,8 +532,10 @@ class Fight:
                 except ValueError as e:
                     logger.error(e)
                     logger.error("Resend!")
-            self.act(response)
             self.pyboy.update_run_data("think_status", False)
+            self.act(response)
+
+            tmp_data = self.dump_data(self.read_data())
 
             if tmp_data["enemy_hp"] == 0:
                 for _ in range(720*2):
@@ -525,12 +544,13 @@ class Fight:
                         self.press_and_release('a')
                     self.pyboy.tick()
             else:
-                for _ in range(720):
+                for _ in range(720*2):
                     if self.pyboy.memory[0xc4f2]==238:
                         self.press_and_release('a')
                     self.pyboy.tick()
 
             tmp_data = self.dump_data(self.read_data())
+
             try:
                 now_pokemon_id = tmp_data["now_pokemon_id"]
                 if self.my_old_level[now_pokemon_id-1]["level"] != tmp_data["other_pokemon"][now_pokemon_id-1]["level"]:
