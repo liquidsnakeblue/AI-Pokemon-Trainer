@@ -346,7 +346,7 @@ class Fight:
                     is_has_other_pokemon = True
         
         data["is_has_other_pokemon"] = is_has_other_pokemon
-        data["if_fight_with_person"] = self.if_fight_with_person
+        data["if_fight_with_person"] = self.if_fight_with_person()
         
         data["ablation"] = {
             "escape": self.is_ablation_escape or self.if_fight_with_person(), # If fight with person, disable escape
