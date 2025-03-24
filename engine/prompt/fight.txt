@@ -16,6 +16,6 @@
   {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
 {%endif%}{%endif%}{%endif%}{%endfor%}{%else%}    You not have other available pokemon.{%endif%}{%endif%}{%if not ablation.item%}
 - You can use items:{%for i in item%}{%if i.name%}
-  {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%endif%}{%endfor%}{%endif%}{{if if_fight_with_person}}
-- The opponent is the trainer, so you have multiple Pokemons to defeat, and the opponent now has {{enemy_count}} usable Pokemon left{{%endif%}}
+  {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%endif%}{%endfor%}{%endif%}{%if if_fight_with_person%}
+- The opponent is the trainer, so you have multiple Pokemons to defeat, and the opponent now has {{enemy_count}} usable Pokemon left{%endif%}
 Make your decision.
