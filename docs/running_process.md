@@ -195,3 +195,4 @@ https://github.com/siw028/AI-Pokemon-Trainer/blob/3ce64b16f8cb488a4101ec0393bde7
 ]
 ```
 
+More [detile](test_mode.md) for test.
