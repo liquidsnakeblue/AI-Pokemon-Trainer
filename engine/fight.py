@@ -346,10 +346,9 @@ class Fight:
                     is_has_other_pokemon = True
         
         data["is_has_other_pokemon"] = is_has_other_pokemon
-        data["if_fight_with_person"] = self.if_fight_with_person()
         
         data["ablation"] = {
-            "escape": self.is_ablation_escape or self.if_fight_with_person(), # If fight with person, disable escape
+            "escape": self.is_ablation_escape,
             "switch": self.is_ablation_switch,
             "item": self.is_ablation_item,
         }
@@ -478,9 +477,6 @@ class Fight:
     def ifight(self):
         return bool(self.pyboy.memory[0xD057]) # Fight Flag
     
-    def if_fight_with_person(self):
-        return self.pyboy.memory[0xD057] == 2
-    
     def getresult(self):
         self.dump_data(self.read_data())
         return self.history
@@ -492,26 +488,17 @@ class Fight:
         self.my_old_level = self.read_data()["other_pokemon"]
         while self.ifight():
             self.pyboy.pre_fight_test(self.pyboy)
-            # while self.pyboy.memory[0xC4F2] != 16 and self.ifight():
-            #     logger.debug(f"** Skip msg")
-            #     self.pyboy.update_run_data("action_msg", "Skip msg")
-            #     self.pyboy.update_run_data("reason_msg", "...")
-            #     self.press_and_release('a')
-            
-            #We could hard code the first keypress since it's always the same "A wild ... appears,"
-            #Start of Battle
-            #Render battle start animation
+
             if flag==True:
                 for _ in range(720):
                     self.pyboy.tick()
                 self.press_and_release('a')    
-                #Render "throw pokemon out" animation
+
                 for _ in range(720):
                     self.pyboy.tick()
                 flag=False
             tmp = self.read_data()
-            #What if the pokemon wants to learn a new skill?
-            #End of Battle
+
             if tmp['enemy_maxhp']  == 0:
                 if self.if_fight_with_person():
                     self.press_and_release('down')
@@ -519,7 +506,6 @@ class Fight:
                 else:
                     self.press_and_release('a')
                 continue
-            #logger.debug(f"Fight Data {tmp}")
 
             self.pyboy.update_run_data("think_status", True)
             tmp_data = self.dump_data(tmp)
@@ -534,47 +520,11 @@ class Fight:
                     logger.error("Resend!")
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
-
-            tmp_data = self.dump_data(self.read_data())
-
-            if tmp_data["enemy_hp"] == 0:
-                for _ in range(720*2):
-                    # We will need a check here for dialogues. If our pokemon uses a non-damaging move, critical hits, dialogue will pop-up and need to press a
-                    if self.pyboy.memory[0xC4F2]==238:
-                        self.press_and_release('a')
-                    self.pyboy.tick()
-            else:
-                for _ in range(720*2):
-                    if self.pyboy.memory[0xc4f2]==238:
-                        self.press_and_release('a')
-                    self.pyboy.tick()
-
-            tmp_data = self.dump_data(self.read_data())
-
-            try:
-                now_pokemon_id = tmp_data["now_pokemon_id"]
-                if self.my_old_level[now_pokemon_id-1]["level"] != tmp_data["other_pokemon"][now_pokemon_id-1]["level"]:
-                    self.press_and_release('a')
-                    self.my_old_level = tmp_data["other_pokemon"]
-                    logger.debug("The level up, skip animation.")
-            except KeyError:
-                ...
             
-            if tmp_data["enemy_hp"] == 0:
-                self.killed_enemy += 1
-                for _ in range(720*3):
-                    if self.pyboy.memory[0xc4f2]==238:
-                        self.press_and_release('a')
-                    self.pyboy.tick()
-                
-                if self.dump_data(self.read_data())["enemy_count"] != 0:
-                    self.press_and_release('down')
-                    flag = True
-            else:
-                for _ in range(720):
-                    if self.pyboy.memory[0xc4f2]==238:
-                        self.press_and_release('a')
-                    self.pyboy.tick()
+            for _ in range(720):
+                if self.pyboy.memory[0xc4f2]==238:
+                    self.press_and_release('a')
+                self.pyboy.tick()
 
         logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")

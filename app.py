@@ -128,7 +128,7 @@ def pyboy_thread():
                 for key in tmp:
                     pyboy.button_release(key)
 
-            if os.getenv('AI_POKEMON_TRAINER_NO_AUTO') == '0' and bool(pyboy.memory[0xD057]):
+            if os.getenv('AI_POKEMON_TRAINER_NO_AUTO') == '0' and pyboy.memory[0xD057]==1:
                 do_fight(pyboy)
         
             time.sleep(0.01)
