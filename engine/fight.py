@@ -391,10 +391,11 @@ class Fight:
         self.press_and_release('a')
     
     def _act_switch_poke(self, poke_index):
- 
-        if self.read_data()["my_hp"] != 0:
-            self.press_and_release('right')
-            self.press_and_release('a')
+        
+        #If pokemon is dead, the same logic applies
+        #if self.read_data()["my_hp"] != 0:
+        self.press_and_release('right')
+        self.press_and_release('a')
 
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
@@ -520,7 +521,7 @@ class Fight:
                 if self.pyboy.memory[0xc4f2]==238:
                     self.press_and_release('a')
                 self.pyboy.tick()
-
+        
         logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")
         return self.getresult() # return fight result
