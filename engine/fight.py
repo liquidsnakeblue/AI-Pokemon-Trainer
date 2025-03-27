@@ -391,12 +391,12 @@ class Fight:
         self.press_and_release('a')
     
     def _act_switch_poke(self, poke_index):
-        if not self.if_fight_with_person():
-            if self.read_data()["my_hp"] != 0:
-                self.press_and_release('right')
-                self.press_and_release('a')
-            else:
-                self.press_and_release('a')
+        
+        #If pokemon is dead, the same logic applies
+        #if self.read_data()["my_hp"] != 0:
+        self.press_and_release('right')
+        self.press_and_release('a')
+
         for i in range(self.nowpoke-1):
             self.press_and_release('up')
         for i in range(poke_index-1):
@@ -489,23 +489,18 @@ class Fight:
         while self.ifight():
             self.pyboy.pre_fight_test(self.pyboy)
 
+            #When flag is true, that means we are entering the battle for the first time
             if flag==True:
+                #skips animation
                 for _ in range(360):
                     self.pyboy.tick()
                 self.press_and_release('a')    
-
+                #skips animation
                 for _ in range(360):
                     self.pyboy.tick()
                 flag=False
             tmp = self.read_data()
 
-            if tmp['enemy_maxhp']  == 0:
-                if self.if_fight_with_person():
-                    self.press_and_release('down')
-                    self.press_and_release('a')
-                else:
-                    self.press_and_release('a')
-                continue
 
             self.pyboy.update_run_data("think_status", True)
             tmp_data = self.dump_data(tmp)
@@ -520,12 +515,13 @@ class Fight:
                     logger.error("Resend!")
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
-            
-            for _ in range(360):
+
+            #Renders self and enemy pokemon skill use animation
+            for _ in range(1080):
                 if self.pyboy.memory[0xc4f2]==238:
                     self.press_and_release('a')
                 self.pyboy.tick()
-
+        
         logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")
         return self.getresult() # return fight result
