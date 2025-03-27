@@ -490,11 +490,11 @@ class Fight:
             self.pyboy.pre_fight_test(self.pyboy)
 
             if flag==True:
-                for _ in range(720):
+                for _ in range(360):
                     self.pyboy.tick()
                 self.press_and_release('a')    
 
-                for _ in range(720):
+                for _ in range(360):
                     self.pyboy.tick()
                 flag=False
             tmp = self.read_data()
@@ -521,7 +521,7 @@ class Fight:
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
             
-            for _ in range(720):
+            for _ in range(360):
                 if self.pyboy.memory[0xc4f2]==238:
                     self.press_and_release('a')
                 self.pyboy.tick()
