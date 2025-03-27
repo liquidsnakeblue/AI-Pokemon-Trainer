@@ -488,20 +488,18 @@ class Fight:
         while self.ifight():
             self.pyboy.pre_fight_test(self.pyboy)
 
+            #When flag is true, that means we are entering the battle for the first time
             if flag==True:
+                #skips animation
                 for _ in range(360):
                     self.pyboy.tick()
                 self.press_and_release('a')    
-
+                #skips animation
                 for _ in range(360):
                     self.pyboy.tick()
                 flag=False
             tmp = self.read_data()
 
-            if tmp['enemy_hp']  == 0:
-                self.press_and_release('down')
-                self.press_and_release('a')
-                continue
 
             self.pyboy.update_run_data("think_status", True)
             tmp_data = self.dump_data(tmp)
@@ -516,8 +514,9 @@ class Fight:
                     logger.error("Resend!")
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
-            
-            for _ in range(540):
+
+            #Renders self and enemy pokemon skill use animation
+            for _ in range(1080):
                 if self.pyboy.memory[0xc4f2]==238:
                     self.press_and_release('a')
                 self.pyboy.tick()
