@@ -21,6 +21,11 @@ import sys
 import io
 import os
 
+from pygments.lexers import PythonLexer
+from prompt_toolkit import PromptSession
+from prompt_toolkit.lexers import PygmentsLexer
+from prompt_toolkit.history import InMemoryHistory
+
 from werkzeug.serving import WSGIRequestHandler
 from pathlib import Path
 
@@ -216,14 +221,20 @@ logger.info(f"Started WebSocket Thread in Port {WS_PORT}.")
 
 def shell_console():
     console = code.InteractiveConsole(globals())
+
+    history = InMemoryHistory()
+    session = PromptSession(history=history)
     
     print("Enter Python code to execute. Type 'exit' to quit.")
     while True:
-        user_input = input(">>> ")
+        user_input = session.prompt(
+            ">>> ",
+            lexer=PygmentsLexer(PythonLexer),
+        )
         if user_input.strip().lower() == 'exit':
             print("Exiting interactive console...")
             break
-        if not user_input:
+        if not user_input.strip():
             time.sleep(0.1)
             continue
 

@@ -10,3 +10,4 @@ pyyaml
 scipy
 numpy
 matplotlib
+prompt_toolkit
