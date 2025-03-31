@@ -406,6 +406,9 @@ class Fight:
         self.nowpoke = poke_index
     
     def _act_item(self, item_index, forpokemon=0):
+        for _ in range(20):
+            self.press_and_release('up')
+
         self.press_and_release('down')
         self.press_and_release('a')
         for i in range(item_index-1):
