@@ -421,6 +421,7 @@ class Fight:
         for i in range(forpokemon-1):
             self.press_and_release('down')
         self.press_and_release('a')
+        self.nowpoke_potion = forpokemon
 
         for _  in range(180):
             self.pyboy.tick()
