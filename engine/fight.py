@@ -19,8 +19,7 @@ class Fight:
 
     def __init__(self, pyboy_obj):
         self.lastfight = 1 # Last time use move
-        self.nowpoke = 1 # Last time use pokemon
-        self.nowpoke_potion = 1
+        self.nowpoke = 1
         self.my_old_level = None
         self.killed_enemy = 0
         
@@ -417,12 +416,12 @@ class Fight:
             self.press_and_release('down')
         self.press_and_release('a')
 
-        for i in range(self.nowpoke_potion-1):
+        for i in range(self.nowpoke-1):
             self.press_and_release('up')
         for i in range(forpokemon-1):
             self.press_and_release('down')
         self.press_and_release('a')
-        self.nowpoke_potion = forpokemon
+        self.nowpoke = forpokemon
 
         for _  in range(180):
             self.pyboy.tick()
