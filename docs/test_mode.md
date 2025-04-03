@@ -8,7 +8,7 @@ We need to automate the evaluation and statistics of ai.
 
 You can use `--fight-test` to entrance fight test mode. All user operation will be blocked. I suggest you use `--shell` to easy change the game state.
 
-And there are some other augrements.
+And there are some other arguments.
 
 1. `--test-count <number>`
    The total test count.
