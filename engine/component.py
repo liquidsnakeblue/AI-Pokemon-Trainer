@@ -63,6 +63,8 @@ def random_operation(data):
         return {"decision": "s" + str(choice(data["other_pokemon"])["id"]), "reason": "Random choose"}
     
     elif op == "i":
-        return {"decision": "i" + str(choice(data["item"])["id"]), "reason": "Random choose"}
+        for i in data["item"]:
+            if i["name"] == "Potion":
+                return {"decision": "i" + str(i["id"]), "reason": "Random choose"}
     
     return {"decision": choice(data["my_move"])["id"], "reason": "Random choose"}
