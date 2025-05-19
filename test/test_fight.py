@@ -50,7 +50,7 @@ def run_test(count, pyboy):
                 "rounds": res,
             })
             fp.seek(0)
-            fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))
+            fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=True))
             fp.flush()
             os.fsync(fp.fileno())
     return report
