@@ -64,7 +64,7 @@ def random_operation(data):
     
     elif op == "i":
         for i in data["item"]:
-            if i["name"] == "Potion":
+            if i["name"] == "Potion" and i["quantity"] != 0:
                 return {"decision": "i" + str(i["id"]), "reason": "Random choose"}
     
     return {"decision": choice(data["my_move"])["id"], "reason": "Random choose"}
