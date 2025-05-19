@@ -56,15 +56,20 @@ def random_operation(data):
     ops = ["run", "s", "i", "move"]
     op = choice(ops)
 
+    other_pokemon = []
+    for i in data["other_pokemon"]:
+        if i["is_active"] and i["id"] != data["now_pokemon_id"] and i["hp"] != 0:
+            other_pokemon.append(i)
+
     if op == "run":
         return {"decision": "run", "reason": "Random choose"}
     
     elif op == "s":
-        return {"decision": "s" + str(choice(data["other_pokemon"])["id"]), "reason": "Random choose"}
+        return {"decision": "s" + str(choice(other_pokemon)["id"]), "reason": "Random choose"}
     
     elif op == "i":
         for i in data["item"]:
             if i["name"] == "Potion" and i["quantity"] != 0:
-                return {"decision": "i" + str(i["id"]), "reason": "Random choose"}
+                return {"decision": "i" + str(i["id"]) + " " + str(choice(other_pokemon["id"])), "reason": "Random choose"}
     
     return {"decision": choice(data["my_move"])["id"], "reason": "Random choose"}
