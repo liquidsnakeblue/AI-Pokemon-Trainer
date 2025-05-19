@@ -479,7 +479,7 @@ class Fight:
             self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
             logger.info(f"Act, use item {tmp}")
 
-            self._act_item(tmp, int(response["decision"].split()[1:]))
+            self._act_item(tmp, int(response["decision"].split()[1]))
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
