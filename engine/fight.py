@@ -27,6 +27,7 @@ class Fight:
         self.pyboy = pyboy_obj
         self.history = []
         self.operation_history = []
+        self.last_operation = ""
         self.round_cnt = 1
 
         self.is_ablation_escape = os.getenv('AI_POKEMON_TRAINER_ABLATION_ESCAPE', '0') == '1'
@@ -447,6 +448,7 @@ class Fight:
         logger.debug("Do Act.")
         self.pyboy.update_run_data("reason_msg", response["reason"])
         response["decision"] = str(response["decision"])
+        self.last_operation = response
 
         self.operation_history.append({
             "operation": response["decision"],
@@ -541,7 +543,7 @@ class Fight:
         
         logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")
-        return self.getresult() # return fight result
+        return self.getresult(), self.last_operation # return fight result
 
 
 def do_fight(pyboy_obj:PyBoy):
