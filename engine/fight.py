@@ -6,6 +6,7 @@ from .component import (
     read_prompt, 
     read_prompt_without_template,
     extract_json_from_string,
+    random_operation,
 )
 from .index_data import *
 
@@ -36,6 +37,9 @@ class Fight:
 
         self.is_ablation_item = os.getenv('AI_POKEMON_TRAINER_ABLATION_ITEM', '0') == '1'
         if self.is_ablation_item: logger.info('Ablation item unit.')
+
+        self.is_random_test = os.getenv('AI_POKEMON_TRAINER_BASE_LINE') == '1'
+        if self.is_random_test: logger.info('Make base line.')
     
     def press_and_release(self,key):
         """
@@ -511,15 +515,22 @@ class Fight:
 
             self.pyboy.update_run_data("think_status", True)
             tmp_data = self.dump_data(tmp)
-            while True:
-                response, used_token = get_ai_response(self.make_prompt(tmp_data))
-                self.pyboy.total_usage_token += used_token
-                try:
-                    response = extract_json_from_string(response)
-                    break
-                except ValueError as e:
-                    logger.error(e)
-                    logger.error("Resend!")
+
+            response, used_token = None, None
+            
+            if self.is_random_test:
+                response = random_operation(tmp_data)
+            else:
+                while True:
+                    response, used_token = get_ai_response(self.make_prompt(tmp_data))
+                    self.pyboy.total_usage_token += used_token
+                    try:
+                        response = extract_json_from_string(response)
+                        break
+                    except ValueError as e:
+                        logger.error(e)
+                        logger.error("Resend!")
+
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
 

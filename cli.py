@@ -15,11 +15,12 @@ def cli():
 @click.option('--shell', is_flag=True, help="Shell")
 @click.option('--no-auto', is_flag=True, help="Not have automatic play")
 @click.option('--fight-test', is_flag=True, help="Test fight")
+@click.option('--base-line', is_flag=True, help="Base Line")
 @click.option('--test-count', type=int, default=20, help="Test count")
 @click.option('--test-setting', type=str, default='001_simple', help='Test setting')
 @click.option('--skip-animation', is_flag=True, help="Is skip animation")
 @click.option('--debug', is_flag=True, help="Debug mod")
-def server(port, addr, ws_port, remove_escape, remove_switch, remove_item, shell, no_auto, fight_test, test_count, test_setting, skip_animation, debug):
+def server(port, addr, ws_port, remove_escape, remove_switch, remove_item, shell, no_auto, fight_test, base_line, test_count, test_setting, skip_animation, debug):
     """
     Run server
     """
@@ -36,6 +37,7 @@ def server(port, addr, ws_port, remove_escape, remove_switch, remove_item, shell
 
 
     os.environ["AI_POKEMON_TRAINER_FIGHT_TEST"] = '1' if fight_test else '0'
+    os.environ["AI_POKEMON_TRAINER_BASE_LINE"] = '1' if base_line else '0'
     os.environ["AI_POKEMON_TRAINER_TEST_CNT"] = str(test_count)
     os.environ["AI_POKEMON_TRAINER_TEST_SETTING"] = test_setting
 
