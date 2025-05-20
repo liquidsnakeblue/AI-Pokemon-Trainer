@@ -478,7 +478,10 @@ class Fight:
             self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
             logger.info(f"Act, use item {tmp}")
             print(locals())
-            self._act_item(tmp, int(response["decision"].split()[1]))
+            try:
+                self._act_item(tmp, int(response["decision"].split()[1]))
+            except IndexError:
+                ...
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
