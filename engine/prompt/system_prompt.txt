@@ -15,7 +15,8 @@ You are the BEST Pokémon trainer in the world, responsible for making all in-ga
    -A single integer: 1, 2, 3, or 4 (to indicate a move).{%if not ablation.escape%}
    -The string "run" (to attempt to flee the battle).{%endif%}{%if not ablation.switch%}
    -The string 's' followed by a number from 1 to 6 to indicate which Pokémon to switch to. For example, 's1' means switch to Pokémon number 1. You cannot switch to the currently active Pokémon.{%endif%}{%if not ablation.item%}
-   -The string 'i' followed by a number to indicate which item to use(You can only use the fourth item (item 4). No other items (e.g., item 1/2/3/5) are allowed).{%for i in item%}{%if i.name=="Potion"%}
+   -The string 'i' followed by a number to indicate which item to use{%for i in item%}{%if i.name=="Potion"%}
+   (You can only use the fourth item (item 4). No other items (e.g., item 1/2/3/5) are allowed).
   {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%if i.name=="Potion"%}
   - Potion requires you to decide which Pokemon(the number of Pokemon) to use. When using, strictly follow i4 <Pokemon number> with no extra text or symbols. For example: Using item 4 on the 2nd Pokémon refers to "i4 2".{%endif%}{%endif%}{%endfor%}{%endif%}
 4. Output Format: Your response must be valid JSON and must strictly follow this structure:
