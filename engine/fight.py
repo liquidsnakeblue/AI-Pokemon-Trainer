@@ -455,7 +455,9 @@ class Fight:
             "id": self.round_cnt,
         })
         self.round_cnt = self.round_cnt + 1
-        print(response)
+        
+        logger.debug(response)
+
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
             self.pyboy.update_run_data("action_msg", "Run")
@@ -477,7 +479,8 @@ class Fight:
             tmp = int(response["decision"].split()[0][1:])
             self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
             logger.info(f"Act, use item {tmp}")
-            print(locals())
+            
+            logger.debug(locals())
             try:
                 self._act_item(tmp, int(response["decision"].split()[1]))
             except IndexError:
