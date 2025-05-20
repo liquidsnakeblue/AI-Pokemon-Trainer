@@ -449,7 +449,6 @@ class Fight:
         self.pyboy.update_run_data("reason_msg", response["reason"])
         response["decision"] = str(response["decision"])
         self.last_operation = response
-        print(response)
         self.operation_history.append({
             "operation": response["decision"],
             "reason": response["reason"],
