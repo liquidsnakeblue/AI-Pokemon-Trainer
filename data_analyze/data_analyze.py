@@ -121,7 +121,7 @@ def operation_distribution(data, count_lists, fig, ax):
 def mean_bar_plot(fig, ax, mean_list, se_list):
 
     topics_list = ["Baseline", "DeepSeek-chat", "GPT-4o", "Gemini-2.0-flash",
-                   "Claude-3-5-sonnet", "Qwen-Max", "GPT-4", "doubao-1-5-pro-256k"]
+                   "Claude-3-5-sonnet", "Qwen-Max", "doubao-1-5-pro-256k","GPT-4"]
     ax.set_xlabel("Model")
     ax.set_ylabel("Percentage of Battles Won, (%)")
     ax.errorbar(topics_list, mean_list, color='#1f77b4', alpha=0.8,
