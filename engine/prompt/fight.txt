@@ -14,9 +14,10 @@
 - You can also switch to other available Pokémon:
 {%for i in other_pokemon%}{%if i.is_active%}{%if i.id != now_pokemon_id%}{%if i.hp != 0%}
   {{i.id}}. {{i.name}}:hp:{{i.hp}}, level:{{i.level}},attack:{{i.attack}}, defense:{{i.defense}}, max_hp: {{i.max_hp}}
-{%endif%}{%endif%}{%endif%}{%endfor%}{%else%}    You not have other available pokemon.{%endif%}{%endif%}{%if not ablation.item%}
-- You can use items:{%for i in item%}{%if i.name%}
+{%endif%}{%endif%}{%endif%}{%endfor%}{%else%} You not have other available pokemon.{%endif%}{%endif%}{%if not ablation.item%}
+- Item:{%for i in item%}{%if i.name=="Potion"%}
+  You can use items(You can only use the fourth item (item 4). No other items (e.g., item 1/2/3/5) are allowed)
   {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%if i.name=="Potion"%}
-  - Potion requires you to decide which Pokemon to use. Please write the number after the letter, the middle is separated by a space. For example: Use potion item(item 3) to pokemon 2, `i3 2`.{%endif%}{%endif%}{%endfor%}{%endif%}{%if my_hp==0%}
+  - Potion requires you to decide which Pokemon(the number of Pokemon) to use. When using, strictly follow i4 <Pokemon number> with no extra text or symbols. For example: Using item 4 on the 2nd Pokémon refers to "i4 2".{%endif%}{%endif%}{%endfor%}{%endif%}{%if my_hp==0%}
 - Pokemon is currently dead, so you can only switch to the new one now{%if ablation.escape%}, or escape{%endif%}.{%endif%}
 Make your decision.

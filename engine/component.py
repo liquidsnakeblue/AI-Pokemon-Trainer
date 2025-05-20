@@ -1,6 +1,7 @@
 import math, json, re
 from pathlib import Path
 from jinja2 import Template
+from random import choice
 
 import logging
 logger = logging.getLogger("ai_pokemon_trainer")
@@ -50,3 +51,25 @@ def extract_json_from_string(input_string):
             raise ValueError(f"Invalid JSON format: {e}")
     logger.error(input_string)
     raise ValueError(f"JSON format error")
+
+def random_operation(data):
+    ops = ["run", "s", "i", "move"]
+    op = choice(ops)
+
+    other_pokemon = []
+    for i in data["other_pokemon"]:
+        if i["is_active"] and i["id"] != data["now_pokemon_id"] and i["hp"] != 0:
+            other_pokemon.append(i)
+
+    if op == "run":
+        return {"decision": "run", "reason": "Random choose"}
+    
+    elif op == "s" and len(other_pokemon) != 0:
+        return {"decision": "s" + str(choice(other_pokemon)["id"]), "reason": "Random choose"}
+    
+    elif op == "i" and len(other_pokemon) != 0:
+        for i in data["item"]:
+            if i["name"] == "Potion" and i["quantity"] != 0:
+                return {"decision": "i" + str(i["id"]) + " " + str(choice(other_pokemon)["id"]), "reason": "Random choose"}
+    
+    return {"decision": choice(data["my_move"])["id"], "reason": "Random choose"}

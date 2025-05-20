@@ -41,15 +41,16 @@ def run_test(count, pyboy):
         for i in range(count):
             cnt+=1
             pyboy.total_usage_token = 0
-            res = TestFight(pyboy).run()
+            res, last_operation = TestFight(pyboy).run()
             logger.info(f"Test Process: {cnt}/{count}")
             report.append({
                 "id": i,
                 "total_usage_token": pyboy.total_usage_token,
+                "last_operation": last_operation,
                 "rounds": res,
             })
             fp.seek(0)
-            fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=False))
+            fp.write(json.dumps(report, indent=4, separators=(',', ': '), ensure_ascii=True))
             fp.flush()
             os.fsync(fp.fileno())
     return report

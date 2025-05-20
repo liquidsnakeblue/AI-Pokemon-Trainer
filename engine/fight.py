@@ -6,6 +6,7 @@ from .component import (
     read_prompt, 
     read_prompt_without_template,
     extract_json_from_string,
+    random_operation,
 )
 from .index_data import *
 
@@ -26,6 +27,7 @@ class Fight:
         self.pyboy = pyboy_obj
         self.history = []
         self.operation_history = []
+        self.last_operation = ""
         self.round_cnt = 1
 
         self.is_ablation_escape = os.getenv('AI_POKEMON_TRAINER_ABLATION_ESCAPE', '0') == '1'
@@ -36,6 +38,9 @@ class Fight:
 
         self.is_ablation_item = os.getenv('AI_POKEMON_TRAINER_ABLATION_ITEM', '0') == '1'
         if self.is_ablation_item: logger.info('Ablation item unit.')
+
+        self.is_random_test = os.getenv('AI_POKEMON_TRAINER_BASE_LINE') == '1'
+        if self.is_random_test: logger.info('Make base line.')
     
     def press_and_release(self,key):
         """
@@ -353,7 +358,7 @@ class Fight:
             "item": self.is_ablation_item,
         }
 
-        data["operation_history"] = copy.deepcopy(self.operation_history)
+        data["operation_history"] = copy.deepcopy(self.operation_history[:3]) if len(self.operation_history) >3 else copy.deepcopy(self.operation_history)
 
         return data
 
@@ -443,13 +448,15 @@ class Fight:
         logger.debug("Do Act.")
         self.pyboy.update_run_data("reason_msg", response["reason"])
         response["decision"] = str(response["decision"])
-
+        self.last_operation = response
         self.operation_history.append({
             "operation": response["decision"],
             "reason": response["reason"],
             "id": self.round_cnt,
         })
         self.round_cnt = self.round_cnt + 1
+        
+        logger.debug(response)
 
         if response["decision"] == "run" and (not self.is_ablation_escape):
             # Run
@@ -472,8 +479,12 @@ class Fight:
             tmp = int(response["decision"].split()[0][1:])
             self.pyboy.update_run_data("action_msg", f"Use item: {tmp}")
             logger.info(f"Act, use item {tmp}")
-
-            self._act_item(tmp, int(response["decision"].split()[1]))
+            
+            logger.debug(locals())
+            try:
+                self._act_item(tmp, int(response["decision"].split()[1]))
+            except IndexError:
+                ...
         else:
             # Move
             self.pyboy.update_run_data("action_msg", f"Use move {response['decision']}")
@@ -511,15 +522,22 @@ class Fight:
 
             self.pyboy.update_run_data("think_status", True)
             tmp_data = self.dump_data(tmp)
-            while True:
-                response, used_token = get_ai_response(self.make_prompt(tmp_data))
-                self.pyboy.total_usage_token += used_token
-                try:
-                    response = extract_json_from_string(response)
-                    break
-                except ValueError as e:
-                    logger.error(e)
-                    logger.error("Resend!")
+
+            response, used_token = None, None
+            
+            if self.is_random_test:
+                self.make_prompt(tmp_data)
+                response = random_operation(tmp_data)
+            else:
+                while True:
+                    response, used_token = get_ai_response(self.make_prompt(tmp_data))
+                    self.pyboy.total_usage_token += used_token
+                    try:
+                        response = extract_json_from_string(response)
+                        break
+                    except ValueError as e:
+                        logger.error(e)
+                        logger.error("Resend!")
             self.pyboy.update_run_data("think_status", False)
             self.act(response)
 
@@ -531,7 +549,7 @@ class Fight:
         
         logger.info("End of Fighting.")
         self.pyboy.update_run_data("status_msg", "Manual Operation")
-        return self.getresult() # return fight result
+        return self.getresult(), self.last_operation # return fight result
 
 
 def do_fight(pyboy_obj:PyBoy):
