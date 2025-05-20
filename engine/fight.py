@@ -358,7 +358,7 @@ class Fight:
             "item": self.is_ablation_item,
         }
 
-        data["operation_history"] = copy.deepcopy(self.operation_history)
+        data["operation_history"] = copy.deepcopy(self.operation_history[:3]) if len(self.operation_history) >3 else copy.deepcopy(self.operation_history)
 
         return data
 
