@@ -1,9 +1,12 @@
 import json
+import pathlib
+import random
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 from scipy import stats
 from scipy.stats import norm
-import pathlib
 
 
 def get_battle(model_list):
@@ -118,46 +121,64 @@ def operation_distribution(data, count_lists, fig, ax):
     ax.show()
 
 
-def mean_bar_plot(fig, ax, mean_list, se_list):
+def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
-    topics_list = ["Baseline", "DeepSeek-chat", "GPT-4o", "Gemini-2.0-flash",
-                   "Claude-3-5-sonnet", "Qwen-Max", "GPT-4", "doubao-1-5-pro-256k"]
     ax.set_xlabel("Model")
     ax.set_ylabel("Percentage of Battles Won, (%)")
     ax.errorbar(topics_list, mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt='o', ecolor='black', capsize=5)
-    ax.bar(topics_list, mean_list, color=[
-           "darksalmon", "olivedrab", "cadetblue", "#F0FF00", "darkmagenta", "#0000FF", "aqua", "#23AB87"],)
+    ax.bar(topics_list, mean_list, color=color_list)
     fig.autofmt_xdate()
     plt.show()
 
 
 fig = plt.figure()
 ax = fig.subplots()
-# count_lists=[]
+
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
+COLOR_LIST = [
+    "#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3",
+    "#33FFF3", "#F333FF", "#FFD700", "#4B0082", "#00FFFF",
+    "#FF69B4", "#8A2BE2", "#ADFF2F", "#DA70D6", "#FF4500",
+    "#2E8B57", "#FFA500", "#20B2AA", "#FF1493", "#00CED1",
+    "#FF00FF", "#8B008B", "#00FF00", "#0000FF", "#FFFF00",
+    "#FF0000", "#7CFC00", "#FFFACD", "#ADD8E6", "#F08080",
+    "#E6E6FA", "#FF6347", "#4682B4", "#FFFFE0", "#00FF7F",
+    "#20B2AA", "#FFB6C1", "#FFE4C4", "#FFDEAD", "#98FB98",
+    "#AFEEEE"
+]
+
 model_list = []
+topics_list = []
+color_list = []
+
 list_path = pathlib.Path(__file__).parent / "data_file_paths.json"
+
 with open(list_path, "r", encoding="utf-8") as file:
     whole_list = json.loads(file.read())
+
     for model_name_list in whole_list:
+
         test_list = []
+        topics_list.append(model_name_list["name"])
+        color_list.append(random.choice(COLOR_LIST))
+
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
+
             if not file_path.exists():
                 print("The file does not exist.", file_path)
                 exit(0)
+
             with open(file_path, "r", encoding="utf-8") as file:
                 test_list.append((json.loads(file.read())))
+
         model_list.append(test_list)
+
     print(len(model_list))
-# print("The number of operation(without runaway):",get_sub_battle(data_list))
 
 model_battle_list = get_battle(model_list)
 print("The number of valid run:", model_battle_list)
+
 mean_list, se_list = get_mean_and_se(model_battle_list)
-mean_bar_plot(fig, ax, mean_list, se_list)
-# token_distribution(data_list)
-"""
-operation_distribution(data_list,count_lists,fig,ax)
-"""
+mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
