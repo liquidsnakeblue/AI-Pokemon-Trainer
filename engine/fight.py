@@ -520,6 +520,7 @@ class Fight:
             response, used_token = None, None
             
             if self.is_random_test:
+                self.make_prompt(tmp_data)
                 response = random_operation(tmp_data)
             else:
                 while True:

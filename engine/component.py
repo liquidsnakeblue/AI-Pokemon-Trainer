@@ -64,12 +64,12 @@ def random_operation(data):
     if op == "run":
         return {"decision": "run", "reason": "Random choose"}
     
-    elif op == "s":
+    elif op == "s" and len(other_pokemon) != 0:
         return {"decision": "s" + str(choice(other_pokemon)["id"]), "reason": "Random choose"}
     
-    elif op == "i":
+    elif op == "i" and len(other_pokemon) != 0:
         for i in data["item"]:
             if i["name"] == "Potion" and i["quantity"] != 0:
-                return {"decision": "i" + str(i["id"]) + " " + str(choice(other_pokemon["id"])), "reason": "Random choose"}
+                return {"decision": "i" + str(i["id"]) + " " + str(choice(other_pokemon)["id"]), "reason": "Random choose"}
     
     return {"decision": choice(data["my_move"])["id"], "reason": "Random choose"}
