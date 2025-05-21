@@ -396,6 +396,7 @@ class Fight:
         self.press_and_release('a')
     
     def _act_switch_poke(self, poke_index):
+        self.lastfight = 1 # Return to the origin point
         
         #If pokemon is dead, the same logic applies
         #if self.read_data()["my_hp"] != 0:
