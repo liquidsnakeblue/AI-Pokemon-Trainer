@@ -155,8 +155,15 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
         bar.set_hatch('/')
         bar.set_linewidth(1.2)
 
-    barlabel = ax.bar_label(bars, label_type="center", size=10, color="white")
-    for text in barlabel:
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
+    for text, color in zip(barlabel, color_list):
+        rgba = to_rgba(color)
+
+        # if (rgba[0]/255) * (rgba[1]/255) * (rgba[2]/255) < 0.5:
+        #     text.set_color("white")
+        # else:
+        #     text.set_color("black")
+
         text.set_path_effects([
             # path_effects.Stroke(linewidth=1, foreground="black"),
             path_effects.Normal(),
@@ -169,8 +176,6 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
 
-    plt.show()
-
 
 fig = plt.figure()
 ax = fig.subplots()
@@ -180,6 +185,7 @@ BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
 model_list = []
 topics_list = []
 color_list = []
+score_list = []
 
 list_path = pathlib.Path(__file__).parent / "data_file_paths.json"
 
@@ -191,6 +197,7 @@ with open(list_path, "r", encoding="utf-8") as file:
         test_list = []
         topics_list.append(model_name_list["name"])
         color_list.append(model_name_list["color"])
+        score_list.append(model_name_list["score"])
 
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
@@ -211,3 +218,6 @@ print("The number of valid run:", model_battle_list)
 
 mean_list, se_list = get_mean_and_se(model_battle_list)
 mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
+
+ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
+plt.show()
