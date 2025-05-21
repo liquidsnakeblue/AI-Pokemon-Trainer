@@ -1,4 +1,5 @@
 data_analyze/data_file_paths.json
+data_analyze/function_file_paths.json
 test_record/*
 red.gb.state
 secret_setting.json

@@ -123,12 +123,14 @@ def operation_distribution(data, count_lists, fig, ax):
 
 def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
+    round_mean_list = np.round(mean_list, decimals=2)
     ax.set_xlabel("Model")
     ax.set_ylabel("Percentage of Battles Won, (%)")
-    ax.errorbar(topics_list, mean_list, color='#1f77b4', alpha=0.8,
-                yerr=se_list, fmt='o', ecolor='black', capsize=5)
-    ax.bar(topics_list, mean_list, color=color_list)
+    ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
+                yerr=se_list, fmt="_", ecolor='black', capsize=5)
+    bars = ax.bar(topics_list, round_mean_list, color=color_list)
     fig.autofmt_xdate()
+    ax.bar_label(bars, label_type= "center")
     plt.show()
 
 
