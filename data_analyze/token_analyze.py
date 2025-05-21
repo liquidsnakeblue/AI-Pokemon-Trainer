@@ -50,12 +50,18 @@ def get_token(model_list,model_battle_list):
         token_list.append(test_token_list)
     for i in range(len(token_list)):
         for j in range(len(token_list[i])):
+            if model_battle_list[i][j]==0:
+                token_list[i].pop(j)
+                model_battle_list[i].pop(j)
+                i=i-1
+                j=j-1
             token_list[i][j]=token_list[i][j]/(model_battle_list[i][j])
     return token_list
 
 def get_mean_and_se(token_list):
     mean_list = []
     se_list = []
+    token_list.pop(-1) #delete the baseline group since baseline is useless
     for test_token_list in token_list:
         mean = np.mean(test_token_list)
         se = stats.sem(test_token_list)
@@ -67,7 +73,8 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
     round_mean_list = np.round(mean_list)
     ax.set_xlabel("Model")
-    ax.set_ylabel("Average Token Usage")
+    ax.set_ylabel("Average Token Usage Per Winning")
+    topics_list.pop(-1) #delete the last group(baseline)
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
     bars = ax.bar(topics_list, round_mean_list, color=color_list)
