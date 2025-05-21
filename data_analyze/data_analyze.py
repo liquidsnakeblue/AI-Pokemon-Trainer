@@ -11,22 +11,33 @@ from scipy.stats import norm
 
 def get_battle(model_list):
     model_battle_list = []
+
     for test_list in model_list:
         test_battle_list = []
+
         for data in test_list:
             rounds_count = 0
+
             for battle in data:
+
                 Flag = True
+                Flag1 = False
+
                 if battle["last_operation"]["decision"] == "run":
                     Flag = False
+
                 for poke in battle["rounds"][-1]["other_pokemon"]:
-                    if poke["hp"]!=0:
-                        Flag1=True
-                    Flag1=False
+                    if poke["hp"] != 0:
+                        Flag1 = True
+                        break
+
                 if Flag and Flag1:
                     rounds_count += 1
+
             test_battle_list.append(rounds_count/50)
+
         model_battle_list.append(test_battle_list)
+
     return model_battle_list
 
 
