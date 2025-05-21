@@ -7,23 +7,47 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 
-def operation_count(model_list):
-    move_name_list = []
-    result_list ={}
-    for test_list in model_list:
-        
-    try:
-        index = lst.index(target)
-        print(f"找到字符串 '{target}'，索引位置为: {index}")
-    except ValueError:
-        print(f"未找到字符串: '{target}'")
 
-    count = 0
-    for battle in data:
-        for operation in battle["rounds"][-1]["operation_history"]:
-            if operation["operation"] == user_input:
-                count += 1
-    return user_input, count
+def process_model_data(model_list):
+
+    category_name = []
+    result = {
+        "test_list0": [] , 
+        "test_list1": [] ,
+        "test_list2": [] ,
+        "test_list3": [],
+        "test_list4": [],
+        "test_list5" :[],
+        "test_list6": []
+    }
+    
+    for i in range(len(model_list)-1):
+        for json_data in model_list[i]:
+            
+            for item in json_data:
+                decision = item["last_operation"]["decision"]
+                if decision not in category_name:
+                    category_name.append(decision)
+                    for key in result:
+                        result[key].append(0)
+                    result[f"test_list{i}"][-1] = result[f"test_list{i}"][-1] + 1 
+                elif decision in category_name:
+                    num = category_name.index(decision)
+                    result[f"test_list{i}"][num] = result[f"test_list{i}"][num] + 1 
+
+                for tmp in item["rounds"][-1]["operation_history"]: 
+                    operation = tmp["operation"]
+
+                    if operation in category_name:
+                        c = category_name.index(operation)
+                        result[f"test_list{i}"][c] += 1
+                    else:
+                        category_name.append(operation)
+                        for key in result:
+                            result[key].append(0)
+                            result[f"test_list{i}"][-1] = 1
+    print(category_name)
+    return category_name, result
 
 
 
@@ -61,14 +85,12 @@ with open(list_path, "r", encoding="utf-8") as file:
         model_list.append(test_list)
 
     print(len(model_list))
-
+category_names, results = process_model_data(model_list)
 
 plt.show()
 
-import matplotlib.pyplot as plt
-import numpy as np
 
-category_names = ['Strongly disagree', 'Disagree',
+"""category_names = ['Strongly disagree', 'Disagree',
                   'Neither agree nor disagree', 'Agree', 'Strongly agree']
 results = {
     'Question 1': [10, 15, 17, 32, 26],
@@ -77,27 +99,21 @@ results = {
     'Question 4': [32, 11, 9, 15, 33],
     'Question 5': [21, 29, 5, 5, 40],
     'Question 6': [8, 19, 5, 30, 38]
-}
+}"""
 
 
 def survey(results, category_names):
-    """
-    Parameters
-    ----------
-    results : dict
-        A mapping from question labels to a list of answers per category.
-        It is assumed all lists contain the same number of entries and that
-        it matches the length of *category_names*.
-    category_names : list of str
-        The category labels.
-    """
+    for key, value in results.items():
+        tmp = np.sum(value)
+        for i in range(len(value)):
+            results[key][i] = results[key][i] / tmp
+
     labels = list(results.keys())
     data = np.array(list(results.values()))
     data_cum = data.cumsum(axis=1)
     category_colors = plt.colormaps['RdYlGn'](
         np.linspace(0.15, 0.85, data.shape[1]))
 
-    fig = plt.figure(facecolor='#F5F5F5')
     fig, ax = plt.subplots(figsize=(9.2, 5))
     ax.invert_yaxis()
     ax.xaxis.set_visible(False)
