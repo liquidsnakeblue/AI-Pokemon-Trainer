@@ -89,6 +89,12 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
     barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
 
+
+    ax.spines['top'].set_visible(False)
+
+    ax.spines['right'].set_visible(False)
+    ax.plot(1, 0, ">k", transform=ax.transAxes, markersize=8, clip_on=False)
+    ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
 
 
