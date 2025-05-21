@@ -4,6 +4,7 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 
 from scipy import stats
 def get_battle(model_list):
@@ -77,27 +78,30 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     topics_list.pop(-1) #delete the last group(baseline)
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
-    bars = ax.bar(topics_list, round_mean_list, color=color_list)
+    bars = ax.bar(topics_list, round_mean_list, color=color_list, alpha=0.6)
+
+    for bar, fill_color in zip(bars, color_list):
+        rgba = to_rgba(fill_color)
+        darker_color = (rgba[0]*0.7, rgba[1]*0.7, rgba[2]*0.7, 0.9)
+        bar.set_edgecolor(darker_color)
+        bar.set_hatch('/')
+        bar.set_linewidth(1.2)
+
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
+
+
+    ax.spines['top'].set_visible(False)
+
+    ax.spines['right'].set_visible(False)
+    ax.plot(1, 0, ">k", transform=ax.transAxes, markersize=8, clip_on=False)
+    ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
-    ax.bar_label(bars, label_type= "center")
-    plt.show()
 
 
 fig = plt.figure()
 ax = fig.subplots()
 
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
-COLOR_LIST = [
-    "#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3",
-    "#33FFF3", "#F333FF", "#FFD700", "#4B0082", "#00FFFF",
-    "#FF69B4", "#8A2BE2", "#ADFF2F", "#DA70D6", "#FF4500",
-    "#2E8B57", "#FFA500", "#20B2AA", "#FF1493", "#00CED1",
-    "#FF00FF", "#8B008B", "#00FF00", "#0000FF", "#FFFF00",
-    "#FF0000", "#7CFC00", "#FFFACD", "#ADD8E6", "#F08080",
-    "#E6E6FA", "#FF6347", "#4682B4", "#FFFFE0", "#00FF7F",
-    "#20B2AA", "#FFB6C1", "#FFE4C4", "#FFDEAD", "#98FB98",
-    "#AFEEEE"
-]
 
 model_list = []
 topics_list = []
@@ -112,7 +116,7 @@ with open(list_path, "r", encoding="utf-8") as file:
 
         test_list = []
         topics_list.append(model_name_list["name"])
-        color_list.append(random.choice(COLOR_LIST))
+        color_list.append(model_name_list["color"])
 
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
@@ -133,3 +137,8 @@ print("The number of valid run:", model_token_list)
 
 mean_list, se_list = get_mean_and_se(model_token_list)
 mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
+
+ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
+# plt.show()
+
+plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
