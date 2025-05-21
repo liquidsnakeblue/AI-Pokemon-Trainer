@@ -4,6 +4,7 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 
 from scipy import stats
 
@@ -58,19 +59,25 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
-    bars = ax.bar(topics_list, round_mean_list, color=color_list)
+    
+    bars = ax.bar(topics_list, round_mean_list, color=color_list, alpha=0.6)
+
+    for bar, fill_color in zip(bars, color_list):
+        rgba = to_rgba(fill_color)
+        darker_color = (rgba[0]*0.7, rgba[1]*0.7, rgba[2]*0.7, 0.9)
+        bar.set_edgecolor(darker_color)
+        bar.set_hatch('/')
+        bar.set_linewidth(1.2)
+
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
+
     fig.autofmt_xdate()
-    ax.bar_label(bars, label_type="center")
-    plt.show()
 
 
 fig = plt.figure()
 ax = fig.subplots()
 
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
-COLOR_LIST = [
-    "#1ba784", "#e2c17c", "#2f90b9", "#ea8958", "#bacf65",
-    "#ffa60f", "#813c85", "#248067", "#617172"]
 
 model_list = []
 topics_list = []
@@ -85,7 +92,7 @@ with open(list_path, "r", encoding="utf-8") as file:
 
         test_list = []
         topics_list.append(model_name_list["name"])
-        color_list.append(random.choice(COLOR_LIST))
+        color_list.append(model_name_list["color"])
 
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
@@ -106,3 +113,10 @@ print("The number of valid run:", model_battle_list)
 
 mean_list, se_list = get_mean_and_se(model_battle_list)
 mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
+
+ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
+
+
+# plt.show()
+
+plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
