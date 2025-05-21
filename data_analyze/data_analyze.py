@@ -4,9 +4,10 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
+import matplotlib.patheffects as path_effects
 
 from scipy import stats
-import matplotlib.patheffects as path_effects
 
 
 def get_battle(model_list):
@@ -71,12 +72,29 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
-    bars = ax.bar(topics_list, round_mean_list, color=color_list)
+    
+    bars = ax.bar(topics_list, round_mean_list, color=color_list, alpha=0.6)
+
+    for bar, fill_color in zip(bars, color_list):
+        rgba = to_rgba(fill_color)
+        darker_color = (rgba[0]*0.7, rgba[1]*0.7, rgba[2]*0.7, 0.9)
+        bar.set_edgecolor(darker_color)
+        bar.set_hatch('/')
+        bar.set_linewidth(1.2)
+
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
+    for text, color in zip(barlabel, color_list):
+        rgba = to_rgba(color)
+
+        # if (rgba[0]/255) * (rgba[1]/255) * (rgba[2]/255) < 0.5:
+        #     text.set_color("white")
+        # else:
+        #     text.set_color("black")
 
     barlabel = ax.bar_label(bars, label_type="center", size=10, color="white")
     for text in barlabel:
         text.set_path_effects([
-            path_effects.Stroke(linewidth=1, foreground="black"),
+            # path_effects.Stroke(linewidth=1, foreground="black"),
             path_effects.Normal(),
         ])
 
@@ -87,21 +105,16 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
 
-    plt.show()
-
 
 fig = plt.figure()
 ax = fig.subplots()
 
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
-COLOR_LIST = [
-    "#2A3F54", "#4C6A92", "#6C8EBF", "#3E5F8A", "#5B7D9E",
-    "#7F9DBD", "#4A708B", "#6E7B8B", "#8FBC8F", "#556B2F"
-]
 
 model_list = []
 topics_list = []
 color_list = []
+score_list = []
 
 list_path = pathlib.Path(__file__).parent / "data_file_paths.json"
 
@@ -112,7 +125,8 @@ with open(list_path, "r", encoding="utf-8") as file:
 
         test_list = []
         topics_list.append(model_name_list["name"])
-        color_list.append(random.choice(COLOR_LIST))
+        color_list.append(model_name_list["color"])
+        score_list.append(model_name_list["score"])
 
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
@@ -133,3 +147,8 @@ print("The number of valid run:", model_battle_list)
 
 mean_list, se_list = get_mean_and_se(model_battle_list)
 mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
+
+ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
+# plt.show()
+
+plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
