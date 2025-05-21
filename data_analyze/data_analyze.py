@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 from scipy import stats
 from scipy.stats import norm
+import matplotlib.patheffects as path_effects
 
 
 def get_battle(model_list):
@@ -138,14 +139,27 @@ def operation_distribution(data, count_lists, fig, ax):
 
 def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
-    round_mean_list = np.round(mean_list, decimals=2)
+    round_mean_list = np.round(mean_list, decimals=3)
     ax.set_xlabel("Model")
-    ax.set_ylabel("Percentage of Battles Won, (%)")
+    ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
     bars = ax.bar(topics_list, round_mean_list, color=color_list)
+
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="white")
+    for text in barlabel:
+        text.set_path_effects([
+            path_effects.Stroke(linewidth=1, foreground="black"),
+            path_effects.Normal(),
+        ])
+
+    ax.spines['top'].set_visible(False)
+
+    ax.spines['right'].set_visible(False)
+    ax.plot(1, 0, ">k", transform=ax.transAxes, markersize=8, clip_on=False)
+    ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
-    ax.bar_label(bars, label_type= "center")
+
     plt.show()
 
 
@@ -154,15 +168,8 @@ ax = fig.subplots()
 
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
 COLOR_LIST = [
-    "#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3",
-    "#33FFF3", "#F333FF", "#FFD700", "#4B0082", "#00FFFF",
-    "#FF69B4", "#8A2BE2", "#ADFF2F", "#DA70D6", "#FF4500",
-    "#2E8B57", "#FFA500", "#20B2AA", "#FF1493", "#00CED1",
-    "#FF00FF", "#8B008B", "#00FF00", "#0000FF", "#FFFF00",
-    "#FF0000", "#7CFC00", "#FFFACD", "#ADD8E6", "#F08080",
-    "#E6E6FA", "#FF6347", "#4682B4", "#FFFFE0", "#00FF7F",
-    "#20B2AA", "#FFB6C1", "#FFE4C4", "#FFDEAD", "#98FB98",
-    "#AFEEEE"
+    "#2A3F54", "#4C6A92", "#6C8EBF", "#3E5F8A", "#5B7D9E",
+    "#7F9DBD", "#4A708B", "#6E7B8B", "#8FBC8F", "#556B2F"
 ]
 
 model_list = []

@@ -10,18 +10,33 @@ from scipy import stats
 
 def get_battle(model_list):
     model_battle_list = []
+
     for test_list in model_list:
         test_battle_list = []
+
         for data in test_list:
             rounds_count = 0
+
             for battle in data:
+
                 Flag = True
+                Flag1 = False
+
                 if battle["last_operation"]["decision"] == "run":
                     Flag = False
-                if Flag:
+
+                for poke in battle["rounds"][-1]["other_pokemon"]:
+                    if poke["hp"] != 0:
+                        Flag1 = True
+                        break
+
+                if Flag and Flag1:
                     rounds_count += 1
+
             test_battle_list.append(rounds_count/50)
+
         model_battle_list.append(test_battle_list)
+
     return model_battle_list
 
 
@@ -38,9 +53,9 @@ def get_mean_and_se(model_battle_list):
 
 def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
-    round_mean_list = np.round(mean_list, decimals=2)
+    round_mean_list = np.round(mean_list, decimals=3)
     ax.set_xlabel("Model")
-    ax.set_ylabel("Percentage of Battles Won, (%)")
+    ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
     bars = ax.bar(topics_list, round_mean_list, color=color_list)
@@ -54,16 +69,8 @@ ax = fig.subplots()
 
 BASE_DIR = pathlib.Path(__file__).parent.parent / "test_record"
 COLOR_LIST = [
-    "#FF5733", "#33FF57", "#3357FF", "#F3FF33", "#FF33F3",
-    "#33FFF3", "#F333FF", "#FFD700", "#4B0082", "#00FFFF",
-    "#FF69B4", "#8A2BE2", "#ADFF2F", "#DA70D6", "#FF4500",
-    "#2E8B57", "#FFA500", "#20B2AA", "#FF1493", "#00CED1",
-    "#FF00FF", "#8B008B", "#00FF00", "#0000FF", "#FFFF00",
-    "#FF0000", "#7CFC00", "#FFFACD", "#ADD8E6", "#F08080",
-    "#E6E6FA", "#FF6347", "#4682B4", "#FFFFE0", "#00FF7F",
-    "#20B2AA", "#FFB6C1", "#FFE4C4", "#FFDEAD", "#98FB98",
-    "#AFEEEE"
-]
+    "#1ba784", "#e2c17c", "#2f90b9", "#ea8958", "#bacf65",
+    "#ffa60f", "#813c85", "#248067", "#617172"]
 
 model_list = []
 topics_list = []
