@@ -87,7 +87,7 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
         bar.set_hatch('/')
         bar.set_linewidth(1.2)
 
-    barlabel = ax.bar_label(bars, label_type="center", size=10, color="white")
+    barlabel = ax.bar_label(bars, label_type="center", size=10, color="black")
 
     fig.autofmt_xdate()
 
