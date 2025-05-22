@@ -5,6 +5,7 @@ import pathlib
 import textwrap
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import patheffects
 
 from scipy import stats
 
@@ -123,7 +124,7 @@ results = {
 }"""
 
 
-def survey(results, category_names, min_width_for_label=0.05):
+def survey(results, category_names, min_width_for_label=0.03):
     for key, value in results.items():
         tmp = np.sum(value)
         for i in range(len(value)):
@@ -157,17 +158,31 @@ def survey(results, category_names, min_width_for_label=0.05):
                         label=colname, 
                         color=color)
         r, g, b, _ = color
-        text_color = 'white' if r * g * b < 0.5 else 'darkgrey'
         for rect, width in zip(rects, filtered_widths):
             x = rect.get_x() + rect.get_width() / 2
             y = rect.get_y() + rect.get_height() / 2
 
             x = np.round(x, decimals=3)
-            
-            ax.text(x, y, f'{width:.2%}',
-                    ha='center', va='center',
-                    color=text_color, fontsize=8)
 
+            if width < min_width_for_label:
+                line_y = rect.get_y() + rect.get_height()
+                
+                ax.plot([x, x-0.02], [y, line_y + 0.1], 
+                       color='black', lw=0.8, alpha=0.7,
+                       marker=(2, 0, -90), markersize=0)
+                
+                text = ax.text(x-0.02, line_y + 0.45, f'{width:.1%}',
+                             ha='center', va='bottom', color='black',
+                             fontsize=8,)
+            elif width < 0.05:
+                ax.text(x, y, f'{width:.1%}', 
+                       ha='center', va='center',
+                       color='black', fontsize=7,)
+            else:
+                ax.text(x, y, f'{width:.1%}', 
+                       ha='center', va='center',
+                       color='black', fontsize=8,)
+        
     ax.legend(ncols=len(category_names), bbox_to_anchor=(0, 1),
               loc='lower left', fontsize='small')
     # plt.show()
