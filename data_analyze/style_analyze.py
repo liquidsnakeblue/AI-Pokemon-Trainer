@@ -1,8 +1,11 @@
 import json
-import pathlib
+import math
 import random
+import pathlib
+import textwrap
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import patheffects
 
 from scipy import stats
 
@@ -118,8 +121,11 @@ def survey(results, category_names, min_width_for_label=0.05):
         for i in range(len(value)):
             results[key][i] = results[key][i] / tmp
 
-    labels = topics_list
-    data = np.round(np.array(list(results.values())), decimals=2)
+    labels = []
+    for i in topics_list:
+        labels.append("\n".join(textwrap.wrap(i, width=10)))
+    
+    data = np.array(list(results.values()))
     data_cum = data.cumsum(axis=1)
     category_colors = plt.colormaps['RdYlGn'](
         np.linspace(0.15, 0.85, data.shape[1]))
@@ -143,15 +149,31 @@ def survey(results, category_names, min_width_for_label=0.05):
                         label=colname, 
                         color=color)
         r, g, b, _ = color
-        text_color = 'white' if r * g * b < 0.5 else 'darkgrey'
         for rect, width in zip(rects, filtered_widths):
             x = rect.get_x() + rect.get_width() / 2
             y = rect.get_y() + rect.get_height() / 2
-            
-            ax.text(x, y, f'{width:.0%}',
-                    ha='center', va='center',
-                    color=text_color, fontsize=8)
 
+            x = np.round(x, decimals=3)
+
+            if width < min_width_for_label:
+                line_y = rect.get_y() + rect.get_height()
+                
+                ax.plot([x, x-0.02], [y, line_y + 0.1], 
+                       color='black', lw=0.8, alpha=0.7,
+                       marker=(2, 0, -90), markersize=0)
+                
+                text = ax.text(x-0.02, line_y + 0.45, f'{width:.1%}',
+                             ha='center', va='bottom', color='black',
+                             fontsize=8,)
+            elif width < 0.05:
+                ax.text(x, y, f'{width:.1%}', 
+                       ha='center', va='center',
+                       color='black', fontsize=7,)
+            else:
+                ax.text(x, y, f'{width:.1%}', 
+                       ha='center', va='center',
+                       color='black', fontsize=8,)
+        
     ax.legend(ncols=len(category_names), bbox_to_anchor=(0, 1),
               loc='lower left', fontsize='small')
     # plt.show()
