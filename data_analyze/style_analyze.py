@@ -109,19 +109,10 @@ category_names, results = process_model_data(model_list)
 
 
 
-"""category_names = ['Strongly disagree', 'Disagree',
-                  'Neither agree nor disagree', 'Agree', 'Strongly agree']
-results = {
-    'Question 1': [10, 15, 17, 32, 26],
-    'Question 2': [26, 22, 29, 10, 13],
-    'Question 3': [35, 37, 7, 2, 19],
-    'Question 4': [32, 11, 9, 15, 33],
-    'Question 5': [21, 29, 5, 5, 40],
-    'Question 6': [8, 19, 5, 30, 38]
-}"""
-
 
 def survey(results, category_names, min_width_for_label=0.05):
+    results.append([46,16,40,1,5,13,7])
+    category_names
     for key, value in results.items():
         tmp = np.sum(value)
         for i in range(len(value)):
@@ -182,6 +173,6 @@ for i in range(len(category_names)):
 
 survey(results, category_names)
 
-# plt.show()
+plt.show()
 
-plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
+#plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
