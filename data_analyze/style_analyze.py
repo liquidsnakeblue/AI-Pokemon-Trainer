@@ -113,9 +113,11 @@ category_names, results = process_model_data(model_list)
 
 
 
-def survey(results, category_names, min_width_for_label=0.05):
-    results.append([46,16,40,1,5,13,7])
-    category_names
+def survey(results, category_names, min_width_for_label=0.03):
+
+    results["human"] = [46, 16, 40, 1, 5, 13, 7]
+    topics_list[-1] = "Experienced Human Player"
+
     for key, value in results.items():
         tmp = np.sum(value)
         for i in range(len(value)):
@@ -123,7 +125,7 @@ def survey(results, category_names, min_width_for_label=0.05):
 
     labels = []
     for i in topics_list:
-        labels.append("\n".join(textwrap.wrap(i, width=10)))
+        labels.append("\n".join(textwrap.wrap(i, width=11)))
     
     data = np.array(list(results.values()))
     data_cum = data.cumsum(axis=1)
@@ -195,6 +197,6 @@ for i in range(len(category_names)):
 
 survey(results, category_names)
 
-plt.show()
+# plt.show()
 
-#plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
+plt.savefig('style_for_each_model.png', dpi=300, bbox_inches='tight', transparent=True)
