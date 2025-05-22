@@ -122,7 +122,7 @@ mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
 
 ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
 
+print(se_list)
+plt.show()
 
-# plt.show()
-
-plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
+# plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
