@@ -108,7 +108,7 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
         ax_top.spines['top'].set_position(('outward', 10))
         ax_top.tick_params(axis='x', which='both', length=0) 
     ax_top.set_xlabel("LLM Arena Score")
-    ax_top.plot(1, 1.04, ">k", transform=ax_top.transAxes, markersize=8, clip_on=False)
+    # ax_top.plot(1, 1.04, ">k", transform=ax_top.transAxes, markersize=8, clip_on=False)
 
     ax_top.spines['right'].set_visible(False)
 
