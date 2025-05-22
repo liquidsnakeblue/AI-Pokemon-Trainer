@@ -1,6 +1,8 @@
 import json
-import pathlib
+import math
 import random
+import pathlib
+import textwrap
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -127,8 +129,11 @@ def survey(results, category_names, min_width_for_label=0.05):
         for i in range(len(value)):
             results[key][i] = results[key][i] / tmp
 
-    labels = topics_list
-    data = np.round(np.array(list(results.values())), decimals=2)
+    labels = []
+    for i in topics_list:
+        labels.append("\n".join(textwrap.wrap(i, width=10)))
+    
+    data = np.array(list(results.values()))
     data_cum = data.cumsum(axis=1)
     category_colors = plt.colormaps['RdYlGn'](
         np.linspace(0.15, 0.85, data.shape[1]))
@@ -156,8 +161,10 @@ def survey(results, category_names, min_width_for_label=0.05):
         for rect, width in zip(rects, filtered_widths):
             x = rect.get_x() + rect.get_width() / 2
             y = rect.get_y() + rect.get_height() / 2
+
+            x = np.round(x, decimals=3)
             
-            ax.text(x, y, f'{width:.0%}',
+            ax.text(x, y, f'{width:.2%}',
                     ha='center', va='center',
                     color=text_color, fontsize=8)
 

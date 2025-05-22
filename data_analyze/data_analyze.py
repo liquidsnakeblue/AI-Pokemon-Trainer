@@ -91,13 +91,6 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
         # else:
         #     text.set_color("black")
 
-    barlabel = ax.bar_label(bars, label_type="center", size=10, color="white")
-    for text in barlabel:
-        text.set_path_effects([
-            # path_effects.Stroke(linewidth=1, foreground="black"),
-            path_effects.Normal(),
-        ])
-
     ax.spines['top'].set_visible(False)
 
     ax.spines['right'].set_visible(False)
