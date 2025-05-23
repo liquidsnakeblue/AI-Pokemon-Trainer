@@ -1,5 +1,7 @@
 # AI Pokemon Trainer
 
+https://github.com/user-attachments/assets/146c3a4f-a551-475f-a288-3c1493c824e2
+
 ## Installtion
 
 Firstly, you need install some package, use pip tool to install.
