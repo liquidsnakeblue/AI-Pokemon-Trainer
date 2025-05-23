@@ -1,6 +1,6 @@
 # AI Pokemon Trainer
 
-https://github.com/user-attachments/assets/146c3a4f-a551-475f-a288-3c1493c824e2
+https://github.com/user-attachments/assets/7f5d9d4b-7ecd-422f-9c22-834708eb996d
 
 ## Installtion
 
