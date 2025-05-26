@@ -68,7 +68,7 @@ def get_sub_battle(data_list):
 def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
     round_mean_list = np.round(mean_list, decimals=3)
-    ax.set_xlabel("Model")
+    # ax.set_xlabel("Model")
     ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
