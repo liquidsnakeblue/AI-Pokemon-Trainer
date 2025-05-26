@@ -1,0 +1,149 @@
+[
+    {
+        "name": "GPT-4o",
+        "score": 1405,
+        "color": "#e2c17c",
+        "case":
+        [
+            "GPT-4o_case_9.json",
+            "GPT-4o_case_10.json",
+            "GPT-4o_case_8.json",
+            "GPT-4o_case_7.json",
+            "GPT-4o_case_6.json",
+            "GPT-4o_case_5.json",
+            "GPT-4o_case_4.json",
+            "GPT-4o_case_3.json",
+            "GPT-4o_case_2.json",
+            "GPT-4o_case_1.json"
+        ]
+    },
+    {
+        "name": "DeepSeek-v3",
+        "score":1369,
+        "color": "#2f90b9",
+        "case": 
+        [
+            "Deepseek-v3_case_1.json",
+            "Deepseek-v3_case_2.json",
+            "Deepseek-v3_case_3.json",
+            "Deepseek-v3_case_4.json",
+            "Deepseek-v3_case_5.json",
+            "Deepseek-v3_case_6.json",
+            "Deepseek-v3_case_7.json",
+            "Deepseek-v3_case_8.json",
+            "Deepseek-v3_case_9.json",
+            "Deepseek-v3_case_10.json"
+    
+        ]
+    },
+    {
+        "name": "Gemini-2.0-flash",
+        "score":1352,
+        "color": "#ea8958",
+        "case":
+        [
+            "gemini_case_1.json",
+            "gemini_case_2.json",
+            "gemini_case_3.json",
+            "gemini_case_4.json",
+            "gemini_case_5.json",
+            "gemini_case_6.json",
+            "gemini_case_7.json",
+            "gemini_case_8.json",
+            "gemini_case_9.json",
+            "gemini_case_10.json"
+        ]
+    },
+    {
+        "name": "Qwen-Max",
+        "score":1338,
+        "color": "#bacf65",
+        "case":
+        [
+            "Qwen-Max_case_1.json",
+            "Qwen-Max_case_2.json",
+            "Qwen-Max_case_3.json",
+            "Qwen-Max_case_4.json",
+            "Qwen-Max_case_5.json",
+            "Qwen-Max_case_6.json",
+            "Qwen-Max_case_7.json",
+            "Qwen-Max_case_8.json",
+            "Qwen-Max_case_9.json",
+            "Qwen-Max_case_10.json"
+
+        ]
+    },
+    {
+        "name": "Claude-3-5-sonnet",
+        "score":1265,
+        "color": "#ffa60f",
+        "case": 
+        [
+            "claude-3-5-sonnet_case_1.json",
+            "claude-3-5-sonnet_case_2.json",
+            "claude-3-5-sonnet_case_3.json",
+            "claude-3-5-sonnet_case_4.json",
+            "claude-3-5-sonnet_case_5.json",
+            "claude-3-5-sonnet_case_6.json",
+            "claude-3-5-sonnet_case_7.json",
+            "claude-3-5-sonnet_case_8.json",
+            "claude-3-5-sonnet_case_9.json",
+            "claude-3-5-sonnet_case_10.json"
+        ]
+    },
+    {
+        "name": "doubao-1-5-pro-256k-250115",
+        "color": "#813c85",
+        "score": 0,
+        "case":
+        [
+            "Doubao_case_1.json",
+            "Doubao_case_2.json",
+            "Doubao_case_3.json",
+            "Doubao_case_4.json",
+            "Doubao_case_5.json",
+            "Doubao_case_6.json",
+            "Doubao_case_7.json",
+            "Doubao_case_8.json",
+            "Doubao_case_9.json",
+            "Doubao_case_10.json"
+            
+        ]
+    },
+    {
+        "name":"Qwen3-8B",
+        "color": "#248067",
+        "score":0,
+        "case":
+        [
+            "qwen3_case_1.json",
+            "qwen3_case_2.json",
+            "qwen3_case_3.json",
+            "qwen3_case_4.json",
+            "qwen3_case_5.json",
+            "qwen3_case_6.json",
+            "qwen3_case_7.json",
+            "qwen3_case_8.json",
+            "qwen3_case_9.json",
+            "qwen3_case_10.json"
+        ]
+    },
+    {
+        "name": "Baseline",
+        "color": "#1ba784",
+        "score":0,
+        "case":
+        [
+            "random_case_1.json",
+            "random_case_2.json",
+            "random_case_3.json",
+            "random_case_4.json",
+            "random_case_5.json",
+            "random_case_6.json",
+            "random_case_7.json",
+            "random_case_8.json",
+            "random_case_9.json",
+            "random_case_10.json"
+        ]
+    }
+]
