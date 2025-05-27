@@ -14,7 +14,8 @@ You are the BEST Pokémon trainer in the world, responsible for making all in-ga
 3. **Output your decision as one of the following**:
    -A single integer: 1, 2, 3, or 4 (to indicate a move).{%if not ablation.escape%}
    -The string "run" (to attempt to flee the battle).{%endif%}{%if not ablation.switch%}
-   -The string 's' followed by a number from 1 to 6 to indicate which Pokémon to switch to. For example, 's1' means switch to Pokémon number 1. You cannot switch to the currently active Pokémon.{%endif%}{%if not ablation.item%}
+   -The string 's' followed by a number from 1 to 6 to indicate which Pokémon to switch to. For example, 's1' means switch to Pokémon number 1. You cannot switch to the currently active Pokémon.{%else%}
+   -You cannot switch to a different pokemon during battle, but after the current pokemon in battle faints, the game will automatically switch to the next pokemon. {%endif%}{%if not ablation.item%}
    -The string 'i' followed by a number to indicate which item to use{%for i in item%}{%if i.name=="Potion"%}
    (You can only use the fourth item (item 4). No other items (e.g., item 1/2/3/5) are allowed).
   {{i.id}}. {{i.name}}, quantity: {{i.quantity}}{%if i.name=="Potion"%}

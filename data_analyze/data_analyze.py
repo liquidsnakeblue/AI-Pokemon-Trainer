@@ -76,15 +76,12 @@ def get_sub_battle(data_list):
 def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
 
     round_mean_list = np.round(mean_list, decimals=3)
-    ax.set_xlabel("Model")
+    # ax.set_xlabel("Model")
     ax.set_ylabel("Percentage of Battles Won")
     ax.errorbar(topics_list, round_mean_list, color='#1f77b4', alpha=0.8,
                 yerr=se_list, fmt="_", ecolor='black', capsize=5)
     #human test
-    round_list=np.insert(round_mean_list, 0 , 0.86)
-    print(round_list)
-    se_list.insert(0,0)
-    topics_list.insert(0,"Experienced\n Human Player")
+    round_list=round_mean_list
     bars = ax.bar(topics_list, round_list, color=color_list, alpha=0.6)
 
     for bar, fill_color in zip(bars, color_list):
@@ -109,6 +106,7 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
     ax.plot(1, 0, ">k", transform=ax.transAxes, markersize=8, clip_on=False)
     ax.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
     fig.autofmt_xdate()
+    
     top_labels = ["N/A",1405,1369,1352,1338,1265,"N/A","N/A","N/A"]
     if top_labels is not None:
         ax_top = ax.twiny() 
@@ -118,7 +116,8 @@ def mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list):
         ax_top.spines['top'].set_position(('outward', 10))
         ax_top.tick_params(axis='x', which='both', length=0) 
     ax_top.set_xlabel("LLM Arena Score")
-    ax_top.plot(0, 1, "^k", transform=ax.transAxes, markersize=8, clip_on=False)
+    # ax_top.plot(1, 1.04, ">k", transform=ax_top.transAxes, markersize=8, clip_on=False)
+
     ax_top.spines['right'].set_visible(False)
 
 fig = plt.figure()
@@ -136,14 +135,14 @@ list_path = pathlib.Path(__file__).parent / "data_file_paths.json"
 with open(list_path, "r", encoding="utf-8") as file:
     whole_list = json.loads(file.read())
 
+    color_list.append("darkgrey")
+
     for model_name_list in whole_list:
 
         test_list = []
         topics_list.append(model_name_list["name"])
         color_list.append(model_name_list["color"])
         score_list.append(model_name_list["score"])
-
-        color_list.append("darkgrey")
 
         for test_name in model_name_list["case"]:
             file_path = (BASE_DIR / test_name).resolve()
@@ -164,9 +163,14 @@ get_mean_level(model_list)
 print("The number of valid run:", model_battle_list)
 
 mean_list, se_list = get_mean_and_se(model_battle_list)
+
+mean_list.insert(0,0.86)
+se_list.insert(0,0)
+topics_list.insert(0,"Experienced\n Human Player")
+
 mean_bar_plot(fig, ax, mean_list, se_list, topics_list, color_list)
 
 ax.grid(axis='y', color='gray', linestyle='-', alpha=0.2)
-plt.show()
+# plt.show()
 
-#plt.savefig('output.png', dpi=300, bbox_inches='tight', transparent=True)
+plt.savefig('win_count_for_each_model.png', dpi=300, bbox_inches='tight', transparent=True)

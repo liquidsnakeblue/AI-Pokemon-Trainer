@@ -1,5 +1,7 @@
 # AI Pokemon Trainer
 
+https://github.com/user-attachments/assets/7f5d9d4b-7ecd-422f-9c22-834708eb996d
+
 ## Installtion
 
 Firstly, you need install some package, use pip tool to install.
@@ -15,8 +17,6 @@ Then you need copy secret_setting.json.example to secret_setting.json, and typin
 There are cli tools in the root folder, `cli.py`.
 
 Run `python3 cli.py server`, you will get a web server which started in 8000 port and 18080 port used by websockets, it have beautiful screen. It's goal is for the normal user to watch how AI work.
-
-Run `python3 cli.py local`, you will get a window that run by pyboy, you can see some detial in the console. It's goal is for test the AI.
 
 ![](./docs/img.png)
 

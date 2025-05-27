@@ -1,0 +1,70 @@
+[
+    {
+        "name": "Full Function",
+        "color": "#e2c17c",
+        "case": 
+        [
+            "deepseek_case_1.json",
+            "deepseek_case_2.json",
+            "deepseek_case_3.json",
+            "deepseek_case_4.json",
+            "deepseek_case_5.json",
+            "Deepseek-v3_case_6.json",
+            "Deepseek-v3_case_7.json",
+            "Deepseek-v3_case_8.json",
+            "Deepseek-v3_case_9.json",
+            "Deepseek-v3_case_10.json"
+        ]
+    },
+    {
+        "name": "No Escape",
+        "color": "#2f90b9",
+        "case":
+        [
+            "Deepseek-no-run_case_1.json",
+            "Deepseek-no-run_case_2.json",
+            "Deepseek-no-run_case_3.json",
+            "Deepseek-no-run_case_4.json",
+            "Deepseek-no-run_case_5.json",
+            "Deepseek-no-run_case_6.json",
+            "Deepseek-no-run_case_7.json",
+            "Deepseek-no-run_case_8.json",
+            "Deepseek-no-run_case_9.json",
+            "Deepseek-no-run_case_10.json"
+        ]
+    },
+    {
+        "name": "No Switch",
+        "color": "#ea8958",
+        "case":
+        [
+            "Deepseek-no-switch_case_1.json",
+            "Deepseek-no-switch_case_2.json",
+            "Deepseek-no-switch_case_3.json",
+            "Deepseek-no-switch_case_4.json",
+            "Deepseek-no-switch_case_5.json",
+            "Deepseek-no-switch_case_6.json",
+            "Deepseek-no-switch_case_7.json",
+            "Deepseek-no-switch_case_8.json",
+            "Deepseek-no-switch_case_9.json",
+            "Deepseek-no-switch_case_10.json"
+        ]
+    },
+    {
+        "name": "No Item",
+        "color": "#bacf65",
+        "case": 
+        [
+           "Deepseek-no-item_case_1.json",
+           "Deepseek-no-item_case_2.json",
+           "Deepseek-no-item_case_3.json",
+           "Deepseek-no-item_case_4.json",
+           "Deepseek-no-item_case_5.json",
+           "Deepseek-no-item_case_6.json",
+           "Deepseek-no-item_case_7.json",
+           "Deepseek-no-item_case_8.json",
+           "Deepseek-no-item_case_9.json",
+           "Deepseek-no-item_case_10.json"
+        ]
+    }
+]
