@@ -40,7 +40,15 @@ def get_battle(model_list):
         model_battle_list.append(test_battle_list)
 
     return model_battle_list
-
+def get_mean_level(model_list):
+    num = 0
+    time = 0
+    for test_list in model_list:
+        for data in test_list:
+            for battle in data:
+                num+=battle["rounds"][-1]["enemy_level"]
+                time+=1
+    print(num/time)
 
 def get_mean_and_se(model_battle_list):
     mean_list = []
@@ -152,6 +160,7 @@ with open(list_path, "r", encoding="utf-8") as file:
     print(len(model_list))
 
 model_battle_list = get_battle(model_list)
+get_mean_level(model_list)
 print("The number of valid run:", model_battle_list)
 
 mean_list, se_list = get_mean_and_se(model_battle_list)
