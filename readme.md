@@ -1,6 +1,11 @@
 # AI Pokemon Trainer
 
+[![MIT License](https://img.shields.io/badge/License-MIT%20License-silver?style=flat-square)](LICENSE)
+
+[![arxiv 2506.23689](https://img.shields.io/badge/Research-2506.23689-B31B1B?logo=arxiv&style=flat-square)](https://arxiv.org/abs/2506.23689)
+
 https://github.com/user-attachments/assets/7f5d9d4b-7ecd-422f-9c22-834708eb996d
+
 
 ## Installtion
 
