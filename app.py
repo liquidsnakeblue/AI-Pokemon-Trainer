@@ -160,7 +160,7 @@ class PyBoy_Web(PyBoy):
     def pre_fight_test(self, pyboy):
         pass
 
-pyboy = PyBoy_Web("red.gb", window="null", sound_emulated=False)
+pyboy = PyBoy_Web("red.gb", window="null", scale=4, sound_emulated=False)
 
 if state_save_path.exists():
     with open(state_save_path, "rb") as f:

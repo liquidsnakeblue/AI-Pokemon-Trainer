@@ -34,6 +34,18 @@
           50% { opacity: 1; }
           100% { opacity: 0; }
         }
+        /* Game Screen Enhancement - 4x upscaling for prominent display */
+        #game-screen {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            width: 640px;
+            height: 576px;
+            border: 4px solid #363636;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
     </style>
 </head>
 <body>
@@ -42,7 +54,7 @@
         <div class="columns">
             <div class="column">
                 <figure class="image">
-                    <img width="160" id="game-screen" src="" alt="Game screen">
+                    <img id="game-screen" src="" alt="Game screen">
                 </figure>
                 
                 <!-- Party Status Panel -->

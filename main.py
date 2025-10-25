@@ -22,7 +22,7 @@ class PyBoy_Web(PyBoy):
     def update_run_data(self, *_):
         ...
 
-pyboy = PyBoy_Web("red.gb")
+pyboy = PyBoy_Web("red.gb", window="SDL2", scale=4, sound_emulated=True)
 
 if state_save_path.exists():
     with open(state_save_path, "rb") as f:
