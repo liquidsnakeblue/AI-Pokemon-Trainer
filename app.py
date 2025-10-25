@@ -75,6 +75,62 @@ class PyBoy_Web(PyBoy):
     def get_run_data(self):
         with run_data_lock:
             return self.__run_data
+            
+    def get_party_data(self):   # Our new Party Status Tracker
+        """Read party Pokemon data from memory"""
+        from engine.index_data import internal_index
+        from engine.component import connect_digit_list
+
+        party = []
+        party_count = self.memory[0xD163]  # Number of Pokemon in party
+
+        # Party Pokemon data structure (matching fight.py)
+        party_slots = [
+            {"species": 0xD164, "hp": [0xD16C, 0xD16D], "level": 0xD18C, "max_hp": [0xD18D, 0xD18E]},  # Slot 1
+            {"species": 0xD165, "hp": [0xD198, 0xD199], "level": 0xD1B8, "max_hp": [0xD1B9, 0xD1BA]},  # Slot 2
+            {"species": 0xD166, "hp": [0xD1C4, 0xD1C5], "level": 0xD1E4, "max_hp": [0xD1E5, 0xD1E6]},  # Slot 3
+            {"species": 0xD167, "hp": [0xD1F0, 0xD1F1], "level": 0xD210, "max_hp": [0xD211, 0xD212]},  # Slot 4
+            {"species": 0xD168, "hp": [0xD21C, 0xD21D], "level": 0xD23C, "max_hp": [0xD23D, 0xD23E]},  # Slot 5
+            {"species": 0xD169, "hp": [0xD248, 0xD249], "level": 0xD268, "max_hp": [0xD269, 0xD26A]},  # Slot 6
+        ]
+
+        for i in range(6):
+            if i >= party_count:
+                party.append({"exists": False})
+                continue
+
+            slot = party_slots[i]
+            species_id = self.memory[slot["species"]]
+
+            if species_id == 0 or species_id == 0xFF:
+                party.append({"exists": False})
+                continue
+
+            # Get Pokemon name from index (internal_index is a list indexed by species ID)
+            pokemon_name = "Unknown"
+            try:
+                if 0 <= species_id < len(internal_index):
+                    pokemon_name = internal_index[species_id]["name"]
+                else:
+                    logger.debug(f"Species ID {species_id} out of range (max: {len(internal_index)-1})")
+            except Exception as e:
+                logger.error(f"Error looking up Pokemon name for species {species_id}: {e}")
+
+            # Read HP values using the correct function from component.py
+            current_hp = connect_digit_list([self.memory[slot["hp"][0]], self.memory[slot["hp"][1]]])
+            max_hp = connect_digit_list([self.memory[slot["max_hp"][0]], self.memory[slot["max_hp"][1]]])
+            level = self.memory[slot["level"]]
+
+            party.append({
+                "exists": True,
+                "name": pokemon_name,
+                "level": level,
+                "hp": current_hp,
+                "max_hp": max_hp,
+                "hp_percent": int((current_hp / max_hp * 100) if max_hp > 0 else 0)
+            })
+
+        return party
     
     def tick(self, count=1, render=True):
         global last_frame
@@ -165,6 +221,18 @@ async def websocket_handler(websocket, path):
                     await websocket.send(tmp)
                     last_data=tmp
                 await asyncio.sleep(0.1)
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
+            logger.warning("websockets connection closed.")
+    
+    elif path == "/get_party_data":
+        try:
+            last_data = None
+            while True:
+                tmp = json.dumps(pyboy.get_party_data())
+                if last_data!=tmp:
+                    await websocket.send(tmp)
+                    last_data=tmp
+                await asyncio.sleep(0.5)  # Update every 0.5 seconds
         except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
             
