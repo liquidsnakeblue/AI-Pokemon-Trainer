@@ -40,6 +40,7 @@ master_pid = os.getpid()
 
 enable_auto_tick = True
 last_frame = None
+last_audio = None
 pressed_keys = set()
 pressed_keys_lock = threading.Lock()
 run_data_lock = threading.Lock()
@@ -133,13 +134,23 @@ class PyBoy_Web(PyBoy):
         return party
     
     def tick(self, count=1, render=True):
-        global last_frame
+        global last_frame, last_audio
         screen = self.screen
         image = screen.image
         byte_io = io.BytesIO()
         image.save(byte_io, 'PNG')
         byte_io.seek(0)
         last_frame = byte_io.getvalue()
+        
+        # Capture audio data
+        try:
+            audio_array = self.sound.ndarray
+            if audio_array is not None and len(audio_array) > 0:
+                # Convert int8 stereo to bytes
+                last_audio = audio_array.tobytes()
+        except Exception as e:
+            logger.debug(f"Audio capture error: {e}")
+        
         if os.getenv('AI_POKEMON_TRAINER_SKIP_ANIMATION') == '0':
             time.sleep(0.01)
         return super().tick(count, render)
@@ -160,7 +171,7 @@ class PyBoy_Web(PyBoy):
     def pre_fight_test(self, pyboy):
         pass
 
-pyboy = PyBoy_Web("red.gb", window="null", scale=4, sound_emulated=False)
+pyboy = PyBoy_Web("red.gb", window="null", scale=4, sound_emulated=True)
 
 if state_save_path.exists():
     with open(state_save_path, "rb") as f:
@@ -211,6 +222,15 @@ async def websocket_handler(websocket, path):
                 await asyncio.sleep(0.01)
         except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
             logger.warning("websockets connection closed.")
+    
+    elif path == "/audio":
+        try:
+            while True:
+                if last_audio is not None:
+                    await websocket.send(last_audio)
+                await asyncio.sleep(0.01)  # ~100 FPS audio streaming
+        except (websockets.exceptions.ConnectionClosedOK,websockets.exceptions.ConnectionClosedError):
+            logger.warning("websockets audio connection closed.")
             
     elif path == "/get_run_data":
         try:
