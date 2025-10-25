@@ -7,12 +7,25 @@ logger = logging.getLogger("ai_pokemon_trainer")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_SETTING = None
-if not os.path.exists(BASE_DIR / 'secret_setting.json'):
-    shutil.copyfile(BASE_DIR / 'secret_setting.json.example',
-                    BASE_DIR / 'secret_setting.json')
-with open(BASE_DIR / 'secret_setting.json', 'r') as fp:
-    SECRET_SETTING = json.loads(fp.read())
+# Import config loader for executable support
+try:
+    from config_loader import load_config, get_config_path
+    SECRET_SETTING = load_config()
+    # If config is empty, try fallback to old method
+    if not SECRET_SETTING.get("api-key"):
+        if not os.path.exists(BASE_DIR / 'secret_setting.json'):
+            shutil.copyfile(BASE_DIR / 'secret_setting.json.example',
+                            BASE_DIR / 'secret_setting.json')
+        with open(BASE_DIR / 'secret_setting.json', 'r') as fp:
+            SECRET_SETTING = json.loads(fp.read())
+except ImportError:
+    # Fallback to old config loading if config_loader not available
+    SECRET_SETTING = None
+    if not os.path.exists(BASE_DIR / 'secret_setting.json'):
+        shutil.copyfile(BASE_DIR / 'secret_setting.json.example',
+                        BASE_DIR / 'secret_setting.json')
+    with open(BASE_DIR / 'secret_setting.json', 'r') as fp:
+        SECRET_SETTING = json.loads(fp.read())
 
 client = OpenAI(
     api_key=SECRET_SETTING["api-key"],

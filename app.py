@@ -45,8 +45,16 @@ pressed_keys = set()
 pressed_keys_lock = threading.Lock()
 run_data_lock = threading.Lock()
 
-BASE_DIR = Path(__file__).resolve().parent
-state_save_path = BASE_DIR / "red.gb.state"
+# Import config loader for executable support
+try:
+    from config_loader import get_rom_path, get_save_state_path
+    rom_path = get_rom_path()
+    state_save_path = get_save_state_path()
+    BASE_DIR = Path(__file__).resolve().parent
+except ImportError:
+    BASE_DIR = Path(__file__).resolve().parent
+    rom_path = "red.gb"
+    state_save_path = BASE_DIR / "red.gb.state"
 
 logger = logging.getLogger("ai_pokemon_trainer")
 logger.setLevel(logging.DEBUG)
@@ -171,7 +179,7 @@ class PyBoy_Web(PyBoy):
     def pre_fight_test(self, pyboy):
         pass
 
-pyboy = PyBoy_Web("red.gb", window="null", scale=4, sound_emulated=True)
+pyboy = PyBoy_Web(rom_path, window="null", scale=4, sound_emulated=True)
 
 if state_save_path.exists():
     with open(state_save_path, "rb") as f:
