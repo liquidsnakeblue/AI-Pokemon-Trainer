@@ -54,6 +54,11 @@
                 </div>
             </div>
             <div class="column">
+                <!-- Controller Status Display -->
+                <div id="controller-status" class="notification is-info" style="display: none;">
+                    🎮 No controller connected
+                </div>
+                
                 <div class="buttons">
                     <button class="button is-success" onmousedown="pressKey('up')" onmouseup="releaseKey('up')">Up</button>
                     <button class="button is-success" onmousedown="pressKey('left')" onmouseup="releaseKey('left')">Left</button>
@@ -88,6 +93,25 @@
 
         let mainurl = "ws://"+window.location.hostname+":{{WS_PORT}}";
 
+        // Gamepad API Support
+        let gamepads = {};
+        let gamepadConnected = false;
+        let previousButtonStates = {};
+
+        // Gamepad button mapping to Game Boy controls
+        const gamepadMapping = {
+            12: 'up',     // D-pad up
+            13: 'down',   // D-pad down
+            14: 'left',   // D-pad left
+            15: 'right',  // D-pad right
+            1: 'a',       // A button (Circle on PS, A on Xbox)
+            0: 'b',       // B button (X on PS, B on Xbox)
+            2: 'select',  // X button (Square on PS, X on Xbox)
+            3: 'start',   // Y button (Triangle on PS, Y on Xbox)
+            8: 'select',  // Select button
+            9: 'start'    // Start button
+        };
+
         const keyMap = {
             ArrowUp: 'up',
             ArrowDown: 'down',
@@ -95,6 +119,8 @@
             ArrowRight: 'right',
             KeyA: 'a',
             KeyB: 'b',
+            KeyS: 'start',
+            KeyX: 'select',
             Enter: 'start',
             Shift: 'select',
         };
@@ -213,6 +239,112 @@
             // If no Pokemon in party
             if (partyContainer.children.length === 0) {
                 partyContainer.innerHTML = '<p style="font-size: 0.85rem; color: #888;">No Pokemon in party</p>';
+            }
+        }
+
+        // Handle gamepad connection
+        window.addEventListener("gamepadconnected", (e) => {
+            console.log("Gamepad connected:", e.gamepad.id);
+            gamepads[e.gamepad.index] = e.gamepad;
+            previousButtonStates[e.gamepad.index] = {};
+
+            // Show controller status
+            const statusElement = document.getElementById('controller-status');
+            if (statusElement) {
+                statusElement.textContent = `🎮 Controller connected: ${e.gamepad.id}`;
+                statusElement.style.display = 'block';
+            }
+
+            // Start polling when a gamepad connects
+            if (!gamepadConnected) {
+                console.log("Starting polling loop from gamepad connection event");
+                gamepadConnected = true;
+                requestAnimationFrame(pollGamepads);
+            }
+        });
+
+        // Handle gamepad disconnection
+        window.addEventListener("gamepaddisconnected", (e) => {
+            console.log("Gamepad disconnected");
+            delete gamepads[e.gamepad.index];
+            delete previousButtonStates[e.gamepad.index];
+
+            if (Object.keys(gamepads).length === 0) {
+                gamepadConnected = false;
+                const statusElement = document.getElementById('controller-status');
+                if (statusElement) {
+                    statusElement.textContent = '🎮 No controller connected';
+                }
+            }
+        });
+
+        // Poll for gamepad input
+        function pollGamepads() {
+            const connectedGamepads = navigator.getGamepads();
+
+            for (let i = 0; i < connectedGamepads.length; i++) {
+                const gamepad = connectedGamepads[i];
+                if (!gamepad) continue;
+
+                gamepads[i] = gamepad;
+
+                // Check each button
+                for (let buttonIndex = 0; buttonIndex < gamepad.buttons.length; buttonIndex++) {
+                    const button = gamepad.buttons[buttonIndex];
+                    const previousState = previousButtonStates[i][buttonIndex] || false;
+                    const currentState = button.pressed;
+
+                    // Check for state change
+                    if (currentState !== previousState) {
+                        const mappedKey = gamepadMapping[buttonIndex];
+
+                        if (mappedKey) {
+                            if (currentState) {
+                                // Button pressed
+                                console.log(`Controller button ${buttonIndex} pressed: ${mappedKey}`);
+                                pressKey(mappedKey);
+                            } else {
+                                // Button released
+                                console.log(`Controller button ${buttonIndex} released: ${mappedKey}`);
+                                releaseKey(mappedKey);
+                            }
+                        }
+
+                        previousButtonStates[i][buttonIndex] = currentState;
+                    }
+                }
+
+                // Handle analog sticks (left stick for movement)
+                const deadzone = 0.3;
+                const leftX = gamepad.axes[0];
+                const leftY = gamepad.axes[1];
+
+                // Convert analog stick to digital directions
+                const analogStates = {
+                    'left': leftX < -deadzone,
+                    'right': leftX > deadzone,
+                    'up': leftY < -deadzone,
+                    'down': leftY > deadzone
+                };
+
+                // Handle analog stick state changes
+                for (const [direction, isPressed] of Object.entries(analogStates)) {
+                    const previousAnalogState = previousButtonStates[i][`analog_${direction}`] || false;
+
+                    if (isPressed !== previousAnalogState) {
+                        if (isPressed) {
+                            pressKey(direction);
+                        } else {
+                            releaseKey(direction);
+                        }
+                        previousButtonStates[i][`analog_${direction}`] = isPressed;
+                    }
+                }
+            }
+
+            // Continue polling
+            if (gamepadConnected) {
+                requestAnimationFrame(pollGamepads);
             }
         }
     </script>
