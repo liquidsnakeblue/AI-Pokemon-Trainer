@@ -44,6 +44,14 @@
                 <figure class="image">
                     <img width="160" id="game-screen" src="" alt="Game screen">
                 </figure>
+                
+                <!-- Party Status Panel -->
+                <div class="notification is-info mt-4">
+                    <strong>🎒 Party Status</strong>
+                    <div id="party-container" class="mt-2">
+                        <!-- Party Pokemon will be dynamically inserted here -->
+                    </div>
+                </div>
             </div>
             <div class="column">
                 <div class="buttons">
@@ -152,6 +160,61 @@
                 document.getElementsByClassName("dots")[0].style.display = "none";
             }
         };
+
+        // Party Status WebSocket
+        const ws_party = new WebSocket(`${mainurl}/get_party_data`);
+        const partyContainer = document.getElementById('party-container');
+
+        ws_party.onmessage = function(event) {
+            const partyData = JSON.parse(event.data);
+            updatePartyDisplay(partyData);
+        };
+
+        function updatePartyDisplay(partyData) {
+            // Clear existing content
+            partyContainer.innerHTML = '';
+
+            // Create party member elements
+            partyData.forEach((pokemon, index) => {
+                if (!pokemon.exists) {
+                    return; // Skip empty slots
+                }
+
+                const pokemonDiv = document.createElement('div');
+                pokemonDiv.className = 'box mb-2 p-2';
+                pokemonDiv.style.fontSize = '0.85rem';
+
+                // Determine HP bar color based on percentage
+                let hpColor = 'is-success';
+                if (pokemon.hp_percent <= 20) {
+                    hpColor = 'is-danger';
+                } else if (pokemon.hp_percent <= 50) {
+                    hpColor = 'is-warning';
+                }
+
+                // Create Pokemon status display
+                pokemonDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>${pokemon.name}</strong>
+                        <span class="tag is-light">Lv ${pokemon.level}</span>
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                            <span>HP</span>
+                            <span>${pokemon.hp} / ${pokemon.max_hp}</span>
+                        </div>
+                        <progress class="progress ${hpColor} is-small" value="${pokemon.hp}" max="${pokemon.max_hp}"></progress>
+                    </div>
+                `;
+
+                partyContainer.appendChild(pokemonDiv);
+            });
+
+            // If no Pokemon in party
+            if (partyContainer.children.length === 0) {
+                partyContainer.innerHTML = '<p style="font-size: 0.85rem; color: #888;">No Pokemon in party</p>';
+            }
+        }
     </script>
 </body>
 </html>

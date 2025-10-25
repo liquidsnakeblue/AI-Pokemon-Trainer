@@ -1,0 +1,103 @@
+# Changelog - Add Party Tracking Support - Update 1
+
+## Summary
+
+This update introduces **real-time party status tracking** with a visual GUI interface for monitoring all Pokemon in the player's party. The feature reads party data directly from game memory and displays it in a live-updating panel with color-coded health indicators. Additionally, default configuration files are included to provide new users with a ready-to-run setup including a game save state that starts after the intro sequence, as well as access to my AI LLM Server.
+
+**Key Features:**
+- 🎒 Live party status panel showing all 6 party slots
+- 💚 Color-coded HP bars (green/yellow/red) for quick health assessment
+- 🔄 Real-time WebSocket updates every 0.5 seconds
+- ⚙️ Default API configuration for GLM 4.5 Air
+- 💾 Pre-configured save state starting after game intro
+
+---
+
+## Date
+2025-10-25
+
+## Changes
+
+### New Files Added
+- **secret_setting.json** - API configuration file containing:
+  - API key for LLM service
+  - Base URL endpoint (http://schuyler.ai:60000/v1)
+  - Model specification (GLM 4.5 Air)
+
+### Modified Files
+
+#### app.py
+- **Added [`get_party_data()`](app.py:79) method** to [`PyBoy_Web`](app.py:61) class (lines 79-133)
+  - Reads Pokemon party data directly from game memory
+  - Imports [`internal_index`](engine/index_data.py:2) and [`connect_digit_list()`](engine/component.py:22)
+  - Reads party count from memory address 0xD163
+  - Defines party slot structure with memory addresses for all 6 party slots:
+    - Species ID, HP (current), Level, Max HP for each slot
+    - Memory addresses match the existing structure used in [`fight.py`](engine/fight.py:224)
+  - Returns array of party Pokemon with:
+    - `exists` flag (False for empty slots)
+    - Pokemon name (looked up via internal_index)
+    - Current HP and Max HP
+    - Level
+    - HP percentage calculation
+  - Includes error handling for invalid species IDs and edge cases
+
+- **Added `/get_party_data` WebSocket endpoint** (lines 234-243)
+  - Streams party data to frontend via WebSocket
+  - Updates every 0.5 seconds
+  - Only sends data when changes are detected
+  - Uses same pattern as existing `/get_run_data` endpoint
+
+#### templates/index.html
+- **Added Party Status Panel UI** (new section after game screen)
+  - Visual panel titled "🎒 Party Status"
+  - Container for dynamically updated Pokemon list
+  - Positioned logically next to game screen for easy viewing
+
+- **Added WebSocket Integration for Party Data**
+  - New WebSocket connection to `/get_party_data` endpoint
+  - Real-time party status updates
+  - Automatic UI refresh on data changes
+
+- **Added `updatePartyDisplay()` function**
+  - Dynamically renders party Pokemon as individual boxes
+  - Displays for each Pokemon:
+    - Name and level (with tag styling)
+    - Current HP / Max HP (numeric)
+    - Visual HP progress bar
+  - Color-coded HP bars:
+    - Green (`is-success`) for >50% HP
+    - Yellow (`is-warning`) for 20-50% HP
+    - Red (`is-danger`) for ≤20% HP
+  - Compact design with proper spacing
+  - Shows "No Pokemon in party" message when empty
+  - Automatically skips empty party slots
+
+## Technical Details
+
+### Memory Addresses Used
+- **0xD163**: Party count
+- **0xD164-0xD169**: Species IDs for slots 1-6
+- **0xD16C-0xD26A**: HP, Level, and Max HP data for all 6 slots
+
+### WebSocket Communication
+- **Endpoint**: `ws://[host]:[WS_PORT]/get_party_data`
+- **Update Frequency**: 0.5 seconds
+- **Data Format**: JSON array of party Pokemon objects
+- **Optimization**: Only sends updates when party data changes
+
+### Frontend Integration
+- Uses Bulma CSS framework for consistent styling
+- Follows existing WebSocket pattern (similar to `/get_run_data`)
+- Dynamic DOM manipulation for real-time updates
+- Responsive design with proper mobile support
+
+## Purpose
+This update enables real-time tracking and visualization of the player's full party status, allowing users to monitor all Pokemon health, levels, and party composition at a glance during gameplay. The UI provides immediate visual feedback through color-coded health bars for quick status assessment.
+
+## Notes
+- The party tracking feature reads memory addresses consistent with existing battle system
+- Error handling prevents crashes from invalid Pokemon data
+- HP percentage calculation added for easier status monitoring
+- WebSocket implementation follows established patterns for consistency
+- UI updates are efficient, only re-rendering when data changes
