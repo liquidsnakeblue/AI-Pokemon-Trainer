@@ -80,7 +80,6 @@
                     <button class="button is-success" onmousedown="pressKey('b')" onmouseup="releaseKey('b')">B</button>
                     <button class="button is-warning" onclick="saveProgress()">Save</button>
                     <button class="button is-warning" onclick="loadProgress()">Load</button>
-                    <button id="audio-button" class="button is-info" onclick="toggleAudio()">🔊 Enable Sound</button>
                 </div>
                 <p class="dots">Thinking <span>.</span><span>.</span><span>.</span></p>
                 <div class="notification is-danger">
@@ -105,70 +104,6 @@
         let game_screen = document.getElementById('game-screen');
 
         let mainurl = "ws://"+window.location.hostname+":{{WS_PORT}}";
-
-        // Audio context and processing
-        let audioContext = null;
-        let nextPlayTime = 0;
-        const SAMPLE_RATE = 48000;
-        const BUFFER_SIZE = 801; // Samples per frame from PyBoy
-
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)({
-                    sampleRate: SAMPLE_RATE
-                });
-                nextPlayTime = audioContext.currentTime;
-                console.log('Audio context initialized:', audioContext.sampleRate);
-            }
-        }
-
-        function playAudioBuffer(audioData) {
-            if (!audioContext || audioContext.state === 'suspended') {
-                console.log('Audio context not ready:', audioContext ? audioContext.state : 'null');
-                return;
-            }
-
-            try {
-                // Convert int8 bytes to float32 for Web Audio API
-                const int8Array = new Int8Array(audioData);
-                const samples = int8Array.length / 2; // Stereo data
-                
-                if (samples === 0) {
-                    console.log('No audio samples received');
-                    return;
-                }
-                
-                const audioBuffer = audioContext.createBuffer(2, samples, SAMPLE_RATE);
-                const leftChannel = audioBuffer.getChannelData(0);
-                const rightChannel = audioBuffer.getChannelData(1);
-
-                // Deinterleave and convert int8 (-128 to 127) to float32 (-1.0 to 1.0)
-                for (let i = 0; i < samples; i++) {
-                    leftChannel[i] = int8Array[i * 2] / 128.0;
-                    rightChannel[i] = int8Array[i * 2 + 1] / 128.0;
-                }
-
-                const source = audioContext.createBufferSource();
-                source.buffer = audioBuffer;
-                source.connect(audioContext.destination);
-                
-                // Schedule audio to play continuously without gaps
-                const currentTime = audioContext.currentTime;
-                if (nextPlayTime < currentTime) {
-                    nextPlayTime = currentTime;
-                }
-                
-                source.start(nextPlayTime);
-                nextPlayTime += audioBuffer.duration;
-                
-                // Log first few times for debugging
-                if (nextPlayTime < currentTime + 1) {
-                    console.log('Playing audio:', samples, 'samples, duration:', audioBuffer.duration);
-                }
-            } catch (e) {
-                console.error('Audio playback error:', e);
-            }
-        }
 
         // Gamepad API Support
         let gamepads = {};
@@ -250,62 +185,6 @@
         ws_screen.onmessage = function(event) {
             game_screen.src = event.data;
         };
-
-        // Audio WebSocket - initialize audio on first user interaction
-        let audioWebSocket = null;
-        let audioEnabled = false;
-
-        function enableAudio() {
-            if (!audioEnabled) {
-                console.log('Enabling audio...');
-                initAudio();
-                
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume().then(() => {
-                        console.log('Audio context resumed, state:', audioContext.state);
-                    });
-                }
-                
-                if (!audioWebSocket) {
-                    audioWebSocket = new WebSocket(`${mainurl}/audio`);
-                    audioWebSocket.binaryType = 'arraybuffer';
-                    
-                    audioWebSocket.onopen = function() {
-                        console.log('Audio WebSocket connected');
-                    };
-                    
-                    audioWebSocket.onmessage = function(event) {
-                        if (event.data.byteLength > 0) {
-                            playAudioBuffer(event.data);
-                        }
-                    };
-                    
-                    audioWebSocket.onerror = function(error) {
-                        console.error('Audio WebSocket error:', error);
-                    };
-                    
-                    audioWebSocket.onclose = function() {
-                        console.log('Audio WebSocket closed');
-                    };
-                }
-                
-                audioEnabled = true;
-                console.log('Audio enabled, context state:', audioContext.state);
-            }
-        }
-
-        function toggleAudio() {
-            enableAudio();
-            const button = document.getElementById('audio-button');
-            if (button) {
-                button.textContent = audioEnabled ? '🔊 Sound Enabled' : '🔊 Enable Sound';
-                button.disabled = audioEnabled;
-            }
-        }
-
-        // Enable audio on first user interaction (required by browsers)
-        document.addEventListener('click', enableAudio, { once: true });
-        document.addEventListener('keydown', enableAudio, { once: true });
 
         const ws_run_data = new WebSocket(`${mainurl}/get_run_data`);
         ws_run_data.onmessage = function(event) {
